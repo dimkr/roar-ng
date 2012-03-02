@@ -95,7 +95,7 @@ mount /rootfs.sfs /mnt/rootfs -t squashfs -o loop,ro
 [ 0 -ne $? ] && show_error "failed to mount the main file system image"
 echo " done"
 
-# create a mount point for writeable layer
+# create a mount point for the writeable layer
 mkdir -p /mnt/save
 
 # prepare the writeable layer
@@ -145,6 +145,22 @@ esac
 mkdir /mnt/union
 mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
+
+# list the mounted file systems
+file_systems="rootfs"
+case $boot_mode in
+
+	# under "live" or "frugal" mode - just the main file system and the
+	# writeable layer
+	live|full)
+		file_systems="$file_systems save"
+		;;
+
+	# under "frugal" mode, the home partition has its own mount point
+	frugal)
+		file_systems="$file_systems $home_partition save"
+		;;
+esac
 
 # move the mounted file systems to the union file system's /mnt
 for file_system in save $home_partition rootfs

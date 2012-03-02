@@ -1,17 +1,1 @@
 # ~/.stalonetrayrc: stalonetray settings
-
-# appearance
-transparent true
-vertical true
-scrollbars none
-decorations none
-fuzzy_edges 0
-
-# icon size
-icon_size 24
-
-# window
-window_layer bottom
-window_type dock
-skip_taskbar true
-sticky true

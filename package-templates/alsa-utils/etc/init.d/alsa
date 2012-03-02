@@ -12,7 +12,7 @@ case "$1" in
 			echo " done"
 		else
 			echo -n "Initializing ALSA state ..."
-			alsactl init
+			alsactl init > /dev/null 2>&1
 			echo " done"
 		fi
 		;;

@@ -99,7 +99,6 @@ slackware|libusb|libusb|exe,dev,doc,nls
 slackware|libvorbis|libvorbis|exe,dev,doc,nls
 slackware|libxcb_base|libxcb|exe,dev,doc,nls
 slackware|libxml2|libxml2|exe,dev,doc,nls
-slackware|liberation-fonts-ttf|liberation-fonts-ttf|exe,dev,doc,nls
 # use these instead of the kernel package's
 slackware|linux-header|kernel-headers|exe>dev,dev,doc,nls
 slackware|m4|m4|exe>dev,dev,doc,nls
