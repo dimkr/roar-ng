@@ -3,7 +3,7 @@
 # /usr/sbin/splitpkg: a package splitting script
 # dependencies: dash
 
-# usage: splitpkg DIR (to split a package contained extracted to a directory)
+# usage: splitpkg DIR (to split a package extracted to a directory)
 
 # the command-line usage message
 USAGE="splitpkg [DIR]
@@ -26,83 +26,84 @@ PKG_NAME=$(basename "$PKG_PATH")
 # the parent directory of the package directory
 PARENT_DIR=$(dirname "$PKG_PATH")
 
-cd "$PKG_PATH"
+base_dir="$(pwd)"
 
-for i in $(find -mindepth 1)
+cd "$PARENT_DIR"
+
+find "$PKG_NAME" | while read file
 do
 	# if the file no longer exists, skip this iteration
-	[ ! -e "$i" ] && continue
+	[ ! -e "$file" ] && continue
 
-	file_name=$(basename "$i")
-	
+	file_name=$(basename "$file")
+
+	suffix=""
+
 	case "$file_name" in
 		*.la|*.a|*.o|*.prl|pkgconfig|include|*.m4|*.h|*.c|*.cpp)
 			suffix="_DEV"
 			;;
 		gdb)
-			[ -d $i ] && suffix="_DEV"
+			[ -d "$file" ] && suffix="_DEV"
 			;;
 		dir)
-			[ -f $i ] && suffix="_DOC"
+			[ -f "$file" ] && suffix="_DOC"
 			;;
 		doc|*-doc|gtk-doc|Help|HELP|readme.*|README.*|ABOUT|about.txt|ABOUT.TXT|readme|README|manual|MANUAL|faq|FAQ|todo|TODO|examples|EXAMPLES|LessTif|man-html|E-docs)
 			suffix="_DOC"
 			;;
 		help)
-			[ -d $i ] && suffix="_DOC"
+			[ -d "$file" ] && suffix="_DOC"
 			;;
 		man|info)
-			[ -d $i ] && suffix="_DOC"
+			[ -d "$file" ] && suffix="_DOC"
 			 ;;
 		locale|locales|lang|strings)
-			[ -d $i ] && suffix="_NLS"
+			[ -d "$file" ] && suffix="_NLS"
 			;;
 		i18n)
 			suffix="_NLS"
 			;;
 		nls)
 			# there's a directory called "nls" under the kernel modules prefix
-			case "$i" in
-				/lib/modules/*)
+			case "$file" in
+				*/modules/*)
 					;;
 				*)
-				suffix="_NLS"
-				;;
+					suffix="_NLS"
+					;;
 			esac
 			;;
-		*)
-			suffix=""
-			;;
 	esac
-	
+
 	# verbosity, output the redirection for each redirected file
 	case "$suffix" in
-		
+
 		"")
 			# if the file does not need to be redirected, keep it in its
 			# original location
 			;;
-			
+
 		*)
 			sub_package_name="$PKG_NAME$suffix"
-			
+
 			echo "$file_name -> $sub_package_name"
 
 			# detect the sub_directory inside the package
-			sub_dir=$(dirname "$i" | cut -c 2-)
+			sub_dir=$(dirname "$file" | cut -c 2-)
 
 			# create the directory under the sub-package directory
 			mkdir -p "$PARENT_DIR/$sub_package_name/$sub_dir"
 
 			# if it's a directory, copy it
-			if [ -d "$i" ]
+			if [ -d "$file" ]
 			then
-				cp -ar "$i" "$PARENT_DIR/$sub_package_name/$sub_dir"
-				rm -rf "$i"
+				cp -ar "$file" "$PARENT_DIR/$sub_package_name/$sub_dir"
+				rm -rf "$file"
 			else
 				# if it's a file, move it to the sub-package
-				cp -a "$i" "$PARENT_DIR/$sub_package_name/$sub_dir"
-				rm -f "$i"
+				cp -a "$file" "$PARENT_DIR/$sub_package_name/$sub_dir"
+				rm -f "$file"
 			fi
 			;;
 
@@ -110,7 +111,8 @@ do
 done
 
 # if the main package is empty, remove it
-is_empty=$(find "$PKG_PATH" -type f)
-[ -z "$is_empty" ] && rm -rf "$PKG_PATH"
+cd "$base_dir"
+is_empty=$(find "$1" -type f)
+[ -z "$is_empty" ] && rm -rf "$1"
 
 exit 0
