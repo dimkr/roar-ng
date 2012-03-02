@@ -81,6 +81,11 @@ case "$sleep" in
 		;;
 esac
 
+# generate device nodes for all recognized partitions
+echo -n "Recognizing partitions ..."
+mdev -s
+echo " done"
+
 # if the home partition was specified through its UUID, determine its name
 case "$home_partition" in
 	*-*-*-*-*)
@@ -88,14 +93,9 @@ case "$home_partition" in
 		                  grep UUID=\"$home_partition\" | \
 		                  cut -f 1 -d : | cut -f 3- -d /)"
 		[ -z "$home_partition" ] && \
-		               show_error "the specified home partition UUID is invalid"
+		       show_error "the specified home partition UUID was not recognized"
 		;;
 esac
-
-# generate device nodes for all recognized partitions
-echo -n "Recognizing partitions ..."
-mdev -s
-echo " done"
 
 # mount the main file system Squashfs image
 echo -n "Preparing main file system ..."
@@ -153,6 +153,7 @@ case $boot_mode in
 esac
 
 # create a union of the writeable file system and the main file system
+echo -n "Setting up the layered file system ..."
 mkdir /mnt/union
 mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
@@ -160,7 +161,6 @@ mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
 # list the mounted file systems
 file_systems="rootfs"
 case $boot_mode in
-
 	# under "live" or "frugal" mode - just the main file system and the
 	# writeable layer
 	live|full)
@@ -174,7 +174,7 @@ case $boot_mode in
 esac
 
 # move the mounted file systems to the union file system's /mnt
-for file_system in save $home_partition rootfs
+for file_system in $file_systems
 do
 	mkdir -p /mnt/union/mnt/$file_system
 	mount --move /mnt/$file_system /mnt/union/mnt/$file_system
@@ -192,6 +192,8 @@ echo "$hostname" > /mnt/union/etc/hostname
 
 # create the boot mode file
 echo "$boot_mode" > /mnt/union/var/run/boot_mode
+
+echo " done"
 
 # switch to the union file system
 exec switch_root /mnt/union /sbin/init
