@@ -1,0 +1,5 @@
+roar-ng is a generic distribution building system originally forked (but now independent) from Woof, the Puppy Linux build system.
+
+It provides an architecture-independent, flexible and portable infrastructure for the creation of fast and portable "live" GNU/Linux distributions. It provides support for the binary package format and repositories of various GNU/Linux distributions.
+
+The development of roar-ng started as a collection of source hacks of Woof and evolved into a complete, independent re-implementation. It provides advanced features not found in Woof, such as parallel downloads, automatic package splitting, simple branding and easy porting to different processor architectures.
