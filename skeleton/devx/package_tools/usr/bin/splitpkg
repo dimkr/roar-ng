@@ -112,7 +112,8 @@ done
 
 cd "$base_dir"
 
-# remove empty directories in the main package
-find "$1" -type d -empty -delete
+# if the main package is empty, remove it
+is_empty=$(find "$1" -type f)
+[ -z "$is_empty" ] && rm -rf "$1"
 
 exit 0
