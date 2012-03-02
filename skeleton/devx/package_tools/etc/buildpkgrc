@@ -1,0 +1,124 @@
+# /etc/buildpkgrc: a configuration file for buildpkg
+
+# include the distribution information file
+. /etc/distrorc
+
+# compiler flags
+case $(uname -m) in
+	i?86)
+		LIBDIR_SUFFIX=""
+		CFLAGS="-march=i486 -mtune=i686"
+		PKG_ARCH="i486"
+		PKG_CPU="i486"
+		;;
+	x86_64)
+		LIBDIR_SUFFIX="64"
+		CFLAGS="-march=x86-64 -mtune=generic"
+		PKG_ARCH="x86_64"
+		PKG_CPU="x86_64"
+		;;
+esac
+
+export CFLAGS="$CFLAGS -Os -fomit-frame-pointer -pipe"
+export CXXFLAGS="$CFLAGS"
+
+# the number of build threads
+BUILD_THREADS="$(cat /proc/cpuinfo | grep processor | wc -l)"
+
+# the package target
+BUILD_TARGET="$PKG_ARCH-$DISTRO_NICKNAME-$(uname -s | tr '[:upper:]' '[:lower:]')-gnu"
+
+##############
+# base paths #
+##############
+
+# the base install prefix for packages
+BASE_INSTALL_PREFIX="usr"
+
+# the /etc directory
+CONF_DIR="etc"
+
+# the variable data directory
+VAR_DIR="var"
+
+##################
+# relative paths #
+##################
+
+# the binaries directory
+BIN_DIR="$BASE_INSTALL_PREFIX/bin"
+
+# the system binaries directory
+SBIN_DIR="$BASE_INSTALL_PREFIX/sbin"
+
+# the libraries directory
+LIB_DIR="$BASE_INSTALL_PREFIX/lib$LIBDIR_SUFFIX"
+
+# the library executables directory
+LIBEXEC_DIR="$LIB_DIR/$PKG_NAME"
+
+#################################
+# architecture-independent data #
+#################################
+
+# the headers directory
+INCLUDE_DIR="$BASE_INSTALL_PREFIX/include"
+
+# the shared data directory
+SHARE_DIR="$BASE_INSTALL_PREFIX/share"
+
+# the documentation directory
+DOC_DIR="$SHARE_DIR/doc"
+
+# the man pages directory
+MAN_DIR="$SHARE_DIR/man"
+
+# the locales directory
+LOCALE_DIR="$SHARE_DIR/locale"
+
+#######################
+# special directories #
+#######################
+
+# the directory for icons
+PIXMAP_DIR="$SHARE_DIR/pixmaps"
+
+# the directory for .desktop files
+DESKTOP_DIR="$SHARE_DIR/applications"
+
+# the directory for legal information
+LEGAL_DIR="$DOC_DIR/legal"
+
+# the directory for init scripts
+INIT_SCRIPT_DIR="etc/init.d"
+
+###########
+# generic #
+###########
+
+# the base options for autotools-based packages
+AUTOTOOLS_BASE_OPTS="--build=$BUILD_TARGET \
+                     --prefix=/$BASE_INSTALL_PREFIX \
+                     --bindir=/$BIN_DIR \
+                     --sbindir=/$SBIN_DIR \
+                     --libexecdir=/$LIBEXEC_DIR \
+                     --sysconfdir=/$CONF_DIR \
+                     --localstatedir=/$VAR_DIR \
+                     --libdir=/$LIB_DIR \
+                     --includedir=/$INCLUDE_DIR \
+                     --datarootdir=/$SHARE_DIR \
+                     --datadir=/$SHARE_DIR \
+                     --localedir=/$LOCALE_DIR \
+                     --mandir=/$MAN_DIR \
+                     --docdir=/$DOC_DIR/$PKG_NAME"
+
+# fix the compiler flags and set the pkgconfig search path
+for i in $(cat /etc/ld.so.conf)
+do
+	PKG_CONFIG_PATH="$i/pkgconfig:$PKG_CONFIG_PATH"
+done
+export PKG_CONFIG_PATH
+
+export CFLAGS="$CFLAGS -I/$INCLUDE_DIR -L/$LIB_DIR"
+export CXXFLAGS="$CXXFLAGS -I/$INCLUDE_DIR -L/$LIB_DIR"
+export LDFLAGS="$LDFLAGS -L/$LIB_DIR"

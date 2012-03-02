@@ -1,0 +1,61 @@
+#!/bin/dash
+
+# /etc/rc.d/rc.update: a system updating script for generating cache
+
+# include the distribution information file
+. /etc/distrorc
+
+# generate the loader cache
+[ ! -f /etc/ld.so.cache ] && ldconfig
+
+# update the MIME database
+[ ! -f /usr/share/mime/mime.cache ] && update-mime-database /usr/share/mime
+
+# update the gdk-pixbuf list of available loaders
+if [ ! -f /etc/gtk-2.0/gdk-pixbuf.loaders ]
+then
+	case "$DISTRO_ARCH" in
+		*64)
+			suffix="64"
+			;;
+		*)
+			suffix=""
+			;;
+	esac
+	gdk-pixbuf-query-loaders > \
+	                         /usr/lib$suffix/gdk-pixbuf-2.0/2.10.0/loaders.cache
+fi
+
+# update the list of Pango modules
+if [ ! -f /etc/pango/pango.modules ]
+then
+	pango-querymodules > /etc/pango/$DISTRO_ARCH-slackware-linux/pango.modules
+fi
+
+# update the GTK+ icon cache
+if [ ! -f /usr/share/icons/hicolor/icon-theme.cache ]
+then
+	/usr/bin/gtk-update-icon-cache -f /usr/share/icons/hicolor
+fi
+
+# generate the font cache
+if [ "/var/cache/fontconfig/*" = "$(echo /var/cache/fontconfig/*)" ]
+then
+	# create fonts.dir and fonts.scale
+	for directory in $(cat /etc/fonts/fonts.conf | \
+					   grep '<dir>' | cut -f 2 -d \> |
+					   cut -f 1 -d \<)
+	do
+		# skip non-existing directories
+		[ ! -e "$directory" ] && continue
+
+		for sub_directory in $(find $directory -type d)
+		do 	
+			cd $sub_directory
+			[ ! -f fonts.scale ] && mkfontscale
+			[ ! -f fonts.dir ] && mkfontdir
+			cd ..
+		done
+
+	done
+fi

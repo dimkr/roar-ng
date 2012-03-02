@@ -1,0 +1,171 @@
+#!/bin/dash
+
+# /init: a system init script
+# dependencies: dash and busybox
+
+# the size of the tmpfs file system used as the writeable layer, if no save file
+# is used
+TMPFS_SIZE="75%"
+
+# include the distribution information file
+. /etc/distrorc
+
+# include the boot configuration
+. /etc/bootrc
+
+# usage: show_error $error
+show_error()
+{
+	echo
+	echo "Error: $1"
+	sleep 20
+	exit 0
+}
+
+# clear the screen
+clear
+
+# set the executable search path
+export PATH="/bin:/sbin:/usr/bin"
+
+echo "Starting $DISTRO_NAME $DISTRO_VERSION"
+
+# mount all virtual file systems
+mount -t rootfs -o remount,rw rootfs /
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+
+# initialize the boot mode variable
+boot_mode="live"
+
+# parse the kernel command-line
+for argument in $(cat /proc/cmdline)
+do
+	case "$argument" in
+		home=*)
+			home_partition="${argument#*=}"
+			;;
+		boot_mode=*)
+			boot_mode="${argument#*=}"
+			;;
+		hostname=*)
+			hostname="${argument#*=}"
+			;;
+		sleep=*)
+			sleep="${argument#*=}"
+			;;
+	esac
+done
+
+# make sure a valid boot mode was specified
+case "$boot_mode" in
+	full|frugal)
+		[ -z "$home_partition" ] && \
+		    show_error "no home partition was specified for \"$boot_mode\" mode"
+		;;
+	live)
+		[ -n "$home_partition" ] && \
+		           show_error "a home partition was specified for \"live\" mode"
+		;;
+	*)
+		show_error "invalid boot mode"
+		;;
+esac
+
+# if the "sleep" argument was passed, sleep for the given number of seconds
+case "$sleep" in
+	[0-9]*)
+		echo -n "Sleeping for $sleep second(s) ..."
+		sleep $sleep
+		echo " done"
+		;;
+esac
+
+# generate device nodes for all recognized partitions
+echo -n "Recognizing partitions ..."
+mdev -s
+echo " done"
+
+# mount the main file system Squashfs image
+echo -n "Preparing main file system ..."
+
+# mount the main Squashfs image, located at the file system root
+mkdir /mnt/rootfs
+mount /rootfs.sfs /mnt/rootfs -t squashfs -o loop,ro
+[ 0 -ne $? ] && show_error "failed to mount the main file system image"
+echo " done"
+
+# create a mount point for writeable layer
+mkdir -p /mnt/save
+
+# prepare the writeable layer
+case $boot_mode in
+	# under "live" mode, use a tmpfs file system
+	live)
+		echo -n "Preparing live environment ..."
+		mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/save
+		[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
+		echo " done"
+		;;
+
+	# under "full" mode, use the home partition
+	full)
+		# mount the home partition
+		echo -n "Preparing home partition ..."
+		mount /dev/$home_partition /mnt/save
+		[ 0 -ne $? ] && show_error "failed to mount the home partition"
+		echo " done"
+		;;
+
+	# under "frugal" mode, use an image file contained in the home partition
+	frugal)
+		echo -n "Preparing home partition ..."
+
+		# create a mount point
+		mkdir /mnt/$home_partition
+
+		# mount the home partition
+		mount /dev/$home_partition /mnt/$home_partition
+		[ 0 -ne $? ] && show_error "failed to mount the home partition"
+		echo " done"
+
+		# if there is no save file, offer the user to create one now
+		[ ! -f /mnt/$home_partition/$SAVE_FILE_NAME ] && \
+		                   create_save_file /mnt/$home_partition/$SAVE_FILE_NAME
+
+		# mount the save file
+		echo -n "Loading save file ..."
+		mount /mnt/$home_partition/$SAVE_FILE_NAME /mnt/save -o loop,rw
+		[ 0 -ne $? ] && show_error "failed to mount the save file"
+		echo " done"
+		;;
+esac
+
+# create a union of the writeable file system and the main file system
+mkdir /mnt/union
+mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
+[ 0 -ne $? ] && show_error "failed to set up the layered file system"
+
+# move the mounted file systems to the union file system's /mnt
+for file_system in save $home_partition rootfs
+do
+	mkdir -p /mnt/union/mnt/$file_system
+	mount --move /mnt/$file_system /mnt/union/mnt/$file_system
+	[ 0 -ne $? ] && show_error "failed to set up the layered file system"
+done
+
+# unmount virtual file systems
+umount /proc
+umount /sys
+
+# write the hostname file; if no hostname was specified, generate a
+# pesudo-random one
+[ -z "$hostname" ] && hostname="$DISTRO_NICKNAME-$(date | md5sum | cut -b 1-4)"
+echo "$hostname" > /mnt/union/etc/hostname
+
+# create the boot mode file
+echo "$boot_mode" > /mnt/union/var/run/boot_mode
+
+# switch to the union file system
+exec switch_root /mnt/union /sbin/init
+show_error "failed to switch to the layered file system"

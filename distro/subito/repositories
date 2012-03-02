@@ -1,0 +1,8 @@
+# include the distribution information file
+. ./conf/distrorc
+
+# repositories - package list URL|repository name
+repositories="http://www.dimakrasner.com/subito/$DISTRO_ARCH/subito-$(cat distro/subito/version)|subito-official"
+
+# package download mirrors
+mirrors="http://www.dimakrasner.com/subito/$DISTRO_ARCH"

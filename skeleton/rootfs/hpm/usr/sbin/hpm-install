@@ -1,0 +1,71 @@
+#!/bin/dash
+
+# /usr/bin/hpm-install: a package installer
+# dependencies: dash and xz-util
+
+# the command-line usage message
+USAGE="hpm-install PACKAGE NAME
+
+Install a software package."
+
+# check the command-line arguments
+if [ 2 -ne $# ] || [ ! -f "$1" ] || [ -z "$2" ]
+then
+	echo "$USAGE"
+	exit 1
+fi
+
+# make sure the package is not installed already
+if [ -f "$PKG_DATA_DIR/$2" ]
+then
+	echo "Error: the package is already installed."
+	exit 1
+fi 
+
+# include the configuration file
+. /etc/hpmrc
+
+# create a temporary directory for the package extraction
+temp_dir="$(mktemp -d)"
+
+# exctract the package to the temporary directory
+echo -n "Extracting the package ..."
+tar -xf "$1" -C $temp_dir
+if [ 0 -ne $? ]
+then
+	rm -rf $temp_dir
+	echo "Error: failed to extract the package."
+	exit 1
+fi
+echo " done"
+
+# install the package files
+echo -n "Installing files ..."
+cp -rf $temp_dir/* /
+if [ 0 -ne $? ]
+then
+	rm -rf $temp_dir
+	echo "Error: failed to install the package files."
+	exit 1
+fi
+echo " done"
+
+# run the post-install script
+if [ -f $temp_dir/post_install.sh ]
+then
+	base_dir="$(pwd)"
+	cd /
+	./post_install.sh
+	rm -f post_install.sh
+	cd "$base_dir"
+fi
+
+# if there is a post-removal script, keep it
+[ -f /post_uninstall.sh ] && mv /post_uninstall.sh "$PKG_DATA_DIR/$2-post_uninstall.sh"
+
+# list the package contents
+echo -n "Registering the package ..."
+find $temp_dir -mindepth 1 | sed s~"$temp_dir"~~g > "$PKG_DATA_DIR/$2"
+echo " done"
+
+rm -rf $temp_dir

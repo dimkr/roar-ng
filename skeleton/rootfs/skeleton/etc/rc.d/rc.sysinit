@@ -1,0 +1,78 @@
+#!/bin/dash
+
+# /etc/rc.d/rc.sysinit: a system init script
+# dependencies: dash, busybox and udev
+
+# set the executable search path
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/usr/local/sbin"
+
+# include the boot configuration file
+. /etc/bootrc
+
+# mount all virtual file systems
+echo -n "Mounting virtual file systems ..."
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -a
+echo " done"
+
+# enable all swap partitions specified in /etc/fstab
+echo -n "Setting up swap partitions ..."
+swapon -a
+echo " done"
+
+# generate module dependency files
+if [ ! -f /lib/modules/$(uname -r)/modules.dep ]
+then
+	echo -n "Generating module dependency files ..."
+	depmod -a
+	echo " done"
+fi
+
+# set the hostname, using /etc/hostname, which is created by the initramfs
+echo -n "Setting the hostname ..."
+hostname -F /etc/hostname
+echo " done"
+
+# set up up a loopback interface
+echo -n "Setting up a loopback interface ..."
+ifconfig lo 127.0.0.1 up
+route add -net 127.0.0.0 netmask 255.0.0.0 lo
+echo " done"
+
+# start logging daemons
+echo -n "Starting logging services ..."
+klogd
+syslogd -D -S
+echo " done"
+
+# start udev and wait for it to load all required modules
+echo -n "Recognising devices ..."
+udevd --daemon
+udevadm trigger
+udevadm settle
+echo " done"
+
+# load the keyboard map
+echo -n "Loading the keyboard map ..."
+loadkeys -q /usr/share/kbd/keymaps/$KEYBOARD_MAP
+echo " done"
+
+# set the console font
+echo -n "Setting the console font ..."
+for i in 1 2 3 4
+do
+	setfont /usr/share/kbd/consolefonts/$CONSOLE_FONT -C /dev/tty$i
+done
+echo " done"
+
+# update cache and all sorts of generated files
+echo -n "Updating cache ..."
+/etc/rc.d/rc.update > /dev/null 2>&1
+echo " done"
+
+# start extra daemons
+for i in /etc/init.d/*
+do
+	[ -x $i ] && $i start
+done

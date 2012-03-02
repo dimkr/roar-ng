@@ -1,0 +1,61 @@
+################
+# search paths #
+################
+
+# the executable search path
+PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/usr/local/sbin"
+
+# the new file permissions mask
+umask 022
+
+################
+# shell options #
+################
+
+# the history file size
+HISTFILESIZE=1000
+
+# ignore duplicates in the history
+HISTCONTROL="ignoredups"
+
+##########
+# extras #
+##########
+
+for i in /etc/profile.d/*.sh
+do
+	source $i
+done
+
+[ -e /etc/profile.local ] && source /etc/profile.local
+
+#######################
+# important variables #
+#######################
+
+# the terminal type
+TERM="rxvt"
+
+# the default text editor
+EDITOR="vi"
+
+# the system locale
+LANG="C"
+LC_COLLATE="C"
+
+###############################
+# freedesktop.org directories #
+###############################
+
+XDG_DATA_HOME="$HOME/.local/share"
+XDG_CONFIG_HOME="$HOME/.config"
+XDG_DATA_DIRS="/usr/share:/usr/local/share:/opt/share"
+XDG_CONFIG_DIRS="/etc/xdg"
+XDG_CACHE_HOME="$HOME/.cache"
+
+############
+# X server #
+############
+
+# if desksetup was not executed already, run it
+[ ! -f ~/.desktoprc ] && desksetup

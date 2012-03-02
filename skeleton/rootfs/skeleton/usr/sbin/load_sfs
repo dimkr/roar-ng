@@ -1,0 +1,30 @@
+#!/bin/dash
+
+# /usr/sbin/load_sfs: a SFS extension loader
+
+# the command-line usage message
+USAGE="load_sfs SFS MOUNT_POINT
+
+Load a SFS extension."
+
+# check the command-line arguments
+if [ 2 -ne $# ] || [ ! -f "$1" ] || [ ! -d "$2" ]
+then
+	echo "$USAGE"
+	exit 1
+fi
+
+# mount the Squashfs image
+mount -t squashfs -o ro,loop "$1" "$2"
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to mount the SFS extension."
+fi
+
+# add the extension to the layered file system as a read-only layer
+mount -t aufs -o "remount,append=$2=ro" aufs /
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to append the SFS extension to the layered file system."
+	exit 1
+fi

@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# 0setup: a script which downloads and converts all required package lists
+
+# include the distribution information file
+. ./conf/distrorc
+
+# include the functions file
+. ./functions
+
+# download and convert all package lists
+for distro in distro/*
+do
+	# include the repositories list
+	. $distro/repositories
+
+	for repository in $repositories
+	do
+		# parse the entry
+		repository_name="${repository##*|}"
+		package_list_url="${repository%|*}"
+		distribution="$(basename $distro)"
+
+		echo "Processing $repository_name"
+
+		# create a temporary file
+		temp_file="$(mktemp -u)"
+
+		# download the package list
+		echo "  downloading the package list"
+		download_file $package_list_url $temp_file
+		if [ 0 -ne $? ]
+		then
+			echo "Error: failed to download $package_list_url."
+			rm -f $temp_file
+			exit 1
+		fi
+
+		# decompress the package list
+		case $package_list_url in
+			*.gz)
+				echo "  decompressing"
+				temp="$(mktemp -u)"
+				cat $temp_file | gzip -d > $temp
+				mv -f $temp $temp_file
+				;;
+		esac
+
+		# convert the package list to the common format
+		echo "  converting to the common format"
+		$distro/convert_package_list $temp_file | sort > repos/$repository_name
+		if [ 0 -ne $? ]
+		then
+			echo "Error: failed to convert the package list."
+			rm -f $temp_file
+			exit 1
+		fi
+
+		# clean up
+		echo "  cleaning up"
+		rm -f $temp_file
+	done
+done

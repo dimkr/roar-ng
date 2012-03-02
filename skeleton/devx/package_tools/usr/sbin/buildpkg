@@ -1,0 +1,126 @@
+#!/bin/dash
+
+# /usr/sbin/buildpkg: a package building script
+# dependencies: dash wget, tar, XZ Utils and hpm
+
+# usage: buildpkg download BUILD_SCRIPT (to download package sources)
+# or:    buildpkg build    BUILD_SCRIPT (to build a package)
+
+# the command-line usage message
+USAGE="buildpkg [download|build] SCRIPT
+
+Build a binary package, according to a build script."
+
+# include the hpm configuration file
+. /etc/hpmrc
+
+# usage: download_file $url $dest
+# downloads a file
+download_file()
+{
+	# do not check certificates, since this fails a lot
+	case "$1" in
+		https://*)
+			options="--no-check-certificate"
+			;;
+	esac
+
+	if [ -z "$2" ]
+	then
+		wget $options "$1"
+	else
+		wget $options -O "$2" "$1"
+	fi
+	return $?
+}
+
+# check the command-line arguments
+if [ 2 -ne $# ] || [ ! -f "$2" ]
+then
+	echo "$USAGE"
+	exit 1
+fi
+
+case "$1" in
+	download|build)
+		;;
+	*)
+		echo "$USAGE"
+		exit 1
+		;;
+esac
+
+# include the settings file
+. /etc/buildpkgrc
+
+# get the full script path
+path=$(realpath "$2")
+
+# include the build script
+. "$path"
+
+# re-include the settings file
+. /etc/buildpkgrc
+
+# re-include the build script
+. "$path"
+
+# handle the "download" command
+if [ "download" = "$1" ]
+then
+	download
+	[ 0 -ne $? ] && exit 1
+	exit 0
+fi
+
+# handle the "build" command
+INSTALL_DIR="$(mktemp -u -d)"
+
+base_dir="$(pwd)"
+
+# build the package
+build
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to build the package."
+	exit 1
+fi
+
+# create the binary package
+package
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to install the package."
+	exit 1
+fi
+
+cd "$base_dir"
+
+# optimize the package
+strippkg $INSTALL_DIR
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to optimize the package."
+	exit 1
+fi
+
+cd $INSTALL_DIR
+
+# create the binary package
+temp_file="$(mktemp -u)"
+tar -c * > $temp_file
+xz --best $temp_file
+mv -f $temp_file.xz "$base_dir/$PKG_NAME-$PKG_VER.$PKG_EXTENSION"
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to create the package."
+	exit 1
+fi
+
+cd "$base_dir"
+
+# clean up
+rm -rf $INSTALL_DIR
+[ 0 -ne $? ] && exit 1
+
+exit 0

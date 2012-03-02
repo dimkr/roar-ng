@@ -1,0 +1,6 @@
+# ~/.Xdefaults: X server parameters
+
+# rxvt-unicode appearance
+urxvt.foreground:#ffffffffffff
+urxvt.background:#000000000000
+urxvt.font: xft:Terminus:size=10

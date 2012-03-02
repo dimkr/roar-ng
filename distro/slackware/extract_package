@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# usage: extract_package $package $dest
+
+# create the output directory
+mkdir -p "$2"
+
+# extract the package
+case "$1" in
+	*.txz)
+		compression_flag="J"
+		;;
+	*.tgz)
+		compression_flag="z"
+		;;
+esac
+
+tar x${compression_flag}f "$1" -C "$2"
+[ 0 -ne $? ] && exit 1
+
+# run the post-install script
+if [ -f "$2/install/doinst.sh" ]
+then
+	echo "  running the post-installation script"
+	current_dir="$(pwd)"
+	chmod 755 "$2/install/doinst.sh"
+	cd "$2"
+	./install/doinst.sh
+	cd "$current_dir"
+fi
+
+# remove the metadata directory
+rm -rf "$2/install"
+
+exit 0

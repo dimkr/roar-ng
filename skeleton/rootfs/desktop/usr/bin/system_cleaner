@@ -1,0 +1,56 @@
+#!/bin/dash
+
+# /usr/bin/system_cleaner: a configuration and cache cleaning tool
+# dependencies: dash and dialog
+
+# create a temporary file
+temp_file="$(mktemp -u)"
+
+# list all configuration directories
+directories="$(find ~ -type d -name cache) $(find ~ -mindepth 1 -name '.*')"
+[ -d ~/.config ] && directories="$directories $(ls -d1 ~/.config/*)"
+
+# create the items list
+for directory in $directories
+do
+	# skip non-directory entries
+	[ ! -d "$directory" ] && continue
+
+	# filter the base name
+	base_name="${directory##*/}"
+
+	# determine whether the item is selected by default
+	if [ "cache" = "$base_name" ]
+	then
+		is_default="on"
+	else
+		is_default="off"
+	fi
+
+	# add the item to the items list
+	items="$items $directory $(echo $base_name | sed s/^\\.*//g) $is_default"
+done
+
+# choose which directories to remove
+dialog --title "System Cleaner" \
+       --checklist "Choose which directories will be removed." 0 0 0 \
+       $items 2>$temp_file
+if [ 1 -eq $? ]
+then
+	cancel=1
+else
+	cancel=0
+	choice="$(cat $temp_file | sed s/\"//g)"
+fi
+
+# clean up
+rm -f $temp_file
+
+# if the use chose to cancel the operation, exit now
+[ 1 -eq $cancel ] && exit 0
+
+# remove the chosen directories
+for directory in $choice
+do
+	rm -rf "$directory"
+done

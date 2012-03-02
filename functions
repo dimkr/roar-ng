@@ -1,0 +1,142 @@
+# functions: common functions used by multiple scripts
+
+# include the distribution information file
+. ./conf/distrorc
+
+# the timeout for downloads, in seconds
+DOWNLOAD_TIMEOUT=10
+
+#################
+# file download #
+#################
+
+# usage: download_file $src $dest
+# downloads a file from a single mirror
+download_file()
+{
+	wget -T $DOWNLOAD_TIMEOUT -O "$2" "$1"
+	[ 0 -ne $? ] && return 1
+	return 0
+}
+
+# usage: download_file_parallel $mirrors $dest
+# downloads a file from multiple mirrors
+download_file_parallel()
+{
+	# if aria2 is not installed, download from a single mirror using wget
+	if [ -z "$(which aria2c)" ]
+	then
+		echo "Warning: aria2 is not installed; using a single mirror."
+		download_file "$(echo $1 | cut -f 1 -d \ )" "$2"
+		return $?
+	fi
+
+	# otherwise, if aria2 is present, perform a parallel download
+	aria2c -o "$2" $1
+	[ 0 -ne $? ] && return 1
+	return 0
+}
+
+########################
+# package list parsing #
+########################
+
+# usage: list_packages
+# lists all packages in the package list
+list_packages()
+{
+	cat conf/package_list | grep -v \# | tr ' ' '\n' | sed s/'\#.*'//g
+}
+
+# usage: get_package_distro $package_list_entry
+# receives a package list entry and returns the distribution the package belongs
+# to
+get_package_distro()
+{
+	echo $1 | cut -f 1 -d \|
+}
+
+# usage: get_package_name $package_list_entry
+# receives a package list entry and returns the package name
+get_package_name()
+{
+	echo $1 | cut -f 2 -d \|
+}
+
+# usage: get_package_sub_packages $package_list_entry
+# receives a package list entry and returns the list of sub-packages contained
+# in it
+get_package_sub_packages()
+{
+	echo $1 | cut -f 3 -d \| | sed s/,/\ /g
+}
+
+# usage: get_package_redirection_rules $package_list_entry
+# receives a package list entry and returns its redirection rules
+get_package_redirection_rules()
+{
+	echo $1 | cut -f 4 -d \|
+}
+
+####################
+# package locating #
+####################
+
+# usage: get_package_entry $name $distribution
+# receives a package name and returns the most appropriate package's entry
+get_package_entry()
+{
+	# include the list of repositores
+	. distro/$2/repositories
+
+	# find the first match
+	for repository in $repositories
+	do
+		repository_name="${repository##*|}"
+		[ ! -f repos/$repository_name ] && continue
+		result="$(cat repos/$repository_name | grep ^$1\| | tail -n 1)"
+		if [ -n "$result" ]
+		then
+			echo "$result"
+			break
+		fi
+	done
+}
+
+# usage: get_package_location $entry
+# receives a package entry and returns the package location on the mirrors
+get_package_location()
+{
+	echo $@ | cut -f 4 -d \|
+}
+
+# usage: get_package_file_name $entry
+# receives a package entry and returns the package file name
+get_package_file_name()
+{
+	location="$(get_package_location $@)"
+	echo "${location##*/}"
+}
+
+# usage: get_download_links $name $distribution
+# returns a list of download links for a given package
+get_download_links()
+{
+	# include the list of mirrors
+	. distro/$2/repositories
+
+	# get the package entry
+	entry="$(get_package_entry $1 $2)"
+	[ -z "$entry" ] && return 1
+
+	# get the package location within each repository
+	location="$(get_package_location $entry)"
+
+	# create download links from each mirror's URL and the package location
+	for mirror in $mirrors
+	do
+		echo $mirror/$location
+	done
+
+	return 0
+}

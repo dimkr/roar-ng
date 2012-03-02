@@ -1,0 +1,7 @@
+# /etc/hpmrc: a configuration file for hpm
+
+# the installed package data directory
+PKG_DATA_DIR="/var/hpm"
+
+# the binary package file name extension
+PKG_EXTENSION="rxz"

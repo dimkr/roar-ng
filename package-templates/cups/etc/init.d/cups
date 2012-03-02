@@ -1,0 +1,33 @@
+#!/bin/dash
+
+# /etc/init.d/cups: an init script for CUPS
+
+case "$1" in
+
+	start)
+		echo -n "Starting CUPS ..."
+		cupsd
+		success=$?
+		echo " done"
+		exit $success
+		;;
+
+	stop)
+		echo -n "Stopping CUPS ..."
+		kill $(pidof cupsd)
+		success=$?
+		echo " done"
+		exit $success
+		;;
+
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "cups {start|stop|restart}"
+		exit 1
+		;;
+
+esac

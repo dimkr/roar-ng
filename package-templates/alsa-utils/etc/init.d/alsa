@@ -1,0 +1,36 @@
+#!/bin/dash
+
+# /etc/init.d/alsa: an init script for ALSA settings
+
+case "$1" in
+
+	start)
+		if [ -e /etc/asound.state ]
+		then
+			echo -n "Restoring ALSA state ..."
+			alsactl restore
+			echo " done"
+		else
+			echo -n "Initializing ALSA state ..."
+			alsactl init
+			echo " done"
+		fi
+		;;
+
+	stop)
+		echo -n "Storing ALSA state ..."
+		alsactl store
+		echo " done"
+		;;
+
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "alsa {start|stop|restart}"
+		exit 1
+		;;
+
+esac

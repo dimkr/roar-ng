@@ -1,0 +1,10 @@
+# /etc/opt/desktoprc: the default desktop settings
+
+# the default desktop background
+DEFAULT_DESKTOP_BG="default.png"
+
+# the default desktop background mode
+DEFAULT_DESKTOP_BG_MODE="tile"
+
+# the default window manager
+DEFAULT_WINDOW_MANAGER="cwm"

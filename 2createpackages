@@ -1,0 +1,186 @@
+#!/bin/sh
+
+# 2createpackages: a script which extracts and processes all packages specified
+#                  in the package list
+
+# usage: 2createpackages (to process all packages)
+
+# include the distribution information file
+. ./conf/distrorc
+
+# include the functions file
+. ./functions
+
+# determine which libraries directory is used
+case $DISTRO_ARCH in
+	*64)
+		LIBDIR_SUFFIX="64"
+		;;
+	*)
+		LIBDIR_SUFFIX=""
+		;;
+esac
+
+# list all packages
+for package in $(list_packages)
+do
+	# determine the package name and source distribution
+	name="$(get_package_name $package)"
+	distro="$(get_package_distro $package)"
+
+	echo "$name ($distro)"
+	
+	# if the package was already processed, skip it
+	if [ -d processed-packages/$name ] || \
+	   [ -d processed-packages/${name}_DEV ] || \
+	   [ -d processed-packages/${name}_DOC ] || \
+	   [ -d processed-packages/${name}_NLS ]
+	then
+		echo "  already processed, skipping"
+		continue
+	fi
+
+	# download all sub-packages
+	for sub_package in $(get_package_sub_packages $package)
+	do
+		# get the package entry
+		package_entry="$(get_package_entry $sub_package $distro)"
+		if [ -z "$package_entry" ]
+		then
+			echo "Error: the \"$sub_package\" was not found."
+			exit 1		
+		fi
+		
+		# filter the package file name
+		package_file_name="$(get_package_file_name $package_entry)"
+
+		# if the package does not exist, exit now
+		if [ ! -f packages/$package_file_name ]
+		then
+			echo "Error: $package_file_name does not exist under packages."
+			exit 1
+		fi
+
+		# extract the package
+		echo "  extracting $package_file_name"
+		./distro/$distro/extract_package packages/$package_file_name \
+		                                 processed-packages/$name
+		if [ 0 -ne $? ]
+		then
+			echo "Error: failed to extract $package_file_name."
+			exit 1
+		fi
+	done
+
+	# if there is a template, add it to the package
+	if [ -e "package-templates/$name" ]
+	then
+		echo "  applying template"
+		cp -r package-templates/$name/* processed-packages/$name
+		base_dir="$(pwd)"
+		# if there is a hacks script, run it
+		cd "processed-packages/$name"
+		if [ -f hacks.sh ]
+		then
+			chmod 755 hacks.sh
+			LIBDIR_SUFFIX="$LIBDIR_SUFFIX" ./hacks.sh
+			rm -f hacks.sh
+		fi
+		cd "$base_dir"
+	fi
+
+	# optimize the package
+	echo "  optimizing"
+	./skeleton/devx/package_tools/usr/bin/strippkg \
+	                                              "processed-packages/$name"
+	if [ 0 -ne $? ]
+	then
+		echo "Error: failed to optimize $name."
+		exit 1
+	fi
+	
+	# split the package
+	echo "  splitting"
+	./skeleton/devx/package_tools/usr/bin/splitpkg \
+	                                              "processed-packages/$name"
+	if [ 0 -ne $? ]
+	then
+		echo "Error: failed to split $name."
+		exit 1
+	fi
+
+	# handle the package redirection
+	echo "  redirecting"
+	redirection="$(get_package_redirection_rules $package)"
+
+	# parse the redirection field
+	exe_redirection="$(echo $redirection | tr , '\n' | grep ^exe)"
+	dev_redirection="$(echo $redirection | tr , '\n' | grep ^dev)"
+	doc_redirection="$(echo $redirection | tr , '\n' | grep ^doc)"
+	nls_redirection="$(echo $redirection | tr , '\n' | grep ^nls)"
+
+	for redirection in exe,$exe_redirection \
+					   dev,$dev_redirection \
+					   doc,$doc_redirection \
+					   nls,$nls_redirection
+	do
+		# for each sub-package, determine where it goes
+		sub_package="${redirection%,*}"
+		target="$(echo ${redirection##*,} | cut -f 2 -d \>)"
+
+		# if no redirection was specified, do nothing
+		[ -z "$target" ] && target="$sub_package"
+
+		# get the package name suffix for this module
+		case "$sub_package" in
+			exe)
+				original_suffix=""
+				;;
+			dev|doc|nls)
+				original_suffix="_$(echo $sub_package | \
+				                                tr '[:lower:]' '[:upper:]')"
+				;;
+		esac
+
+		# if the sub-package does not exist, skip it
+		[ ! -d "processed-packages/${name}$original_suffix" ] && continue
+
+		# get the package name suffix for the target module
+		case "$target" in
+			exe)
+				target_suffix=""
+				;;
+			dev|doc|nls)
+				target_suffix="_$(echo $target | \
+				                                tr '[:lower:]' '[:upper:]')"
+				;;
+		esac
+
+		case "$target" in
+			# redirection to "null" means the sub-package gets deleted
+			""|null)
+				# print the redirection rule
+				echo "    removing ${name}$original_suffix"
+
+				rm -rf "processed-packages/${name}$original_suffix"
+				;;
+
+			# redirection to another module
+			exe|dev|doc|nls)
+				[ "$original_suffix" = "$target_suffix" ] && continue
+
+				# print the redirection rule
+				echo "    ${name}$original_suffix -> ${name}$target_suffix"
+
+				# copy the sub-package files to the destination
+				[ ! -d "processed-packages/${name}$target_suffix" ] && \
+				                mkdir "processed-packages/${name}$target_suffix"
+				cp -rf "processed-packages/${name}$original_suffix"/* \
+					   "processed-packages/${name}$target_suffix"
+
+				# remove the sub-package
+				rm -rf "processed-packages/${name}$original_suffix"
+				;;
+		esac
+	done
+done

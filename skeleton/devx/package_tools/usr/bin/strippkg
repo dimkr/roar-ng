@@ -1,0 +1,173 @@
+#!/bin/dash
+
+# /usr/sbin/strippkg: a package optimization script
+# dependencies: realpath, file, dash, advancecomp, optipng, xz-util and binutils
+
+# usage: strippkg FILE (to optimize the contents of a directory or a single
+#                       file)
+
+# the command-line usage message
+USAGE="strippkg FILE
+
+Optimize a file or the contents of a directory."
+
+# check the command-line arguments
+if [ 1 -ne $# ] || [ ! -e "$1" ]
+then
+	echo "$USAGE"
+	exit 1
+fi
+
+# get the absolute path to the script itself
+OWN_PATH=$(realpath "$0")
+
+# usage: get_file_type $file
+# returns a file's type
+get_file_type()
+{
+	file -bi "$1" | cut -f 1 -d \;
+}
+
+# usage: optimize_png $png
+# optimizes a PNG image
+optimize_png()
+{
+	optipng -fix -o7 "$1"
+	[ 0 -ne $? ] && return 1
+	advpng -z4 "$1"
+	[ 0 -ne $? ] && return 1
+	return 0
+}
+
+# usage: optimize_compressed $file $compress $decompress
+# optimizes a compressed file
+optimize_compressed()
+{
+	temp_file="$(mktemp -u)"
+
+	# decompress the file
+	cat "$1" | $3 -d > $temp_file
+	if [ 0 -ne $? ]
+	then
+		[ -f $temp_file ] && rm -f $temp_file
+		return 1
+	fi
+
+	# optimize the decompressed file
+	$OWN_PATH $temp_file
+	if [ 0 -ne $? ]
+	then
+		rm -f $temp_file
+		return 1
+	fi
+
+	# re-compress the file
+	cat $temp_file | $2 --best > "$1"
+	if [ 0 -ne $? ]
+	then
+		rm -f $temp_file
+		return 1
+	fi
+
+	# clean up
+	rm -f $temp_file
+	[ 0 -ne $? ] && return 1
+
+	return 0
+}
+
+# usage: optimize_gzip $gzip
+# optimizes a gzip-compressed file
+optimize_gzip()
+{
+	optimize_compressed "$file" gzip gunzip
+	[ 0 -ne $? ] && return $?
+	advdef -z4 "$file"
+	return $?
+}
+
+# usage: optimize_bzip2 $bzip2
+# optimize a bzip2-compressed file
+optimize_bzip2()
+{
+	optimize_compressed "$file" bzip2 bunzip2
+	return $?
+}
+
+# usage: optimize_xz $xz
+# optimize a xz-compressed file
+optimize_xz()
+{
+	optimize_compressed "$file" xz unxz
+	return $?
+}
+
+# optimize the directory contents
+find "$1" -type f | while read file
+do
+	# guess the file type
+	file_type=$(get_file_type "$file")
+
+	# filter the base file name
+	file_name="${file##*/}"
+
+	# optimize the file
+	case "$file_type" in
+
+		# handle single files
+		application/x-sharedlib|application/x-executable)
+			echo "$file_name: shared library or executable"
+			strip --strip-all "$file"
+			continue
+			;;
+
+		application/x-object)
+			case "$file" in
+				*.ko)
+					echo "$file_name: kernel module"
+					strip --strip-unneeded "$file"
+					[ 0 -ne $? ] && exit 1
+					continue
+					;;
+			esac
+			;;
+
+		image/png)
+			echo "$file_name: PNG image"
+			optimize_png "$file"
+			[ 0 -ne $? ] && exit 1
+			continue
+			;;
+
+		video/x-mng)
+			echo "$file_name: MNG image"
+			advmng -z4 "$file"
+			[ 0 -ne $? ] && exit 1
+			continue
+			;;
+
+		# handle compressed files
+		application/x-gzip)
+			echo "$file_name: gzip-compressed file"
+			optimize_gzip "$file"
+			[ 0 -ne $? ] && exit 1
+			continue
+			;;
+
+		application/x-bzip2)
+			echo "$file_name: bzip2-compressed file"
+			optimize_bzip2 "$file"
+			[ 0 -ne $? ] && exit 1
+			continue
+			;;
+
+		application/x-xz)
+			echo "$file_name: xz-compressed file"
+			optimize_xz "$file"
+			[ 0 -ne $? ] && exit 1
+			continue
+			;;
+	esac
+done
+
+exit 0

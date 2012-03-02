@@ -1,0 +1,7 @@
+# ~/.xbindkeysrc: XBindKeys settings
+
+"urxvt -title htop -e htop"
+  Control + Shift + Escape
+
+"grun"
+  Alt + F2

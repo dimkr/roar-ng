@@ -1,0 +1,76 @@
+#!/bin/dash
+
+# /usr/sbin/create_user: a user creation script
+
+# the default groups new users belong to
+DEFAULT_GROUPS="audio cdrom dialout disk floppy lp netdev plugdev tape tty video
+                users"
+
+# the command-line usage message
+USAGE="create_user USER
+
+Create a new user."
+
+# check the command-line arguments
+if [ 1 -ne $# ]
+then
+	echo "$USAGE"
+	exit 1
+fi
+
+echo -n "Creating the user ..."
+
+# create a home directory
+cp -ar /mnt/rootfs/root /home/$1
+
+# create the user
+adduser -D -h /home/$1 -H $1
+
+echo " done"
+
+# create a temporary output file
+temp_file="$(mktemp -u)"
+
+# list all groups
+items=""
+for group in $(cat /etc/group | cut -f 1,3 -d :)
+do
+	# filter the group name and its ID
+	id="${group##*:}"
+	name="${group%:*}"
+
+	mode="off"
+	for default_group in $1 $DEFAULT_GROUPS
+	do
+		if [ "$default_group" = "$name" ]
+		then
+			mode="on"
+			break 1
+		fi
+	done
+	items="$items $name $id $mode"
+done
+
+dialog --title "Groups" \
+       --no-cancel \
+       --checklist \
+       "Choose the groups the user belongs to." \
+       0 0 0 \
+       $items 2>$temp_file
+
+# read the user's choice
+groups="$(cat $temp_file | sed s/\"//g)"
+rm -f $temp_file
+
+# add the user to all groups
+echo -n "Setting the user groups ..."
+for group in $groups
+do
+	addgroup $1 $group
+done
+echo " done"
+
+# change the home directory permissions
+echo -n "Setting home directory permissions ..."
+chown -R $1:$1 /home/$1 
+echo " done"

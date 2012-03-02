@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# 1download: a script which downloads all packages specified in the package list
+
+# usage: 1download (to download all packages)
+
+# include the functions file
+. ./functions
+
+# list all packages
+for package in $(list_packages)
+do
+	# determine the package name and source distribution
+	name="$(get_package_name $package)"
+	distro="$(get_package_distro $package)"
+
+	echo "$name ($distro)"
+
+	# download all sub-packages
+	for sub_package in $(get_package_sub_packages $package)
+	do
+		# get the package entry
+		package_entry="$(get_package_entry $sub_package $distro)"
+		if [ -z "$package_entry" ]
+		then
+			echo "Error: could not locate the \"$sub_package\" package."
+			exit 1
+		fi
+
+		# filter the package file name
+		package_file_name="$(get_package_file_name $package_entry)"
+
+		# check whether the package exists already
+		if [ -f packages/$package_file_name ]
+		then
+			echo "  $package_file_name already exists, skipping"
+			continue
+		fi
+
+		# find all available download links
+		echo "  searching for mirrors"
+		download_links="$(get_download_links $sub_package $distro)"
+		if [ -z "$download_links" ]
+		then
+			echo "Error: no download links were found for $package_file_name."
+			exit 1
+		fi
+
+		# download the package
+		download_file_parallel "$download_links" packages/$package_file_name
+		if [ 0 -ne $? ]
+		then
+			echo "Error: failed to download $package_file_name."
+			[ -f packages/$package_file_name ] &&
+			                                   rm -f packages/$package_file_name
+			exit 1
+		fi
+	done
+done

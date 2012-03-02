@@ -1,0 +1,6 @@
+# /etc/shells: list of shells on the system
+
+/bin/sh
+/bin/ash
+/bin/bash
+/bin/dash

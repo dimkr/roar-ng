@@ -1,0 +1,23 @@
+# include the distribution information file
+. ./conf/distrorc
+
+case $DISTRO_ARCH in
+	x86_64)
+		suffix="64"
+		;;
+	*)
+		suffix=""
+		;;
+esac
+
+version="$(cat distro/slackware/version)"
+
+# repositories - package list URL|repository name
+repositories="ftp://ftp.osuosl.org/pub/slackware/slackware$suffix-$version/patches/PACKAGES.TXT|slackware-patches
+              ftp://ftp.osuosl.org/pub/slackware/slackware$suffix-$version/PACKAGES.TXT|slackware-main"
+
+# package download mirrors
+mirrors="ftp://ftp.gwdg.de/pub/linux/slackware/slackware$suffix-$version
+         ftp://ftp.fu-berlin.de/unix/linux/mirrors/slackware/slackware$suffix-$version
+         http://ftp.gwdg.de/pub/linux/slackware/slackware$suffix-$version
+         http://slackware.mirrors.tds.net/pub/slackware/slackware$suffix-$version"

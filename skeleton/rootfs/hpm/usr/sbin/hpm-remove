@@ -1,0 +1,71 @@
+#!/bin/dash
+
+# /usr/bin/hpm-remove: a package remover
+# dependencies: dash
+
+# the command-line usage message
+USAGE="hpm-remove PACKAGE
+
+Remove a software package."
+
+# include the configuration file
+. /etc/hpmrc
+
+# check the command-line arguments
+if [ 1 -ne $# ] || [ ! -f "$PKG_DATA_DIR/$1" ]
+then
+	echo "$USAGE"
+	exit 1
+fi
+
+success=1
+
+# remove the package files
+echo -n "Removing files ..."
+for i in $(tac "$PKG_DATA_DIR/$1")
+do
+	if [ -f "$i" ]
+	then
+		rm -f "$i"
+		if [ 0 -ne $? ]
+		then
+			success=0
+			break
+		fi
+		continue
+	fi
+
+	if [ -d "$i" ]
+	then
+		rmdir "$i" 2>/dev/null
+		continue
+	fi
+done
+
+if [ 1 -ne $success ]
+then
+	echo "Error: failed to remove the package files."
+	exit 1
+fi
+echo " done"
+
+# run the post-removal script, if there is such
+if [ -f "$PKG_DATA_DIR/$1-post_uninstall.sh" ]
+then
+	chmod +x "$PKG_DATA_DIR/$1-post_uninstall.sh"
+	base_dir="$(pwd)"
+	cd /
+	"$PKG_DATA_DIR/$1-post_uninstall.sh"
+	cd "$base_dir"
+	rm -f "$PKG_DATA_DIR/$1-post_uninstall.sh"
+fi
+
+# unregister the package
+echo -n "Unregistering the package ..."
+rm -f "$PKG_DATA_DIR/$1"
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to unregister the package."
+	exit 1
+fi
+echo " done"

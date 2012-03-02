@@ -1,0 +1,28 @@
+#!/bin/dash
+
+# /etc/rc.d/rc.shutdown: a system shutdown script
+# dependencies: dash and busybox
+
+# stop extra daemons
+for i in /etc/init.d/*
+do
+	[ -x $i ] && $i stop
+done
+
+# stop logging daemons
+echo "Stopping logging services ..."
+kill $(pidof syslogd)
+kill $(pidof klogd)
+echo " done"
+
+# stop other daemons
+echo -n "Stopping system services ..."
+kill $(pidof udevd)
+echo " done"
+
+# unmount all virtual file systems
+echo -n "Unmounting file systems ..."
+sync
+swapoff -a
+umount -a -r
+echo " done"

@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>DISTRO_NAME Changelog</title>
+<meta name="description" content="DISTRO_NAME Changelog" />
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<LINK href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<h1>Version History</h1>
+<h2>0.0.1 - 24th December at 00:30</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Changed Conky's default font to Terminus.</li>
+	<li>Added the Subtle Patterns desktop backgrounds package.</li>
+	<li>Made hsetroot set the wallpaper.</li>
+</ol>
+<h3>Source Hacking</h3>
+<ol>
+	<li>Ported cwm to GNU/Linux using libbsd.</li>
+	<li>Changed cwm's default font to Terminus.</li>
+	<li>Made stalonetray transparent and vertical by default.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Fixed a syntax error in .cwmrc.</li>
+	<li>cwm now ignores the Conky and stalonetray windows.</li>
+</ol>
+
+<h2>0.0.2 - 30th December at 21:15</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Added UnNetHack.</li>
+	<li>Added SimpleBurn, which replaces Pburn.</li>
+	<li>Added Calc.</li>
+	<li>Added TuDu.</li>
+	<li>Added gRun.</li>
+	<li>Added XBindKeys.</li>
+	<li>Added Abook.</li>
+	<li>Added network_tray, freememapplet_tray, powerapplet_tray, Parcellite and Volume Icon.</li>
+	<li>Added Clarity.</li>
+	<li>Added DASH.</li>
+	<li>Updated Bash to version 4.2.020.</li>
+	<li>Updated Links to version 2.5.</li>
+	<li>Updated D-Bus to version 1.2.28.</li>
+	<li>Replaced gtkdialog4 with a build script.</li>
+	<li>Enabled Xft support in rxvt-unicode.</li>
+	<li>Added Yad, with a backwards-compatibility symlink for Zenity.</li>
+	<li>Moved Terminus to /opt/share/fonts.</li>
+	<li>Added /etc/motd and /etc/issue through zzz_humble_hacks.</li>
+	<li>Added a logo through zzz_humble_hacks.</li>
+	<li>Added the new documentation through zzz_humble_hacks.</li>
+	<li>Added a new welcome screen through zzz_humble_hacks.</li>
+	<li>Added an icon for Moon-buggy.</li>
+	<li>Added /opt/bin/desksetup, a desktop configuration tool.</li>
+	<li>All man pages are now compressed using xz.</li>
+</ol>
+<h3>Source Hacking</h3>
+<ol>
+	<li>Removed the libelf dependency of GNU Screen.</li>
+	<li>Made wbar set its window name to "wbar" (so it can be ignored by cwm).</li>
+	<li>Replaced Mick's z_base_hacks with zzz_humble_hacks.</li>
+	<li>Replaced /etc/profile with a simpler one (which does not start the X server) through zzz_humble_hacks.</li>
+	<li>Added CTRL + SHIFT + ESC (htop) to XBindKeys' default settings.</li>
+	<li>Made Volume Icon show a horizonal slider by default and changed the default exernal mixer.</li>
+/ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Removed Axel; aria2 is more sophisticated and way more reliable.</li>
+	<li>Fixed the missing menu icon problem with vitetris, bs, cmus and NetSurf.</li>
+	<li>cmus no longer sets itself as the default audio player.</li>
+	<li>Removed an unneeded icon from the wbar package.</li>
+	<li>Prevented Moon-buggy from writing stuff to /opt/com.</li>
+	<li>Added /opt/bin/rxvt, a symlink to urxvt.</li>
+	<li>Added /opt/share/man to the man pages search path, through man.conf.</li>
+	<li>Removed the man pages for urxvtc and urxvtd.</li>
+	<li>Removed references to MPlayer in the mplayer2 build script.</li>
+	<li>Made aria2 lighter by removing its BitTorrent functionality (which is already provided by rTorrent) and removed some of its dependencies, such as sqlite.</li>
+	<li>Made cwm ignore the wbar window.</li>
+	<li>Removed legacy files in Woof through zzz_humble_hacks.</li>
+	<li>Fixed the paths in the Terminus post-install script.</li>
+	<li>Replaced all instances of "rxvt --title" with "urxvt -title" in menu entries.</li>
+	<li>Removed delayedrun and implemented a new .xinitrc through zzz_humble_hacks.</li>
+	<li>Removed many legacy scripts from Woof through zzz_humble_hacks and removed many of its dependencies.</li>
+	<li>Fixed the bug that caused rxvt-unicode to close immediately when executed with "-e".</li>
+	<li>Fixed the missing symlink problems with the original libpng package.</li>
+	<li>Moved vimrc to the right location.</li>
+	<li>Moved Calc's man pages to the right location.</li>
+</ol>
+
+<h2>0.0.3 - 7th January at 00:05</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Added Xpad.</li>
+	<li>Added NumLockX.</li>
+	<li>Added slock.</li>
+	<li>Added the HumbleRaleigh GTK+ 2 theme.</li>
+	<li>Added load_sfs, a small replacement for sfs_load.</li>
+	<li>Updated file to version 5.10.</li>
+	<li>Updated shared-mime-info to version 0.91.</li>
+	<li>Updated LFTP to version 4.3.4.</li>
+	<li>Updated squashfs-tools to version 4.2.</li>
+	<li>Updated dhcpcd to version 5.2.12.</li>
+	<li>Updated Calc to version 2.12.4.4.</li>
+	<li>Added back support for Metalink in aria2.</li>
+	<li>Added support for post-removal scripts in hpm.</li>
+	<li>Added build scripts for bc, wireless_tools and mktemp.</li>
+	<li>Added a new, lighter rc.update which creates all generated caches at first boot instead of at build time.</li>
+	<li>Improved wmexit and made wmreboot and wmpoweroff call it.</li>
+	<li>Wrote a new, smaller 3builddistro which produces a lighter build.</li>
+</ol>
+<h3>Source Hacking</h3>
+<ol>
+	<li>Replaced ALT with SHIFT in Parcellite's default key bindings.</li>
+	<li>Prevented Xpad's help message from showing up on its first run.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Fixed the 64-bit Parcellite bug; the sources are dirty and ship with a x86_64 version.</li>
+	<li>Fixed the Parcellite icon bug.</li>
+	<li>Added a small delay before startup applications are launched.</li>
+	<li>Made stalonetray force the icon size.</li>
+	<li>Added a white background to the distribution logo.</li>
+	<li>Added gtkdialog-splash to cwm's ignore list.</li>
+</ol>
+
+<h2>0.0.4 - 21st January at 17:55</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Wrote roar-ng, a replacement for Woof.</li>
+	<li>Added gtk2_prefs.</li>
+	<li>Added the full DejaVu fonts package.</li>
+	<li>Added more patterns to the Subtle Patterns package.</li>
+	<li>Replaced Wizard Wizard with a home-made settings panel.</li>
+	<li>Added System Cleaner, a configuration and cache cleaning tool.</li>
+	<li>Updated aria2 to version 1.14.1.</li>
+	<li>Updated msmtp to version 1.4.27.</li>
+	<li>Updated Vim to version 7.3.409.</li>
+	<li>Added support for X11 grabbing in libav.</li>
+	<li>Removed network_tray and freememapplet_tray.</li>
+	<li>Removed Perl from the ISO and moved it to the devx module.</li>
+	<li>Removed GTK+ documentation.</li>
+	<li>Changed the default desktop background.</li>
+</ol>
+<h3>Source Hacking</h3>
+<ol>
+	<li>Changed cwm's default applications to rxvt-unicode and slock.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Prevented Xpad from creating the first note.</li>
+	<li>Removed all texinfo documentation.</li>
+	<li>Made desksetup replace symlinks under ~/Startup with scripts, so permissions can be set.</li>
+</ol>
+
+<h2>0.0.5 - 3rd February at 22:05</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Added the window manager man page to the first-run wizard.</li>
+	<li>Built using roar-ng, with many fixes and improvements.</li>
+	<li>Removed all Puppy-specific dependencies of the skeleton.</li>
+	<li>Updated LFTP to version 4.3.5.</li>
+	<li>Updated rxvt-unicode to version 9.15.</li>
+	<li>Updated Vim to version 7.3.420.</li>
+	<li>Changed the distribution name and re-branded all Puppy stuff.</li>
+	<li>Made the initramfs much smaller by removing unneeded drivers.</li>
+	<li>Implemented proper use of a layered file system.</li>
+	<li>Implemented save files.</li>
+	<li>Added create_user, a user creation script.</li>
+	<li>Added full slackware64 support to roar-ng.</li>
+	<li>Switched from Aufs to Unionfs.</li>
+	<li>Replaced the kernel with the latest longterm version.</li>
+	<li>Moved the icon theme to /usr/share/pixmaps.</li>
+	<li>Wrote a BusyBox build script.</li>
+	<li>Expanded the distribution documentation.</li>
+	<li>Added a dedicated package repository.</li>
+	<li>Enabled the Dropbear SSH server by default.</li>
+</ol>
+<h3>Source Hacking</h3>
+<ol>
+	<li>Changed the default key paths in Dropbear to the right ones.</li>
+	<li>Removed the default optimization in the BusyBox makefile.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Performed additional removal of Puppy-specific packages.</li>
+	<li>Added the D-Bus user to make it work.</li>
+	<li>Changed roar-ng's behavior - now it takes isolinux.bin from the binary package.</li>
+	<li>Fixed the missing libraries issue with GCC.</li>
+	<li>Converted all symlinks under ~/Startup to shell scripts.</li>
+	<li>Fixed the libav and mplayer2 build scripts, after the recent changes in the former.</li>
+	<li>Added the missing defaultaudiomixer.</li>
+	<li>Modified the D-Bus and Dropbear init scripts to match the init scripts format.</li>
+	<li>Added a post-installation script for DejaVu which updates the fonts cache.</li>
+	<li>Prevented the Terminus post-installation script from updating the fonts cache of the host when executed by roar-ng.</li>
+	<li>Removed the BusyBox man applet.</li>
+</ol>
+
+<h2>0.0.6 - 4th February at 21:00</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Added a licenses package.</li>
+	<li>Added KVM support to Linux.</li>
+	<li>Updated Linux to version 3.0.19.</li>
+	<li>Updated Vim to version 7.3.421.</li>
+	<li>Switched to to the libav 0.8 stable branch, since mplayer2 does not build against the development branch.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Added back the printk() support removed from the kernel by mistake.</li>
+</ol>
+
+<h2>0.9.0 (Alpha 1) - 18th February at 13:20</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Added Movgrab.</li>
+	<li>Added x86-video-nouveau, to make Nouveau usable.</li>
+	<li>Added the Argyle pattern to the desktop backgrounds package.</li>
+	<li>Added support for the Slackware patches repository.</li>
+	<li>Updated BusyBox to version 1.19.4.</li>
+	<li>Updated Linux to version 3.0.21.</li>
+	<li>Updated libvorbis to version 1.3.3.</li>
+	<li>Updated UnNetHack to version 3.6.1.</li>
+	<li>Updated slock to version 1.0.</li>
+	<li>Updated Vim to version 7.3.444.</li>
+	<li>Updated shared-mime-info to version 1.0</li>
+	<li>Updated the Clarity icon theme to verison 0.3.2.</li>
+	<li>Moved all the stuff in /opt to /usr.</li>
+	<li>Added DASH to the initramfs.</li>
+	<li>Implemented the rxz package format.</li>
+	<li>Added save file usage anlysis (using ncdu) to the system settings panel.</li>
+	<li>Moved create_save_file to the initramfs and added automatic creation of save files once the "home" boot code is specified.</li>
+	<li>Rewrote Builder and merged it into roar-ng, to allow the latter to build packages inside the distribution built by it.</li>
+	<li>Added detection of configuration files to desksetup, to make it reflect the current state.</li>
+	<li>Added console font changing to the init script.</li>
+	<li>Added swap partition setup to the init script.</li>
+	<li>Made the desktop backgrounds hardcoded to /usr/share/backgrounds.</li>
+	<li>Removed all use of /usr/local/bin for default applications.</li>
+	<li>Removed all extra menu entries.</li>
+	<li>Rewrote the package building framework.</li>
+	<li>Changed roar-ng's configuration format.</li>
+	<li>Removed some backwards-compatibility symlinks specific to Puppy.</li>
+</ol>
+<h3>Source Hacking</h3>
+<ol>
+	<li>Reduced the kernel verbosity level.</li>
+	<li>Removed the XBindKeys settings source hack and made it part of the skeleton.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Fixed the blank screen problem with KMS.</li>
+	<li>Moved dvtm from /usr/local to the right prefix.</li>
+	<li>Fixed a bug in splitpkg which caused directories of redirected sub-packages to be placed directly under the file system root.</li>
+	<li>Changed the default shell to Bash and made it run interactively.</li>
+	<li>Fixed the modprobe errors issue caused by missing module dependency files.</li>
+</ol>
+<h2>0.9.5 (Beta) - 1st March at 21:30</h2>
+<h3>New Features</h3>
+<ol>
+	<li>Added Geany.</li>
+	<li>Updated aria2 to version 1.14.2.</li>
+	<li>Updated Vifm to version 0.7.2.</li>
+	<li>Updated Linux to version 3.0.23.</li>
+	<li>Added an improved default configuration for Conky, which shows battery state.</li>
+	<li>Removed powerapplet_tray.</li>
+	<li>Removed hnb.</li>
+	<li>Removed Yad.</li>
+	<li>Improved create_user; it no longer asks for a password and produces a more verbose output.</li>
+	<li>Changed the default desktop background.</li>
+	<li>Implemented "full" boot mode in roar-ng.</li>
+	<li>Made roar-ng output hubrid ISO images, which can be written on USB devices.</li>
+	<li>Added boot codes documentation to the boot loader message.</li>
+	<li>Streamlined 3builddistro.</li>
+	<li>Added a usage manual to roar-ng.</li>
+</ol>
+<h3>Bug Fixes</h3>
+<ol>
+	<li>Made MIME types cache generation run just once.</li>
+	<li>Made the init script remove /mnt/home, since it remains in the save file.</li>
+	<li>Changed the D-Bus init script, so it removes the pidfile.</li>
+</ol>
+</body>

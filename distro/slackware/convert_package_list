@@ -1,0 +1,66 @@
+#!/usr/bin/python
+
+# usage: convert_package_list $package_list
+
+from sys import argv
+import re
+
+# the regular expression used to parse lines
+LINE_REGEX = re.compile("(.+):(.*)", re.S)
+
+class Package(object):
+	def __init__(self, name):
+		self.name = name
+		self.description = None
+
+	def __str__(self):
+		return "%(name)s|%(version)s|%(revision)s|%(location)s/%(file_name)s|%(description)s" % { "name" : self.name,
+		                                                                                          "version" : self.version,
+		                                                                                          "revision" : self.revision,
+		                                                                                          "location" : self.location,
+		                                                                                          "file_name" : self.file_name,
+		                                                                                          "description" : self.description
+		                                                                                        }
+
+# read the file contents
+f = open(argv[1], "rb")
+contents = f.read().split("\n")
+f.close()
+
+# initialize the "package" variable
+package = None
+
+# parse the file
+for line in contents:
+	match = LINE_REGEX.match(line)
+	if match is None:
+		continue
+
+	# get the field name and value
+	field = match.group(1)
+	value = match.group(2).strip()
+
+	if "PACKAGE NAME" == field:
+		# split the file name and reverse it
+		package_name_split = value.split("-")
+		package_name_split.reverse()
+
+		name = package_name_split[3:]
+		name.reverse()
+		package = Package("-".join(name))
+
+		package.version = package_name_split[2]
+		package.revision = package_name_split[0][:package_name_split[0].index(".")]
+		package.file_name = value
+
+	if "PACKAGE LOCATION" == field:
+		package.location = value[2:]
+
+	if package is not None:
+		if package.name == field:
+			if package.description is None:
+				if " " in value:
+					package.description = value[2 + value.index(" "):-1]
+				else:
+					package.description = value
+				print package

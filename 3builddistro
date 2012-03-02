@@ -1,0 +1,396 @@
+#!/bin/sh
+
+# 3builddistro: a script which assmbles a bootable ISO9660 image from the
+#               distribution skeleton and the processed packages
+
+# usage: 3builddistro (to build the image)
+
+# include the distribution information file
+. ./conf/distrorc
+
+# include the functions file
+. ./functions
+
+#######################
+# build configuration #
+#######################
+
+# the flags passed to mksquashfs
+MKSQUASHFS_OPTIONS="-comp xz -Xbcj x86"
+
+##############
+# file names #
+##############
+
+# the devx module name
+DEVX_SFS_NAME="devx_$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.sfs"
+
+#####################
+# included packages #
+#####################
+
+# packages that go into the initramfs
+INITRAMFS_PACKAGES="busybox glibc dash"
+
+# packages included in the the main module
+MAIN_SFS_PACKAGES=""
+
+# packages included in the devx module
+DEVX_PACKAGES=""
+
+# list all sub-packages; make sure all packages exist and choose which go to
+# the main SFS and which go to the devx module
+for package in $(list_packages | cut -f 2 -d \|)
+do
+	found=0
+	exe_exists=0
+	dev_exists=0
+
+	# list the package sub-packages
+	if [ -d processed-packages/$package ]
+	then
+		MAIN_SFS_PACKAGES="$MAIN_SFS_PACKAGES $package"
+		exe_exists=1
+		found=1
+	fi
+
+	if [ -d processed-packages/${package}_DEV ]
+	then
+		DEVX_PACKAGES="$DEVX_PACKAGES ${package}_DEV"
+		dev_exists=1
+		found=1
+	fi
+
+	for suffix in _DOC _NLS
+	do
+		if [ -d processed-packages/${package}$suffix ]
+		then
+			# if no main package exists, but a _DEV one does, put the package
+			# in the devx module
+			if [ 0 -eq $exe_exists ] && [ 1 -eq $dev_exists ]
+			then
+				DEVX_PACKAGES="$DEVX_PACKAGES ${package}$suffix"
+			else
+				MAIN_SFS_PACKAGES="$MAIN_SFS_PACKAGES ${package}$suffix"
+			fi
+			found=1
+		fi
+	done
+
+	# if no package was found, exit here
+	if [ 0 -eq $found ]
+	then
+		echo "Error: the \"$package\" package could not be found."
+		exit 1
+	fi
+done
+
+# usage: build_module $name $directory $packages
+# isos a module from its skeleton and a list of packages
+build_module()
+{
+	echo "Building the \"$1\" module"
+
+	# create the output directory
+	mkdir $2
+
+	# initialize the merged post-installation script
+	post_install_script="$(mktemp -u)"
+
+	# list the directories to add their contents
+	directories=""
+
+	# list the packages
+	for package in $3
+	do
+		directories="$directories processed-packages/$package"
+	done
+
+	# list the skeleton modules
+	for module in skeleton/$1/*
+	do
+		directories="$directories $module"
+	done
+
+	# copy the module contents
+	for directory in $directories
+	do
+		echo -n "Adding $directory ..."
+		cp -a --remove-destination $directory/* $2
+		[ 0 -ne $? ] && exit 1
+		echo " done"
+
+		# remove unwanted init scripts
+		case "$directory" in
+			skeleton/*)
+				;;
+			*)
+				[ -d $2/etc/rc.d ] && rm -rf $2/etc/rc.d
+				;;
+		esac
+
+		# remove shell customizations
+		[ -d $2/etc/profile.d ] && rm -rf $2/etc/profile.d
+
+		# if there is a post-installation script, append it
+		if [ -f $2/post_install.sh ]
+		then
+			# append a newline, since some post-installation scripts do
+			# not have one
+			echo -n "Merging the post installation script ..."
+			echo >> $post_install_script
+			cat $2/post_install.sh >> $post_install_script
+			rm -f $2/post_install.sh
+			echo " done"
+		fi
+	done
+
+	# remove unneeded files
+	for file in post_install.sh post_uninstall.sh
+	do
+		[ -f $2/$file ] && rm -f $2/$file
+	done
+
+	# move the merged post-installation script to the module
+	[ -f $post_install_script ] && \
+	                                  mv $post_install_script $2/post_install.sh
+}
+
+# usage: run_post_install $module
+# runs the merged post-installation script of a module
+run_post_install()
+{
+	[ ! -f $1/post_install.sh ] && return
+	base_dir="$(pwd)"
+	cd $1
+	chmod 755 post_install.sh
+	./post_install.sh
+	rm -f post_install.sh
+	cd $base_dir
+}
+
+# remove previous sandbox directories
+if [ -d sandbox ]
+then
+	echo -n "Cleaning up ..."
+	rm -rf sandbox
+	echo " done"
+fi
+
+mkdir sandbox
+
+#############################
+# main file system creation #
+#############################
+
+# build the main file system
+build_module rootfs sandbox/rootfs "$MAIN_SFS_PACKAGES"
+
+# add distrorc
+install -D -m644 conf/distrorc sandbox/rootfs/etc/distrorc
+
+# add bootrc
+install -D -m644 conf/bootrc sandbox/rootfs/etc/bootrc
+
+# run the merged post-installation script
+run_post_install sandbox/rootfs
+
+###############
+# devx module #
+###############
+
+# build the devx module
+if [ -n "$DEVX_PACKAGES" ]
+then
+	build_module devx sandbox/devx "$DEVX_PACKAGES"
+	run_post_install sandbox/devx
+fi
+
+#############
+# initramfs #
+#############
+
+build_module initramfs sandbox/initramfs "$INITRAMFS_PACKAGES"
+
+#############
+# ISO image #
+#############
+
+build_module iso sandbox/iso ""
+
+#############
+# initramfs #
+#############
+
+# add distrorc to the initramfs
+cp conf/distrorc sandbox/initramfs/etc
+
+# copy bootrc to the initramfs
+cp conf/bootrc sandbox/initramfs/etc
+
+# clean up the initramfs
+rm -rf sandbox/initramfs/usr/share
+
+# run the merged post-installation script
+run_post_install sandbox/initramfs
+
+# move the kernel to the results directory
+mv sandbox/rootfs/boot/vmlinuz sandbox/iso
+
+############
+# clean up #
+############
+
+cd sandbox
+
+echo -n "Cleaning up the main file system ..."
+
+# remove the module dependency files
+find rootfs/lib/modules -name 'modules.*' -delete
+
+# remove the loader cache
+[ -f rootfs/etc/ld.so.cache ] && rm -f rootfs/etc/ld.so.cache
+
+# remove the fonts cache
+find rootfs -name fonts.scale -or \
+            -name fonts.dir -or \
+            -name 'fonts.cache*' \
+            -name '.fonts.cache*' \
+            -delete
+rm -f rootfs/var/cache/fontconfig/* > /dev/null 2>&1
+
+# remove the icons cache
+[ -f rootfs/usr/share/icons/hicolor/icon-theme.cache ] && \
+                           rm -f rootfs/usr/share/icons/hicolor/icon-theme.cache
+
+# remove the gdk-pixbuf loaders list
+[ -f rootfs/etc/gtk-2.0/gdk-pixbuf.loaders ] && \
+                                     rm -f rootfs/etc/gtk-2.0/gdk-pixbuf.loaders
+
+# remove Aufs remains
+for i in rootfs devx
+do
+	[ -d $i ] && find $i -name '.wh*' -delete
+done
+
+# remove gutenprint documentation
+[ -d rootfs/usr/share/gutenprint/doc ] && \
+                                        rm -rf rootfs/usr/share/gutenprint/doc/*
+
+# remove gutenprint samples
+[ -d rootfs/usr/share/gutenprint/samples ] &&
+                                    rm -rf rootfs/usr/share/gutenprint/samples/*
+
+# remove unneeded directories
+for directory in examples \
+                 common-lisp \
+                 gtk-doc \
+                 info \
+                 src \
+                 emacs \
+                 deforma
+do
+	for prefix in usr usr/share usr usr/local usr/local/share
+	do
+		for i in rootfs devx
+		do
+			[ -d $i/$prefix/$directory ] && rm -rf $i/$prefix/$directory
+		done
+	done
+done
+
+echo " done"
+
+###############
+# permissions #
+###############
+
+echo -n "Setting permissions and ownership ..."
+
+# set the permissions for system directories so they're writeable by all users
+chmod 777 rootfs/tmp
+chmod 777 rootfs/var
+
+echo " done"
+
+#########
+# hacks #
+#########
+
+# disable Dropbear
+chmod -x rootfs/etc/init.d/dropbear
+
+# set DASH as the default initramfs shell
+rm -f initramfs/bin/sh
+ln -s dash initramfs/bin/sh
+
+# if DASH is not present, use Bash instead
+if [ ! -e rootfs/bin/dash ]
+then
+	ln -s bash rootfs/bin/dash
+fi
+
+# set Bash as the default shell
+[ -e rootfs/bin/sh ] && rm -f rootfs/bin/sh
+ln -s bash rootfs/bin/sh
+
+##################
+# image creation #
+##################
+
+# create the main Squashfs image
+mksquashfs rootfs initramfs/rootfs.sfs $MKSQUASHFS_OPTIONS
+
+# create the initramfs
+cd initramfs
+find . | cpio -o -H newc | gzip --best > ../iso/initrd.gz
+cd ..
+
+# re-compress the initramfs to make it smaller
+advdef -z4 iso/initrd.gz
+
+#######
+# ISO #
+#######
+
+mkdir dist
+
+echo -n "Configuring the boot loader ..."
+
+# add isolinux.bin
+cp -a $(find ../processed-packages/syslinux -name isolinux.bin) iso
+
+# put the distribution name and version in isolinux.cfg
+for i in iso/isolinux.cfg iso/*.txt
+do
+	sed -e s~DISTRO_NAME~"$DISTRO_NAME"~g \
+	    -e s~DISTRO_VERSION~"$DISTRO_VERSION"~g \
+	    -e s~DISTRO_NICKNAME~"$DISTRO_NICKNAME"~g \
+	    -i $i
+done
+echo " done"
+
+mkisofs -D -R \
+        -o dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso \
+        -b isolinux.bin \
+        -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table iso
+
+echo -n "Making the ISO image hybrid ..."
+isohybrid dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso
+echo " done"
+
+# create the devx module
+if [ -n "$DEVX_PACKAGES" ]
+then
+	mksquashfs devx dist/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
+fi
+
+#######
+# MD5 #
+#######
+
+# calculate the MD5 hashes of the output
+echo -n "Generating md5sums.txt ..."
+cd dist
+md5sum * > md5sums.txt
+echo " done"

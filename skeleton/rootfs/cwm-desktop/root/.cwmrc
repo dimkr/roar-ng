@@ -1,0 +1,27 @@
+# ~/.cwmrc: cwm configuration
+
+# windows to ignore
+ignore Conky
+ignore stalonetray
+ignore wbar
+
+# the default font
+fontname "Terminus:size=10"
+
+# default applications
+command term urxvt
+command lock slock
+
+# applications menu
+command Vifm "urxvt -title Vifm -e vifm"
+command Geany geany
+command Links "urxvt -title Links -e links"
+command Mutt "urxvt -title Mutt -e mutt"
+command rTorrent "urxvt -title rTorrent -e rtorrent"
+command Snownews "urxvt -title Snownews -e snownews"
+command TuDu "urxvt -title TuDu -e tudu"
+command AlsaMixer "urxvt -title AlsaMixer -e alsamixer"
+command cmus "urxvt -title cmus -e cmus"
+command UnNetHack "urxvt -title UnNetHack -e unnethack"
+command Angband "urxvt -title Angband -e angband"
+command htop "urxvt -title htop -e htop"

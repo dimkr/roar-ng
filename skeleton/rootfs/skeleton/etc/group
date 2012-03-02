@@ -1,0 +1,15 @@
+root:x:0:
+audio:x:1:
+cdrom:x:2:
+dialout:x:3:
+disk:x:4:
+floppy:x:5:
+kmem:x:6:
+lp:x:7:
+netdev:x:8:
+plugdev:x:9:
+tape:x:10:
+tty:x:11:
+video:x:12:
+503:x:503:messagebus
+users:x:13:

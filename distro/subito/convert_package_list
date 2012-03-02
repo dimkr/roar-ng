@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# usage: convert_package_list $package_list
+
+cat "$1"

@@ -1,0 +1,129 @@
+#!/bin/sh
+
+# 4buildpackage: a script which builds a given package in a chroot environment
+#                created from the output of 3builddistro
+
+# usage: 4buildpackage PACKAGE (to build a given package)
+
+# virtual file systems in the file system root to bind to the host's
+VIRTUAL_FS="dev proc sys"
+
+# the build scripts directory
+BUILD_SCRIPT_DIR="var/packages"
+
+# check the command-line arguments
+if [ 1 -ne $# ] || [ -z "$1" ]
+then
+	echo "Error: must supply a package name."
+	exit 1
+fi
+
+# make sure the directories the script relies on actually exist
+if [ ! -d sandbox/devx ] || [ ! -d sandbox/rootfs ]
+then
+	echo "Error: must run after 3builddistro."
+	exit 1
+fi
+
+# create a writeable layer
+[ ! -d sandbox/rw ] && mkdir sandbox/rw
+
+# mount an Aufs file system to join the contents the main Squashfs image and the
+# devx module
+mount_point="$(mktemp -d -p /mnt)"
+mount -t aufs \
+      -o udba=reval \
+      -o diropq=w \
+      -o br=sandbox/rw:sandbox/devx:sandbox/rootfs \
+      none $mount_point
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to mount an Aufs file system."
+	exit 1
+fi
+
+# bind the host's virtual file systems to the chroot environment's ones
+for i in $VIRTUAL_FS
+do
+	# if the mount point is missing, create it
+	if [ ! -d $mount_point/$i ]
+	then
+		mkdir $mount_point/$i
+	else
+		rm -rf $mount_point/$i/*
+	fi
+
+	# bind the file system
+	mount --bind /$i $mount_point/$i
+	if [ 0 -ne $? ]
+	then
+		echo "Error: failed to bind the /$i directory."
+		exit 1
+	fi
+done
+
+# add the host's resolv.conf to allow DNS resolving
+cp -f /etc/resolv.conf $mount_point/etc
+
+# create the build directory
+[ ! -d $mount_point/tmp/build ] && mkdir -p $mount_point/tmp/build
+
+# if the sources exist, copy them; otherwise - create an empty directory
+if [ -d sources/$1 ]
+then
+	cp -r sources/$1 $mount_point/tmp/build
+else
+	mkdir -p $mount_point/tmp/build/$1
+fi
+
+# create a wrapper for buildpkg, which will also download the sources
+cat << EOF > $mount_point/tmp/build/$1/build.sh
+ldconfig
+cd /tmp/build/$1
+buildpkg download \$(find /$BUILD_SCRIPT_DIR -name $1.sh)
+if [ 0 -ne \$? ]
+then
+	echo \$? > success
+	exit 1
+fi
+buildpkg build \$(find /$BUILD_SCRIPT_DIR -name $1.sh)
+success=\$?
+echo \$success > success
+[ 0 -ne \$success ] && exit 1
+[ "busybox" != "$1" ] && hpm-install *.rxz $1
+exit 0
+EOF
+chmod 755 $mount_point/tmp/build/$1/build.sh
+
+# run the wrapper
+chroot $mount_point /tmp/build/$1/build.sh
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to run chroot."
+	exit 1
+fi
+
+# determine whether buildpkg succeeded
+exit_code="$(cat $mount_point/tmp/build/$1/success)"
+
+# unmount all virtual file systems
+for i in $VIRTUAL_FS
+do
+	umount $mount_point/$i > /dev/null 2>&1
+done
+
+# unmount the Aufs file system
+umount $mount_point > /dev/null 2>&1
+
+# clean up
+[ 0 -eq $? ] && rm -rf $mount_point
+
+# if buildpkg succeeded, copy the result packages
+if [ 0 -eq $exit_code ]
+then
+	[ ! -d built-packages/$1 ] && mkdir built-packages/$1
+	cp -f sandbox/rw/tmp/build/$1/*.rxz built-packages/$1
+fi
+
+# return the buildpkg exit code
+exit $exit_code

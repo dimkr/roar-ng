@@ -1,0 +1,29 @@
+#!/bin/dash
+
+# /etc/init.d/dbus: an init script for D-Bus
+
+case "$1" in
+	start)
+		echo -n "Starting D-Bus ..."
+		[ -f /var/run/dbus/dbus.pid ] && rm -f /var/run/dbus/dbus.pid
+		dbus-daemon --system --fork
+	 	dbus-uuidgen > /var/lib/dbus/machine-id
+	 	echo " done"
+		;;
+
+	stop)
+		echo -n "Stopping D-Bus ..."
+		killall dbus-daemon
+		echo " done"
+		;;
+		
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "dbus {start|stop|restart}"
+		exit 1
+		;;
+esac
