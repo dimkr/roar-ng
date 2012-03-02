@@ -101,13 +101,9 @@ esac
 echo -n "Preparing main file system ..."
 
 # mount the main Squashfs image, located at the file system root
-mkdir /mnt/rootfs
 mount /rootfs.sfs /mnt/rootfs -t squashfs -o loop,ro
 [ 0 -ne $? ] && show_error "failed to mount the main file system image"
 echo " done"
-
-# create a mount point for the writeable layer
-mkdir -p /mnt/save
 
 # prepare the writeable layer
 case $boot_mode in
