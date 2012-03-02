@@ -1,7 +1,6 @@
 # ~/.cwmrc: cwm configuration
 
 # windows to ignore
-ignore Conky
 ignore stalonetray
 ignore wbar
 

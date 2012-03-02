@@ -28,9 +28,9 @@ PARENT_DIR=$(dirname "$PKG_PATH")
 
 base_dir="$(pwd)"
 
-cd "$PARENT_DIR"
+cd "$PKG_PATH"
 
-find "$PKG_NAME" | while read file
+find | while read file
 do
 	# if the file no longer exists, skip this iteration
 	[ ! -e "$file" ] && continue
@@ -90,8 +90,8 @@ do
 			echo "$file_name -> $sub_package_name"
 
 			# detect the sub_directory inside the package
-			sub_dir=$(dirname "$file" | cut -c 2-)
-
+			sub_dir=$(dirname "$file")
+			
 			# create the directory under the sub-package directory
 			mkdir -p "$PARENT_DIR/$sub_package_name/$sub_dir"
 
@@ -110,8 +110,9 @@ do
 	esac
 done
 
-# if the main package is empty, remove it
 cd "$base_dir"
+
+# if the main package is empty, remove it
 is_empty=$(find "$1" -type f)
 [ -z "$is_empty" ] && rm -rf "$1"
 
