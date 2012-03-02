@@ -81,6 +81,17 @@ case "$sleep" in
 		;;
 esac
 
+# if the home partition was specified through its UUID, determine its name
+case "$home_partition" in
+	*-*-*-*-*)
+		home_partition="$(blkid | \
+		                  grep UUID=\"$home_partition\" | \
+		                  cut -f 1 -d : | cut -f 3- -d /)"
+		[ -z "$home_partition" ] && \
+		               show_error "the specified home partition UUID is invalid"
+		;;
+esac
+
 # generate device nodes for all recognized partitions
 echo -n "Recognizing partitions ..."
 mdev -s
