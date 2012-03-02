@@ -267,10 +267,14 @@ rm -f rootfs/var/cache/fontconfig/* > /dev/null 2>&1
 [ -f rootfs/etc/gtk-2.0/gdk-pixbuf.loaders ] && \
                                      rm -f rootfs/etc/gtk-2.0/gdk-pixbuf.loaders
 
-# remove Aufs remains
 for i in rootfs devx
 do
-	[ -d $i ] && find $i -name '.wh*' -delete
+	# remove Aufs remains
+	if [ -d $i ] 
+	then
+		find $i -name '.wh*' -delete
+		find $i -name '*.pyc' -or -name '*.pyo' -delete
+	fi
 done
 
 # remove gutenprint documentation
