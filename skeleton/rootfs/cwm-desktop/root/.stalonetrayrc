@@ -9,7 +9,6 @@ fuzzy_edges 0
 
 # icon size
 icon_size 24
-#kludges force_icon_size
 
 # window
 window_layer bottom
