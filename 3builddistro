@@ -151,6 +151,9 @@ build_module()
 		[ -f $2/$file ] && rm -f $2/$file
 	done
 
+	# remove .gitignore files
+	find $2 -name .gitignore -delete
+
 	# move the merged post-installation script to the module
 	[ -f $post_install_script ] && \
 	                                  mv $post_install_script $2/post_install.sh
