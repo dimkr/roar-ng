@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="volumeicon"
-PKG_VER="0.4.5"
+PKG_VER="0.4.6"
 PKG_REV="1"
 PKG_DESC="Audio volume control tray icon"
 PKG_CAT="Multimedia"
@@ -46,10 +46,6 @@ build() {
 package() {
 	# install the package
 	make DESTDIR=$INSTALL_DIR install
-	[ $? -ne 0 ] && return 1
-
-	# remove all icon themes
-	rm -rf $INSTALL_DIR/$SHARE_DIR/$PKG_NAME/icons/*
 	[ $? -ne 0 ] && return 1
 
 	# install the list of authors

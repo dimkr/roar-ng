@@ -269,10 +269,11 @@ rm -f rootfs/var/cache/fontconfig/* > /dev/null 2>&1
 
 for i in rootfs devx
 do
-	# remove Aufs remains
 	if [ -d $i ] 
-	then
+	then	
+		# remove Aufs remains
 		find $i -name '.wh*' -delete
+		# remove Python bytecode
 		find $i -name '*.pyc' -or -name '*.pyo' -delete
 	fi
 done
