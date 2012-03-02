@@ -150,7 +150,6 @@ esac
 
 # create a union of the writeable file system and the main file system
 echo -n "Setting up the layered file system ..."
-mkdir /mnt/union
 mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
 
