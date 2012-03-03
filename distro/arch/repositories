@@ -19,7 +19,7 @@ repositories="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$suffix/core.d
 
 # package download mirrors - more at http://www.archlinux.org/mirrors/status/
 mirrors="http://mirror.csclub.uwaterloo.ca/archlinux
-         http://mirror.ece.vt.edu/archlinux/
+         http://mirror.ece.vt.edu/archlinux
          http://mirror.rit.edu/archlinux
-         http://ftp5.gwdg.de/pub/linux/archlinux/
-         http://archlinux.mirrors.ovh.net/archlinux/"
+         http://ftp5.gwdg.de/pub/linux/archlinux
+         http://archlinux.mirrors.ovh.net/archlinux"
