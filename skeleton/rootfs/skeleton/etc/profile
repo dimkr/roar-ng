@@ -24,10 +24,10 @@ HISTCONTROL="ignoredups"
 
 for i in /etc/profile.d/*.sh
 do
-	source $i
+	. $i
 done
 
-[ -e /etc/profile.local ] && source /etc/profile.local
+[ -e /etc/profile.local ] && . /etc/profile.local
 
 #######################
 # important variables #
