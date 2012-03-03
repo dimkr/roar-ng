@@ -1,5 +1,5 @@
 logo.lss
-0aWelcome to DISTRO_NAME!07
+07Welcome to DISTRO_NAME!
 
 If you encouter any issues or wish to enable persistency between sessions, here are some useful boot codes:
 - hostname (e.g hostname=pc) - used to specify the hostname to use instead of a randomly-generated one.
