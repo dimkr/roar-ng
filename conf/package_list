@@ -105,9 +105,10 @@ slackware|m4|m4|exe>dev,dev,doc,nls
 slackware|man|man|exe,dev,doc,nls
 slackware|man-pages|man-pages|exe,dev,doc,nls
 slackware|make|make|exe>dev,dev,doc,nls
-slackware|mesa|mesa|exe,dev,doc,nls
+slackware|mesa|mesa,glew|exe,dev,doc,nls
 slackware|module-init-tools|module-init-tools|exe,dev,doc,nls
 slackware|mpfr|mpfr|exe>dev,dev,doc,nls
+slackware|nasm|nasm|exe>dev,dev,doc,nls
 slackware|ncurses|ncurses|exe,dev,doc,nls
 slackware|netpbm|netpbm|exe,dev,doc,nls
 slackware|net-tools|net-tools|exe,dev,doc,nls
@@ -136,7 +137,6 @@ slackware|subversion|subversion,neon|exe>dev,dev,doc,nls
 # dependency of SDL
 slackware|svgalib|svgalib|exe,dev,doc,nls
 slackware|sysfsutils|sysfsutils|exe,dev,doc,nls
-slackware|syslinux|syslinux|exe,dev,doc,nls
 slackware|tar|tar|exe,dev,doc,nls
 slackware|udev|udev|exe,dev,doc,nls
 slackware|util-linux|util-linux|exe,dev,doc,nls
@@ -166,6 +166,8 @@ subito|bash|bash|exe,dev,doc,nls
 subito|squashfs-tools|squashfs-tools|exe,dev,doc,nls
 # use the Slackware kernel headers inside
 subito|linux|linux|exe,dev>null,doc,nls
+# use a Subito package, which is newer
+subito|syslinux|syslinux|exe,dev,doc,nls
 subito|licenses|licenses|exe,dev,doc,nls
 subito|iana-etc|iana-etc|exe,dev,doc,nls
 subito|libbsd|libbsd|exe,dev,doc,nls

@@ -35,6 +35,8 @@ do
 		then
 			echo "  $package_file_name already exists, skipping"
 			continue
+		else
+			echo "  downloading $package_file_name"
 		fi
 
 		# find all available download links

@@ -272,8 +272,8 @@ rm -f rootfs/var/cache/fontconfig/* > /dev/null 2>&1
 
 for i in rootfs devx
 do
-	if [ -d $i ] 
-	then	
+	if [ -d $i ]
+	then
 		# remove Aufs remains
 		find $i -name '.wh*' -delete
 		# remove Python bytecode
@@ -378,20 +378,29 @@ do
 done
 echo " done"
 
+# generate a color in the syslinux format
+echo -n "Generating the boot loader logo ..."
+pngtopnm -mix \
+         -background white \
+         rootfs/usr/share/icons/hicolor/256x256/apps/distro.png | \
+pnmtoplainpnm | \
+ppmtolss16 \#000000=0 \#ffffff=7 > iso/logo.lss 2>/dev/null
+echo " done"
+
+# create the ISO image
 mkisofs -D -R \
         -o dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso \
         -b isolinux.bin \
         -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table iso
 
+# make the ISO image hybrid, so it can be written to other media
 echo -n "Making the ISO image hybrid ..."
 isohybrid dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso
 echo " done"
 
 # create the devx module
-if [ -n "$DEVX_PACKAGES" ]
-then
-	mksquashfs devx dist/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
-fi
+[ -n "$DEVX_PACKAGES" ] && mksquashfs devx \
+                                      dist/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
 
 #######
 # MD5 #
