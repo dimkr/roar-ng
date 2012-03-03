@@ -1,0 +1,12 @@
+Authors
+-------
+	- Dima Krasner (dima@dimakrasner.com)
+
+Contributors
+------------
+
+The following people have contributed to the development of roar-ng and deserve
+many kudos:
+	- Barry Kauler (bkhome.org) - structure, some core concepts, inspiration,
+	                              boot loader text, mkisofs parameters in
+	                              3builddistro, author of Woof
