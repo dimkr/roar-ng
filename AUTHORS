@@ -4,9 +4,16 @@ Authors
 
 Contributors
 ------------
-
-The following people have contributed to the development of roar-ng and deserve
-many kudos:
+The following people, sites and organizations have contributed to the
+development of roar-ng and deserve many kudos:
 	- Barry Kauler (bkhome.org) - structure, some core concepts, inspiration,
 	                              boot loader text, mkisofs parameters in
 	                              3builddistro, author of Woof
+	- Tomas M. (tomas-m.com) - inspiration, author of Linux Live and SLAX
+	- The Arch Linux wiki - useful documentation, guidance in hard times of
+	                        configuration issues
+	- The Arch User Repository (AUR) - useful explanations for package building
+	                                   issues, some patches and inspiration for
+	                                   the creation of Builder
+	- Slackware - extremely useful and inspirational build scripts, inspiration
+	              for the creation of hpm
