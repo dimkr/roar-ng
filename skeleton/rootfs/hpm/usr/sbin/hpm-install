@@ -15,15 +15,15 @@ then
 	exit 1
 fi
 
+# include the configuration file
+. /etc/hpmrc
+
 # make sure the package is not installed already
 if [ -f "$PKG_DATA_DIR/$2" ]
 then
 	echo "Error: the package is already installed."
 	exit 1
 fi 
-
-# include the configuration file
-. /etc/hpmrc
 
 # create a temporary directory for the package extraction
 temp_dir="$(mktemp -d)"
