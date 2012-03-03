@@ -1,0 +1,25 @@
+# include the distribution information file
+. ./conf/distrorc
+
+case $DISTRO_ARCH in
+	x86_64)
+		suffix="x86_64"
+		;;
+	*)
+		suffix="i686"
+		;;
+esac
+
+version="$(cat distro/arch/version)"
+
+# repositories - package list URL|repository name
+repositories="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$suffix/core.db.tar.gz|arch-core
+              http://mirror.csclub.uwaterloo.ca/archlinux/extra/os/$suffix/extra.db.tar.gz|arch-extra
+              http://mirror.csclub.uwaterloo.ca/archlinux/community/os/$suffix/community.db.tar.gz|arch-community"
+
+# package download mirrors - more at http://www.archlinux.org/mirrors/status/
+mirrors="http://mirror.csclub.uwaterloo.ca/archlinux
+         http://mirror.ece.vt.edu/archlinux/
+         http://mirror.rit.edu/archlinux
+         http://ftp5.gwdg.de/pub/linux/archlinux/
+         http://archlinux.mirrors.ovh.net/archlinux/"

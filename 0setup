@@ -38,6 +38,7 @@ do
 
 		# decompress the package list
 		case $package_list_url in
+			*.db.tar.gz) ;; # arch
 			*.gz)
 				echo "  decompressing"
 				temp="$(mktemp -u)"
@@ -48,7 +49,7 @@ do
 
 		# convert the package list to the common format
 		echo "  converting to the common format"
-		$distro/convert_package_list $temp_file | sort > repos/$repository_name
+		$distro/convert_package_list $temp_file $repository_name | sort > repos/$repository_name
 		if [ 0 -ne $? ]
 		then
 			echo "Error: failed to convert the package list."

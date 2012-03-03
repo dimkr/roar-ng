@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# usage: convert_package_list $package_list
+# usage: convert_package_list $package_list $repository_name
 
 awk -F ":" '
 	function trimB(s) {sub(/^ */,"",s); return s} # trim beginning of string

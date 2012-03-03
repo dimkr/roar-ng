@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# usage: convert_package_list $package_list $repository_name
+
+. ./conf/distrorc
+
+case $DISTRO_ARCH in
+	x86_64)
+		suffix="x86_64"
+		;;
+	*)
+		suffix="i686"
+		;;
+esac
+
+repository="${2#arch-}"
+
+temp_folder="$(mktemp -d)"
+cd "$temp_folder"
+tar xzf "$1"
+
+for folder in *
+do
+	awk -v pkgpath="$repository" -v arch="$suffix" '{
+		if($1 == "%FILENAME%"){getline filename}
+		if($1 == "%NAME%"){getline pkgname}
+		if($1 == "%VERSION%"){getline pkgver; split(pkgver, pkgverarr, "-")}
+		if($1 == "%DESC%"){getline pkgdesc}
+	}END{printf("%s|%s|%s|%s/os/%s/%s|%s|\n", pkgname, pkgverarr[1], pkgverarr[2], pkgpath, arch, filename, pkgdesc)}' "$folder/desc"
+done

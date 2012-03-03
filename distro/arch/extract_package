@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# usage: extract_package $package $dest
+
+# create the output directory
+mkdir -p "$2"
+
+# extract the package
+case "$1" in
+	*.pkg.tar.xz)
+		compression_flag="J"
+		;;
+	*.pkg.tar.bz2)
+		compression_flag="j"
+		;;
+	*.pkg.tar.gz)
+		compression_flag="z"
+		;;
+esac
+
+tar x${compression_flag}f "$1" -C "$2"
+[ 0 -ne $? ] && exit 1
+
+[ -f "$2/.PKGINFO" ] && rm "$2/.PKGINFO"
+[ -f "$2/.INSTALL" ] && rm "$2/.INSTALL"
+[ -f "$2/.CHANGELOG" ] && rm "$2/.CHANGELOG"
+
+exit 0
