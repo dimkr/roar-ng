@@ -59,3 +59,6 @@ XDG_CACHE_HOME="$HOME/.cache"
 
 # if desksetup was not executed already, run it
 [ ! -f ~/.desktoprc ] && desksetup
+
+# start the X server
+[ -z "$(pidof -s X)" ] && startx
