@@ -1,5 +1,5 @@
 #!/bin/sh
 
-# usage: convert_package_list $package_list
+# usage: convert_package_list $package_list $repository_name
 
 cat "$1"
