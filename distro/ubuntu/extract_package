@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# usage: extract_package $package $dest
+
+distro/debian/extract_package "$1" "$2"

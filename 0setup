@@ -38,14 +38,23 @@ do
 
 		# decompress the package list
 		case $package_list_url in
-			*.db.tar.gz) ;; # arch
 			*.gz)
-				echo "  decompressing"
-				temp="$(mktemp -u)"
-				cat $temp_file | gzip -d > $temp
-				mv -f $temp $temp_file
+				compression="gzip"
+				;;
+			*.bz2)
+				compression="bzip2"
+			*)
+				compression=""
 				;;
 		esac
+
+		if [ -n "$compression" ]
+		then
+			echo "  decompressing"
+			temp="$(mktemp -u)"
+			cat $temp_file | $compression -d > $temp
+			mv -f $temp $temp_file
+		fi
 
 		# convert the package list to the common format
 		echo "  converting to the common format"

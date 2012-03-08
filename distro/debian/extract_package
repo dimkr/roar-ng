@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# usage: extract_package $package $dest
+
+# create the output directory
+mkdir -p "$2"
+
+# extract the package
+dataFile="$(ar t "$1" | grep "data.tar")"
+
+case "$dataFile" in
+	*.tar.xz)
+		compression_flag="-J"
+		;;
+	*.tar.lzma)
+		compression_flag="--lzma"
+		;;
+	*.tar.bz2)
+		compression_flag="-j"
+		;;
+	*.tar.gz)
+		compression_flag="-z"
+		;;
+	*.tar)
+		compression_flag=""
+		;;
+esac
+
+ar p "$1" "$dataFile" | tar x ${compression_flag} -C "$2"
+[ 0 -ne $? ] && exit 1
+
+exit 0

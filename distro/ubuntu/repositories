@@ -1,0 +1,26 @@
+# include the distribution information file
+. ./conf/distrorc
+
+case $DISTRO_ARCH in
+	x86_64)
+		suffix="amd64"
+		;;
+	*)
+		suffix="i386"
+		;;
+esac
+
+version="$(cat distro/ubuntu/version)"
+
+# repositories - package list URL|repository name
+repositories="http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/main/binary-$suffix/Packages.bz2|ubuntu-main
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/universe/binary-$suffix/Packages.bz2|ubuntu-universe
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/multiverse/binary-$suffix/Packages.bz2|ubuntu-multiverse
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/restricted/binary-$suffix/Packages.bz2|ubuntu-restricted"
+
+# package download mirrors - more at https://launchpad.net/ubuntu/+archivemirrors
+mirrors="http://ubuntu.mirror.tudos.de/ubuntu
+         http://mirror.aarnet.edu.au/pub/ubuntu/archive
+         http://mirror.csclub.uwaterloo.ca/ubuntu
+         http://ubuntu.c3sl.ufpr.br/ubuntu
+         http://ftp.halifax.rwth-aachen.de/ubuntu"

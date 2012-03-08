@@ -1,0 +1,25 @@
+# include the distribution information file
+. ./conf/distrorc
+
+case $DISTRO_ARCH in
+	# possible arches: alpha amd64 arm armel armhf hppa hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mips mipsel powerpc s390 s390x sparc
+	x86_64)
+		suffix="amd64"
+		;;
+	*)
+		suffix="i386"
+		;;
+esac
+
+version="$(cat distro/debian/version)"
+
+# repositories - package list URL|repository name
+repositories="http://mirror.csclub.uwaterloo.ca/debian/dists/$version/main/binary-$suffix/Packages.bz2|debian-main
+              http://mirror.csclub.uwaterloo.ca/debian/dists/$version/contrib/binary-$suffix/Packages.bz2|debian-contrib
+              http://mirror.csclub.uwaterloo.ca/debian/dists/$version/non-free/binary-$suffix/Packages.bz2|debian-non-free"
+
+# package download mirrors - more at http://www.debian.org/mirror/list
+mirrors="http://mirror.csclub.uwaterloo.ca/debian
+         http://http.us.debian.org/debian
+         http://debian.lcs.mit.edu/debian
+         http://ftp.iinet.net.au/debian/debian"

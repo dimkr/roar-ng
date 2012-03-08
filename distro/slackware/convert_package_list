@@ -10,7 +10,7 @@ awk -F ":" '
 			sub(/\..*/,"",namearr[namelen]); pkgrev=namearr[namelen] # remove ".t(gz/xz/...)" from pkgrev
 			pkgver=namearr[namelen-2] # get version
 			for(i=1;i<namelen-2;i++){pkgname=pkgname"-"namearr[i]} sub(/^-/, "", pkgname) # for each remaining field, add to name, then remove beginning "-"
-			printf("%s|%s|%s|%s/%s|%s|\n",pkgname,pkgver,pkgrev,pkgpath,filename,pkgdesc) # print
+			printf("%s|%s|%s|%s/%s|%s\n",pkgname,pkgver,pkgrev,pkgpath,filename,pkgdesc) # print
 		}
 		pkgname=""; pkgver=""; pkgrev=""; pkgpath=""; filename=""; pkgdesc=""; # clear vars
 	}

@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# usage: convert_package_list $package_list $repository_name
+
+awk -F ": " '
+	function printPkg() {
+		printf("%s|%s|%s|%s|%s\n", pkgname, pkgverarr[1], pkgverarr[2], filename, pkgdesc)
+		pkgname=""; pkgverarr[1]=""; pkgverarr[2]=""; filename=""; pkgdesc="" # clear vars
+	}
+	{
+	if($1 == "Package"){pkgname=$2}
+	if($1 == "Version"){split($2,pkgverarr,"-")}
+	if($1 == "Filename"){filename=$2}
+	if($1 == "Description"){pkgdesc=$2}
+	if($0 == "" && pkgname!=""){printPkg()}
+}END{if(pkgname!=""){printPkg()}}' "$1"

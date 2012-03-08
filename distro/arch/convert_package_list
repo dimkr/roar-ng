@@ -26,5 +26,8 @@ do
 		if($1 == "%NAME%"){getline pkgname}
 		if($1 == "%VERSION%"){getline pkgver; split(pkgver, pkgverarr, "-")}
 		if($1 == "%DESC%"){getline pkgdesc}
-	}END{printf("%s|%s|%s|%s/os/%s/%s|%s|\n", pkgname, pkgverarr[1], pkgverarr[2], pkgpath, arch, filename, pkgdesc)}' "$folder/desc"
+	}END{printf("%s|%s|%s|%s/os/%s/%s|%s\n", pkgname, pkgverarr[1], pkgverarr[2], pkgpath, arch, filename, pkgdesc)}' "$folder/desc"
 done
+
+cd /
+rm -rf "$temp_folder"
