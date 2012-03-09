@@ -26,7 +26,7 @@ case "$dataFile" in
 		;;
 esac
 
-ar p "$1" "$dataFile" | tar x ${compression_flag} -C "$2"
+ar p "$1" "$dataFile" | tar -x ${compression_flag} -C "$2"
 [ 0 -ne $? ] && exit 1
 
 exit 0
