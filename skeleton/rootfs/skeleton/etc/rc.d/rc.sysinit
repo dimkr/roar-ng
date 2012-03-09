@@ -10,7 +10,7 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/us
 . /etc/bootrc
 
 # mount all virtual file systems
-echo -n "Mounting virtual file systems ..."
+echo -n "Mounting file systems ..."
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 mount -a

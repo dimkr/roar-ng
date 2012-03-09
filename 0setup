@@ -43,6 +43,7 @@ do
 				;;
 			*.bz2)
 				compression="bzip2"
+				;;
 			*)
 				compression=""
 				;;
