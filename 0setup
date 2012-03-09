@@ -27,7 +27,7 @@ do
 		temp_file="$(mktemp -u)"
 
 		# download the package list
-		echo "  downloading the package list"
+		echo "Downloading the package list"
 		download_file $package_list_url $temp_file
 		if [ 0 -ne $? ]
 		then
@@ -51,14 +51,15 @@ do
 
 		if [ -n "$compression" ]
 		then
-			echo "  decompressing"
+			echo -n "Decompressing ..."
 			temp="$(mktemp -u)"
 			cat $temp_file | $compression -d > $temp
 			mv -f $temp $temp_file
+			echo " done"
 		fi
 
 		# convert the package list to the common format
-		echo "  converting to the common format"
+		echo -n "Converting to the common format ..."
 		$distro/convert_package_list $temp_file $repository_name | sort > repos/$repository_name
 		if [ 0 -ne $? ]
 		then
@@ -66,9 +67,11 @@ do
 			rm -f $temp_file
 			exit 1
 		fi
+		echo " done"
 
 		# clean up
-		echo "  cleaning up"
+		echo -n "Cleaning up ..."
 		rm -f $temp_file
+		echo " done"
 	done
 done
