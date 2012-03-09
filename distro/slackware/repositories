@@ -5,7 +5,7 @@ case $DISTRO_ARCH in
 	x86_64)
 		suffix="64"
 		;;
-	*)
+	i?86)
 		suffix=""
 		;;
 esac

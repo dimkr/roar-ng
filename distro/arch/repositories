@@ -3,19 +3,19 @@
 
 case $DISTRO_ARCH in
 	x86_64)
-		suffix="x86_64"
+		arch="x86_64"
 		;;
-	*)
-		suffix="i686"
+	i?86)
+		arch="i686"
 		;;
 esac
 
 version="$(cat distro/arch/version)"
 
 # repositories - package list URL|repository name
-repositories="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$suffix/core.db.tar.gz|arch-core
-              http://mirror.csclub.uwaterloo.ca/archlinux/extra/os/$suffix/extra.db.tar.gz|arch-extra
-              http://mirror.csclub.uwaterloo.ca/archlinux/community/os/$suffix/community.db.tar.gz|arch-community"
+repositories="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$arch/core.db.tar.gz|arch-core
+              http://mirror.csclub.uwaterloo.ca/archlinux/extra/os/$arch/extra.db.tar.gz|arch-extra
+              http://mirror.csclub.uwaterloo.ca/archlinux/community/os/$arch/community.db.tar.gz|arch-community"
 
 # package download mirrors - more at http://www.archlinux.org/mirrors/status/
 mirrors="http://mirror.csclub.uwaterloo.ca/archlinux

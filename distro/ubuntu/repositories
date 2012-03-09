@@ -3,20 +3,24 @@
 
 case $DISTRO_ARCH in
 	x86_64)
-		suffix="amd64"
+		arch="amd64"
 		;;
 	*)
-		suffix="i386"
+		arch="i386"
 		;;
 esac
 
 version="$(cat distro/ubuntu/version)"
 
 # repositories - package list URL|repository name
-repositories="http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/main/binary-$suffix/Packages.bz2|ubuntu-main
-              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/universe/binary-$suffix/Packages.bz2|ubuntu-universe
-              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/multiverse/binary-$suffix/Packages.bz2|ubuntu-multiverse
-              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/restricted/binary-$suffix/Packages.bz2|ubuntu-restricted"
+repositories="http://ubuntu.mirror.tudos.de/ubuntu/dists/$version-updates/main/binary-$arch/Packages.bz2|ubuntu-updates_main
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version-updates/universe/binary-$arch/Packages.bz2|ubuntu-updates_universe
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version-updates/multiverse/binary-$arch/Packages.bz2|ubuntu-updates_multiverse
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version-updates/restricted/binary-$arch/Packages.bz2|ubuntu-updates_restricted
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/main/binary-$arch/Packages.bz2|ubuntu-main
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/universe/binary-$arch/Packages.bz2|ubuntu-universe
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/multiverse/binary-$arch/Packages.bz2|ubuntu-multiverse
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$version/restricted/binary-$arch/Packages.bz2|ubuntu-restricted"
 
 # package download mirrors - more at https://launchpad.net/ubuntu/+archivemirrors
 mirrors="http://ubuntu.mirror.tudos.de/ubuntu
