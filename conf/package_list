@@ -112,6 +112,7 @@ slackware|nasm|nasm|exe>dev,dev,doc,nls
 slackware|ncurses|ncurses|exe,dev,doc,nls
 slackware|netpbm|netpbm|exe,dev,doc,nls
 slackware|net-tools|net-tools|exe,dev,doc,nls
+slackware|nfs-utils|nfs-utils,portmap|exe,dev,doc,nls
 slackware|ntfsprogs|ntfsprogs|exe,dev,doc,nls
 slackware|openldap|openldap-client|exe,dev,doc,nls
 slackware|openssl|openssl,ca-certificates|exe,dev,doc,nls

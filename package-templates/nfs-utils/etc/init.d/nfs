@@ -1,0 +1,59 @@
+#!/bin/dash
+
+# /etc/init.d/nfs: an init script for a NFS server
+
+# the number of server threads
+THREADS=8
+
+case "$1" in
+
+	start)
+		echo -n "Starting the RPC port mapper ..."
+		rpc.portmap
+		echo " done"
+
+		echo -n "Starting the NSM server ..."
+		rpc.statd
+		echo " done"
+
+		echo -n "Starting the NFS server ..."
+		[ ! -f /proc/1/net/rpc/nfsd ] && modprobe -q nfsd
+		mount -t nfsd none /proc/fs/nfsd
+		rpc.nfsd $THREADS
+		echo " done"
+
+		echo -n "Exporting NFS shares ..."
+		exportfs -a -r
+		echo " done"
+		;;
+
+	stop)
+		echo -n "Removing exported NFS shares ..."
+		exportfs -a -u
+		echo " done"
+
+		echo -n "Stopping the NFS server ..."
+		rpc.nfsd 0
+		umount /proc/fs/nfsd
+		echo " done"
+
+		echo -n "Stopping the NSM server ..."
+		kill $(pidof rpc.statd)
+		echo " done"
+
+		echo -n "Stopping the RPC port mapper ..."
+		kill $(pidof rpc.portmap)
+		echo " done"
+		;;
+
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "nfs {start|stop|restart}"
+		exit 1
+		;;
+
+esac
