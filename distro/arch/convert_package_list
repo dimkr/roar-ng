@@ -19,11 +19,6 @@ temp_folder="$(mktemp -d)"
 cd "$temp_folder"
 tar -xf "$1"
 
-for folder in *
-do
-	files+=" $folder/desc"
-done
-
 awk -v pkgpath="$repository" -v arch="$arch" '{
 	if($1 == "%FILENAME%"){getline filename}
 	if($1 == "%NAME%"){getline pkgname}
@@ -32,7 +27,7 @@ awk -v pkgpath="$repository" -v arch="$arch" '{
 	printf("%s|%s|%s|%s/os/%s/%s|%s\n", pkgname, pkgverarr[1], pkgverarr[2], pkgpath, arch, filename, pkgdesc);
 	pkgname=""; pkgverarr[1]=""; pkgverarr[2]=""; filename=""; pkgdesc="";
 	}
-}' $files
+}' */desc
 
 cd /
 rm -rf "$temp_folder"
