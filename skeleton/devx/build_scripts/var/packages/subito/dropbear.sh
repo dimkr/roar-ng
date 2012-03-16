@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="dropbear"
-PKG_VER="2011.54"
+PKG_VER="2011.55"
 PKG_REV="1"
 PKG_DESC="SSH2 server and client"
 PKG_CAT="Network"
