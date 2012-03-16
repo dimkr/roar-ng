@@ -1,43 +1,26 @@
 #!/bin/sh
 
 PKG_NAME="wbar"
-PKG_VER="2.2.2"
+PKG_VER="2.3.0"
 PKG_REV="1"
 PKG_DESC="Lightweight dock"
 PKG_CAT="Desktop"
 PKG_DEPS="+imlib2"
 
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tbz2 ] && return 0
+	[ -f ${PKG_NAME}_${PKG_VER}.orig.tar.gz ] && return 0
 	# download the sources tarball
-	download_file http://wbar.googlecode.com/files/$PKG_NAME-$PKG_VER.tbz2
+	download_file http://wbar.googlecode.com/files/${PKG_NAME}_${PKG_VER}.orig.tar.gz
 	[ $? -ne 0 ] && return 1
 	return 0
 }
 
 build() {
 	# extract the sources tarball
-	tar -xjvf $PKG_NAME-$PKG_VER.tbz2
+	tar -xzvf ${PKG_NAME}_${PKG_VER}.orig.tar.gz
 	[ $? -ne 0 ] && return 1
 
 	cd $PKG_NAME-$PKG_VER
-
-	# patch the sources to make wbar set its window name, so it can be skipped
-	# by window managers
-	echo -n 'diff -rup wbar-2.2.2-orig//src/core/Main.cc wbar-2.2.2/src/core/Main.cc
---- wbar-2.2.2-orig//src/core/Main.cc	2011-05-08 22:21:07.000000000 +0200
-+++ wbar-2.2.2/src/core/Main.cc	2011-12-24 16:04:28.775088026 +0200
-@@ -162,6 +162,8 @@ int main(int argc, char **argv)
-         INIT_IMLIB(barwin.getDisplay(), barwin.getVisual(), barwin.getColormap(),
-                 barwin.getDrawable(), 2048*2048);
-
-+        barwin.setName((char *) "wbar");
-+
-         /* check if double clicking, ms time */
-         dblclk_tm = optparser.isSet(DBLCLK)?atoi(optparser.getArg(DBLCLK).c_str()):0;
-
-' | patch -p1
-	[ $? -ne 0 ] && return 1
 
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \

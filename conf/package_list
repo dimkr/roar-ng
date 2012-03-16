@@ -48,7 +48,7 @@ slackware|gamin|gamin|exe,dev,doc,nls
 slackware|gawk|gawk|exe,dev,doc,nls
 # GCC itself, except runtime libraries (gcc_lib)
 slackware|gcc_dev|gcc,gcc-g++|exe>dev,dev,doc,nls
-# GCC's dependencies; required only for GCC itself (gcc_dev) but not for the 
+# GCC's dependencies; required only for GCC itself (gcc_dev) but not for the
 # runtime libraries (gcc_lib)
 slackware|gcc_dev_deps|gmp,libelf,libmpc,mpfr|exe>dev,dev,doc,nls
 # parts of GCC needed to run stuff built by it - runtime libraries
@@ -150,6 +150,7 @@ slackware|xcb-util|xcb-util|exe,dev,doc,nls
 slackware|xdg-user-dirs|xdg-user-dirs|exe,dev,doc,nls
 slackware|xfsprogs|xfsprogs|exe,dev,doc,nls
 slackware|xorg_base|appres,bdftopcf,bitmap,editres,evieext,fontconfig,fonttosfnt,fslsfonts,fstobdf,iceauth,libdmx,libfontenc,libFS,libICE,libSM,libX11,libXau,libXaw,libXcomposite,libXcursor,libXdamage,libXdmcp,libXext,libXfixes,libXfont,libXfontcache,libXft,libXi,libXinerama,libxkbfile,libXmu,libXp,libXpm,libXrandr,libXrender,libXt,libXtst,libXv,libXvMC,libXxf86dga,libXxf86misc,libXxf86vm,listres,luit,makedepend,mkcomposecache,mkfontdir,mkfontscale,rendercheck,sessreg,setxkbmap,showfont,smproxy,viewres,x11perf,xauth,xbacklight,xbiff,xditview,xdpyinfo,xdriinfo,xev,xf86dga,xfontsel,xgamma,xhost,xinit,xkbcomp,xkbutils,xkill,xmessage,xmodmap,xprop,xrandr,xrdb,xrefresh,xset,xsm,xstdcmap,xvidtune,xvinfo,xwd,xwininfo,libdrm,xkeyboard-config,rgb|exe,dev,doc,nls
+slackware|xorg_fonts|font-adobe-100dpi,font-adobe-75dpi,font-alias,font-bitstream-100dpi,font-bitstream-75dpi,font-cursor-misc,font-xfree86-type1|exe,dev,doc,nls
 slackware|xserver_xorg|xorg-server,xf86-video-apm,xf86-video-ark,xf86-video-ast,xf86-video-ati,xf86-video-chips,xf86-video-cirrus,xf86-video-i128,xf86-video-i740,xf86-video-intel,xf86-video-mach64,xf86-video-mga,xf86-video-neomagic,xf86-video-nv,xf86-video-nouveau,xf86-video-openchrome,xf86-video-r128,xf86-video-rendition,xf86-video-s3,xf86-video-s3virge,xf86-video-savage,xf86-video-siliconmotion,xf86-video-sis,xf86-video-sisusb,xf86-video-tdfx,xf86-video-trident,xf86-video-tseng,xf86-video-v4l,xf86-video-vesa,xf86-video-vmware,xf86-video-voodoo,xf86-video-xgi,xf86-input-evdev,xf86-input-keyboard,xf86-input-mouse,xf86-input-synaptics|exe,dev,doc,nls
 slackware|xtrans|xtrans|exe>dev,dev,doc,nls
 slackware|xz|xz|exe,dev,doc,nls

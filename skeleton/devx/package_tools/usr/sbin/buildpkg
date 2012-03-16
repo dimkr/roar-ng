@@ -107,10 +107,7 @@ fi
 cd $INSTALL_DIR
 
 # create the binary package
-temp_file="$(mktemp -u)"
-tar -c * > $temp_file
-xz --best $temp_file
-mv -f $temp_file.xz "$base_dir/$PKG_NAME-$PKG_VER.$PKG_EXTENSION"
+tar -c * | xz -e --best > "$base_dir/$PKG_NAME-$PKG_VER.$PKG_EXTENSION"
 if [ 0 -ne $? ]
 then
 	echo "Error: failed to create the package."
