@@ -6,10 +6,10 @@
 
 case $DISTRO_ARCH in
 	x86_64)
-		suffix="x86_64"
+		arch="x86_64"
 		;;
-	*)
-		suffix="i686"
+	i?86)
+		arch="i686"
 		;;
 esac
 
@@ -19,15 +19,15 @@ temp_folder="$(mktemp -d)"
 cd "$temp_folder"
 tar -xf "$1"
 
-for folder in *
-do
-	awk -v pkgpath="$repository" -v arch="$suffix" '{
-		if($1 == "%FILENAME%"){getline filename}
-		if($1 == "%NAME%"){getline pkgname}
-		if($1 == "%VERSION%"){getline pkgver; split(pkgver, pkgverarr, "-")}
-		if($1 == "%DESC%"){getline pkgdesc}
-	}END{printf("%s|%s|%s|%s/os/%s/%s|%s\n", pkgname, pkgverarr[1], pkgverarr[2], pkgpath, arch, filename, pkgdesc)}' "$folder/desc"
-done
+awk -v pkgpath="$repository" -v arch="$arch" '{
+	if($1 == "%FILENAME%"){getline filename}
+	if($1 == "%NAME%"){getline pkgname}
+	if($1 == "%VERSION%"){getline pkgver; split(pkgver, pkgverarr, "-")}
+	if($1 == "%DESC%"){getline pkgdesc;
+	printf("%s|%s|%s|%s/os/%s/%s|%s\n", pkgname, pkgverarr[1], pkgverarr[2], pkgpath, arch, filename, pkgdesc);
+	pkgname=""; pkgverarr[1]=""; pkgverarr[2]=""; filename=""; pkgdesc="";
+	}
+}' */desc
 
 cd /
 rm -rf "$temp_folder"
