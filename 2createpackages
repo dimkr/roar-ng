@@ -21,6 +21,9 @@ case $DISTRO_ARCH in
 		;;
 esac
 
+# include the hpm configuration file
+. ./skeleton/rootfs/hpm/etc/hpmrc
+
 # list all packages
 for package in $(list_packages)
 do
@@ -29,14 +32,14 @@ do
 	distro="$(get_package_distro $package)"
 
 	echo "$name ($distro)"
-	
+
 	# if the package was already processed, skip it
 	if [ -d processed-packages/$name ] || \
 	   [ -d processed-packages/${name}_DEV ] || \
 	   [ -d processed-packages/${name}_DOC ] || \
 	   [ -d processed-packages/${name}_NLS ]
 	then
-		echo "  already processed, skipping"
+		echo "  Already processed, skipping"
 		continue
 	fi
 
@@ -48,9 +51,9 @@ do
 		if [ -z "$package_entry" ]
 		then
 			echo "Error: the \"$sub_package\" was not found."
-			exit 1		
+			exit 1
 		fi
-		
+
 		# filter the package file name
 		package_file_name="$(get_package_file_name $package_entry)"
 
@@ -62,9 +65,10 @@ do
 		fi
 
 		# extract the package
-		echo "  extracting $package_file_name"
+		echo -n "  Extracting $package_file_name"
 		./distro/$distro/extract_package packages/$package_file_name \
-		                                 processed-packages/$name
+		                                 processed-packages/$name \
+		                                 > /dev/null 2>&1
 		if [ 0 -ne $? ]
 		then
 			echo "Error: failed to extract $package_file_name."
@@ -75,7 +79,7 @@ do
 	# if there is a template, add it to the package
 	if [ -e "package-templates/$name" ]
 	then
-		echo "  applying template"
+		echo -n "  Applying template ..."
 		cp -r package-templates/$name/* processed-packages/$name
 		base_dir="$(pwd)"
 		# if there is a hacks script, run it
@@ -87,22 +91,21 @@ do
 			rm -f hacks.sh
 		fi
 		cd "$base_dir"
+		echo " done"
 	fi
 
 	# optimize the package
-	echo "  optimizing"
-	./skeleton/devx/package_tools/usr/bin/strippkg \
-	                                              "processed-packages/$name"
+	echo "  Optimizing"
+	./skeleton/devx/package_tools/usr/bin/strippkg "processed-packages/$name"
 	if [ 0 -ne $? ]
 	then
 		echo "Error: failed to optimize $name."
 		exit 1
 	fi
-	
+
 	# split the package
-	echo "  splitting"
-	./skeleton/devx/package_tools/usr/bin/splitpkg \
-	                                              "processed-packages/$name"
+	echo "  Splitting"
+	./skeleton/devx/package_tools/usr/bin/splitpkg "processed-packages/$name"
 	if [ 0 -ne $? ]
 	then
 		echo "Error: failed to split $name."
@@ -110,7 +113,7 @@ do
 	fi
 
 	# handle the package redirection
-	echo "  redirecting"
+	echo "  Redirecting"
 	redirection="$(get_package_redirection_rules $package)"
 
 	# parse the redirection field
@@ -138,7 +141,7 @@ do
 				;;
 			dev|doc|nls)
 				original_suffix="_$(echo $sub_package | \
-				                                tr '[:lower:]' '[:upper:]')"
+				                                    tr '[:lower:]' '[:upper:]')"
 				;;
 		esac
 
@@ -152,7 +155,7 @@ do
 				;;
 			dev|doc|nls)
 				target_suffix="_$(echo $target | \
-				                                tr '[:lower:]' '[:upper:]')"
+				                                    tr '[:lower:]' '[:upper:]')"
 				;;
 		esac
 
@@ -176,11 +179,24 @@ do
 				[ ! -d "processed-packages/${name}$target_suffix" ] && \
 				                mkdir "processed-packages/${name}$target_suffix"
 				cp -rf "processed-packages/${name}$original_suffix"/* \
-					   "processed-packages/${name}$target_suffix"
+				       "processed-packages/${name}$target_suffix"
 
 				# remove the sub-package
 				rm -rf "processed-packages/${name}$original_suffix"
 				;;
 		esac
 	done
+
+	# register the package with hpm, so it can be removed
+	echo -n "  Listing the package contents ..."
+	for sub_package in $name ${name}_DEV ${name}_DOC ${name}_NLS
+	do
+		[ ! -d processed-packages/$sub_package ] && continue
+		temp_file="$(mktemp -u)"
+		find processed-packages/$sub_package -mindepth 1 | \
+		sed s~"processed-packages/$sub_package"~~g > $temp_file
+		mkdir -p processed-packages/$sub_package$PKG_DATA_DIR
+		mv $temp_file processed-packages/$sub_package$PKG_DATA_DIR/$sub_package
+	done
+	echo " done"
 done
