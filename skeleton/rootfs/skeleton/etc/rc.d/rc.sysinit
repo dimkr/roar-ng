@@ -76,3 +76,6 @@ for i in /etc/init.d/*
 do
 	[ -x $i ] && $i start
 done
+
+# run the user's custom init script, if it exists
+[ -x /etc/rc.local ] && /etc/rc.local
