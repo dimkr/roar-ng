@@ -199,7 +199,8 @@ install -D -m644 conf/bootrc sandbox/rootfs/etc/bootrc
 run_post_install sandbox/rootfs
 
 # populate /root with the skeleton
-cp -ar sandbox/rootfs/etc/skel/* sandbox/rootfs/root
+[ -d sandbox/rootfs/root ] && rm -rf sandbox/rootfs/root
+cp -ar sandbox/rootfs/etc/skel sandbox/rootfs/root
 
 ###############
 # devx module #
