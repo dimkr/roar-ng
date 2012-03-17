@@ -192,11 +192,19 @@ do
 	for sub_package in $name ${name}_DEV ${name}_DOC ${name}_NLS
 	do
 		[ ! -d processed-packages/$sub_package ] && continue
+
+		# list the file contents
 		temp_file="$(mktemp -u)"
 		find processed-packages/$sub_package -mindepth 1 | \
 		sed s~"processed-packages/$sub_package"~~g > $temp_file
 		mkdir -p processed-packages/$sub_package$PKG_DATA_DIR
 		mv $temp_file processed-packages/$sub_package$PKG_DATA_DIR/$sub_package
+
+		# if a post-removal script exists, move it to the path hpm uses
+		[ -f processed-packages/$sub_package/post_uninstall.sh ] && \
+		      mv \
+     processed-packages/$sub_package/post_uninstall.sh \
+     processed-packages/$sub_package$PKG_DATA_DIR/$sub_package-post_uninstall.sh
 	done
 	echo " done"
 done
