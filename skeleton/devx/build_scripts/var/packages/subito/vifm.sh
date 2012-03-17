@@ -20,8 +20,6 @@ build() {
 	tar -xjvf $PKG_NAME-$PKG_VER.tar.bz2
 	[ $? -ne 0 ] && return 1
 
-	cd $PKG_NAME-$PKG_VER
-
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --disable-extended-keys \
