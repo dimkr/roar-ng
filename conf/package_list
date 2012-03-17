@@ -44,7 +44,6 @@ slackware|flex|flex|exe>dev,dev,doc,nls
 slackware|foomatic-filters|foomatic-filters|exe,dev,doc,nls
 slackware|freetype|freetype|exe,dev,doc,nls
 slackware|fribidi|fribidi|exe,dev,doc,nls
-slackware|gamin|gamin|exe,dev,doc,nls
 slackware|gawk|gawk|exe,dev,doc,nls
 # GCC itself, except runtime libraries (gcc_lib)
 slackware|gcc_dev|gcc,gcc-g++|exe>dev,dev,doc,nls
