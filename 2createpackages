@@ -65,7 +65,7 @@ do
 		fi
 
 		# extract the package
-		echo -n "  Extracting $package_file_name"
+		echo -n "  Extracting $package_file_name ..."
 		./distro/$distro/extract_package packages/$package_file_name \
 		                                 processed-packages/$name \
 		                                 > /dev/null 2>&1
@@ -74,6 +74,7 @@ do
 			echo "Error: failed to extract $package_file_name."
 			exit 1
 		fi
+		echo " done"
 	done
 
 	# if there is a template, add it to the package
