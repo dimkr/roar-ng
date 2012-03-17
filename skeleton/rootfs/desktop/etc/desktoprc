@@ -1,7 +1,7 @@
-# /etc/opt/desktoprc: the default desktop settings
+# /etc/desktoprc: default desktop settings
 
 # the default desktop background
-DEFAULT_DESKTOP_BG="default.png"
+DEFAULT_DESKTOP_BG="pinstriped_suit.png"
 
 # the default desktop background mode
 DEFAULT_DESKTOP_BG_MODE="tile"

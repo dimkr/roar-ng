@@ -198,6 +198,9 @@ install -D -m644 conf/bootrc sandbox/rootfs/etc/bootrc
 # run the merged post-installation script
 run_post_install sandbox/rootfs
 
+# populate /root with the skeleton
+cp -ar sandbox/rootfs/etc/skel/* sandbox/rootfs/root
+
 ###############
 # devx module #
 ###############

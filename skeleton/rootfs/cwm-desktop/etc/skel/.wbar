@@ -1,4 +1,4 @@
-# /etc/default/wbar/wbat.cfg: default configuration for wbar
+# ~/.wbar: wbar configuration
 
 i: /usr/share/pixmaps/wbar/osxbarback.png
 c: wbar --bpress --pos bottom --isize 48 --idist 5 --nanim 4

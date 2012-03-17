@@ -1,4 +1,4 @@
-# /etc/screenrc: default GNU Screen configuration
+# ~/.screenrc: GNU Screen configuration
 
 # disable the startup message
 startup_message off

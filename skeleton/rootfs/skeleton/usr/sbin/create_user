@@ -20,8 +20,8 @@ fi
 
 echo -n "Creating the user ..."
 
-# create a home directory
-cp -ar /mnt/rootfs/root /home/$1
+# create a home directory from the skeleton
+cp -ar /etc/skel /home/$1
 
 # create the user
 adduser -D -h /home/$1 -H $1
@@ -72,5 +72,5 @@ echo " done"
 
 # change the home directory permissions
 echo -n "Setting home directory permissions ..."
-chown -R $1:$1 /home/$1 
+chown -R $1:$1 /home/$1
 echo " done"

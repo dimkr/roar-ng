@@ -1,4 +1,4 @@
-# /etc/conky/conky.conf: Conky settings
+# ~/.conkyrc: Conky settings
 
 alignment top_right
 background no
