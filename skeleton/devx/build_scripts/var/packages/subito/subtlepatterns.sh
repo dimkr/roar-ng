@@ -8,7 +8,7 @@ PKG_CAT="Desktop"
 PKG_DEPS=""
 
 # the patterns to include in the package, by their ID
-PATTERNS="641 695 845 750 676 573 820 907 826 1015 934 944 1024 1022 1083 1117"
+PATTERNS="641 695 845 750 676 573 820 907 826 1015 934 944 1024 1022 1083 1117 1119 1134"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0

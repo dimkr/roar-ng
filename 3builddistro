@@ -336,10 +336,7 @@ rm -f initramfs/bin/sh
 ln -s dash initramfs/bin/sh
 
 # if DASH is not present, use Bash instead
-if [ ! -e rootfs/bin/dash ]
-then
-	ln -s bash rootfs/bin/dash
-fi
+[ ! -e rootfs/bin/dash ] && ln -s bash rootfs/bin/dash
 
 # set Bash as the default shell
 [ -e rootfs/bin/sh ] && rm -f rootfs/bin/sh
