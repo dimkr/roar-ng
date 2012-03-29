@@ -5,10 +5,10 @@ DISTRO_NAME="Subito GNU/Linux"
 DISTRO_NICKNAME="subito"
 
 # the distribution version, in a nicely-printable representation
-DISTRO_VERSION="1.0 Beta"
+DISTRO_VERSION="1.0.0 Stable"
 
 # the distribution version, in a numeric representation
-DISTRO_VERSION_NUMERIC="0.9.5"
+DISTRO_VERSION_NUMERIC="1.0.0"
 
 # the distribution processor architecture
 DISTRO_ARCH="x86_64"

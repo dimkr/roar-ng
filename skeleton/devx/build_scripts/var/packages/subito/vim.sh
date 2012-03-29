@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="vim"
-PKG_VER="7.3.475"
+PKG_VER="7.3.486"
 PKG_REV="1"
 PKG_DESC="Improved implementation of the vi text editor"
 PKG_CAT="Document"
