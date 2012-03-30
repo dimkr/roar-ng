@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="htop"
-PKG_VER="1.0"
+PKG_VER="1.0.1"
 PKG_REV="1"
 PKG_DESC="Interactive process viewer"
 PKG_CAT="System"
