@@ -358,6 +358,13 @@ cd ..
 # re-compress the initramfs to make it smaller
 advdef -z4 iso/initrd.gz
 
+# create the devx module
+if [ -n "$DEVX_PACKAGES" ]
+then
+	mksquashfs devx dist/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
+	cp dist/$DEVX_SFS_NAME iso
+fi
+
 #######
 # ISO #
 #######
@@ -398,10 +405,6 @@ mkisofs -D -R \
 echo -n "Making the ISO image hybrid ..."
 isohybrid dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso
 echo " done"
-
-# create the devx module
-[ -n "$DEVX_PACKAGES" ] && mksquashfs devx \
-                                      dist/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
 
 #######
 # MD5 #
