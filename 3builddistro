@@ -129,9 +129,6 @@ build_module()
 				;;
 		esac
 
-		# remove shell customizations
-		[ -d $2/etc/profile.d ] && rm -rf $2/etc/profile.d
-
 		# if there is a post-installation script, append it
 		if [ -f $2/post_install.sh ]
 		then
