@@ -4,6 +4,7 @@
 If you encouter any issues or wish to enable persistency between sessions, here are some useful boot codes:
 - boot_mode (e.g boot_mode=live) - used to specify the boot mode. Valid values are "live", "frugal" (persistent) and "full" (persistent).
 - home (e.g home=sdb1) - used to specify the partition used for persistency.
+- sleep (e.g sleep=5) - wait for a given number of seconds
 
 To use the default live session, just press ENTER.
 
