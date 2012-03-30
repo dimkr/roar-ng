@@ -358,6 +358,8 @@ cd ..
 # re-compress the initramfs to make it smaller
 advdef -z4 iso/initrd.gz
 
+mkdir dist
+
 # create the devx module
 if [ -n "$DEVX_PACKAGES" ]
 then
@@ -368,8 +370,6 @@ fi
 #######
 # ISO #
 #######
-
-mkdir dist
 
 echo -n "Configuring the boot loader ..."
 
