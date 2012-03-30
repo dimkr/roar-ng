@@ -68,24 +68,29 @@ cp -f /etc/resolv.conf $mount_point/etc
 # create the build directory
 [ ! -d $mount_point/tmp/build ] && mkdir -p $mount_point/tmp/build
 
-# if the sources exist, copy them; otherwise - create an empty directory
-if [ -d sources/$1 ]
-then
-	cp -r sources/$1 $mount_point/tmp/build
-else
-	mkdir -p $mount_point/tmp/build/$1
-fi
+# create the sources directory
+[ ! -d sources/$1 ] && mkdir sources/$1
 
-# create a wrapper for buildpkg, which will also download the sources
+# download the sources
+cd sources/$1
+../../skeleton/devx/package_tools/usr/sbin/buildpkg \
+         download \
+         $(find ../../skeleton/devx/build_scripts/$BUILD_SCRIPT_DIR -name $1.sh)
+if [ 0 -ne $? ]
+then
+	echo "Error: failed to download the sources."
+	exit 1
+fi
+cd ../..
+
+# copy the sources to the build directory
+cp -r sources/$1 $mount_point/tmp/build
+
+# create a wrapper for buildpkg; install the built package, but ignore Busybox
+# because it breaks things
 cat << EOF > $mount_point/tmp/build/$1/build.sh
 ldconfig
 cd /tmp/build/$1
-buildpkg download \$(find /$BUILD_SCRIPT_DIR -name $1.sh)
-if [ 0 -ne \$? ]
-then
-	echo \$? > success
-	exit 1
-fi
 buildpkg build \$(find /$BUILD_SCRIPT_DIR -name $1.sh)
 success=\$?
 echo \$success > success
