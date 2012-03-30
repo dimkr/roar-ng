@@ -7,6 +7,9 @@
 # branding #
 ############
 
+# create /etc/hostname
+echo -n "$DISTRO_NICKNAME" > ./etc/hostname
+
 # replace DISTRO_NAME and DISTRO_VERSION with their values
 echo "  creating /etc/motd and /etc/issue"
 for i in issue motd

@@ -48,9 +48,6 @@ do
 		boot_mode=*)
 			boot_mode="${argument#*=}"
 			;;
-		hostname=*)
-			hostname="${argument#*=}"
-			;;
 		sleep=*)
 			sleep="${argument#*=}"
 			;;
@@ -179,11 +176,6 @@ done
 # unmount virtual file systems
 umount /proc
 umount /sys
-
-# write the hostname file; if no hostname was specified, generate a
-# pesudo-random one
-[ -z "$hostname" ] && hostname="$DISTRO_NICKNAME-$(date | md5sum | cut -b 1-4)"
-echo "$hostname" > /mnt/union/etc/hostname
 
 # create the boot mode file
 echo "$boot_mode" > /mnt/union/var/run/boot_mode

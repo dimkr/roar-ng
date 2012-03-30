@@ -29,7 +29,7 @@ then
 	echo " done"
 fi
 
-# set the hostname, using /etc/hostname, which is created by the initramfs
+# set the hostname
 echo -n "Setting the hostname ..."
 hostname -F /etc/hostname
 echo " done"
