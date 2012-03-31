@@ -73,7 +73,8 @@ do
 done
 echo " done"
 
-# change the home directory permissions
-echo -n "Setting home directory permissions ..."
+# change the home directory permissions and owner
+echo -n "Setting home directory permissions and owner ..."
+chmod 700 /home/$1
 chown -R $1:$1 /home/$1
 echo " done"

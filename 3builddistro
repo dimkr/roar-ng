@@ -340,6 +340,9 @@ ln -s dash initramfs/bin/sh
 [ -e rootfs/bin/sh ] && rm -f rootfs/bin/sh
 ln -s bash rootfs/bin/sh
 
+# make /root readable only by root
+chmod 700 rootfs/root
+
 ##################
 # image creation #
 ##################
