@@ -54,7 +54,7 @@ build() {
 	esac
 
 	# add the configuration
-cat << CONFIG_END > .config
+	cat << CONFIG_END > .config
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.19.3
@@ -1081,6 +1081,21 @@ CONFIG_END
 package() {
 	# install the package
 	make install
+	[ $? -ne 0 ] && return 1
+
+	# make sure /bin/busybox has the right permissions
+	chmod 4755 $INSTALL_DIR/bin/busybox
+	[ $? -ne 0 ] && return 1
+
+	# add /etc/busybox.conf
+	mkdir $INSTALL_DIR/etc
+	[ $? -ne 0 ] && return 1
+	cat << END > $INSTALL_DIR/etc/busybox.conf
+[SUID]
+su = ssx
+sulogin = ssx
+END
+	chmod 600 $INSTALL_DIR/etc/busybox.conf
 	[ $? -ne 0 ] && return 1
 
 	return 0
