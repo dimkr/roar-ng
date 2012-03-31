@@ -176,13 +176,8 @@ subito|libbsd|libbsd|exe,dev,doc,nls
 subito|cwm|cwm|exe,dev,doc,nls
 subito|zathura|zathura|exe,dev,doc,nls
 subito|slock|slock|exe,dev,doc,nls
-subito|bs|bs|exe,dev,doc,nls
-subito|greed|greed|exe,dev,doc,nls
-subito|moon-buggy|moon-buggy|exe,dev,doc,nls
-subito|tty-clock|tty-clock|exe,dev,doc,nls
 subito|dtach|dtach|exe,dev,doc,nls
 subito|fbshot|fbshot|exe,dev,doc,nls
-subito|vitetris|vitetris|exe,dev,doc,nls
 subito|bwm-ng|bwm-ng|exe,dev,doc,nls
 subito|htop|htop|exe,dev,doc,nls
 subito|abook|abook|exe,dev,doc,nls
@@ -199,7 +194,6 @@ subito|surfraw|surfraw|exe,dev,doc,nls
 subito|snownews|snownews|exe,dev,doc,nls
 subito|calcurse|calcurse|exe,dev,doc,nls
 subito|vifm|vifm|exe,dev,doc,nls
-subito|angband|angband|exe,dev,doc,nls
 subito|screen|screen|exe,dev,doc,nls
 subito|nano|nano|exe,dev,doc,nls
 subito|gtkdialog|gtkdialog|exe,dev,doc,nls
