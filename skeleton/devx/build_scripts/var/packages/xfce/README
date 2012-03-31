@@ -1,0 +1,17 @@
+Xfce should be built in the following order:
+
+libxfce4util
+xfconf
+libxfce4ui
+garcon
+exo
+libwnck
+xfce4-panel
+thunar
+xfce4-settings
+xfce4-session
+xfwm4
+xfdesktop
+xfce4-appfinder
+xfce-utils
+gtk-xfce-engine
