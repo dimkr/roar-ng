@@ -6,5 +6,5 @@ If you encouter any issues or wish to enable persistency between sessions, here 
 - home (e.g home=sdb1) - used to specify the partition used for persistency.
 - sleep (e.g sleep=5) - wait for a given number of seconds.
 
-To use the default live session, just press ENTER.
+To use the default live session, just press ENTER; otherwise, type "DISTRO_NICKNAME", followed by boot codes.
 
