@@ -16,10 +16,6 @@ i: /usr/share/pixmaps/edit48.png
 c: rxvt -title "GNU nano" -e nano
 t: Text editor
 
-i: /usr/share/pixmaps/configuration48.png
-c: system_settings
-t: System Settings
-
 i: /usr/share/pixmaps/console48.png
 c: urxvt
 t: Console

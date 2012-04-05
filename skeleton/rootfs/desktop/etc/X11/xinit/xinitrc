@@ -15,9 +15,6 @@ delayed_run()
 			[ -x "$i" ] && $i &
 		done
 	fi
-
-	# run the first-run wizard
-	[ "live" = "$(cat /var/run/boot_mode)" ] && firstrun &
 }
 
 # include the default configuration file
