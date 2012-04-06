@@ -6,6 +6,3 @@ SAVE_FILE_NAME="save_file.$SAVE_FILE_FS"
 
 # the console font
 CONSOLE_FONT="ter-u16n.psf.gz"
-
-# the keyboard map
-KEYBOARD_MAP="i386/qwerty/defkeymap.map.gz"

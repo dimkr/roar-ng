@@ -53,11 +53,6 @@ udevadm trigger
 udevadm settle
 echo " done"
 
-# load the keyboard map
-echo -n "Loading the keyboard map ..."
-loadkeys -q /usr/share/kbd/keymaps/$KEYBOARD_MAP
-echo " done"
-
 # set the console font
 echo -n "Setting the console font ..."
 for i in 1 2 3 4
@@ -78,4 +73,4 @@ do
 done
 
 # run the user's custom init script, if it exists
-[ -x /etc/rc.local ] && /etc/rc.local
+[ -x /etc/rc.local ] && . /etc/rc.local
