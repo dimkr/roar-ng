@@ -42,6 +42,10 @@ package() {
 	make DESTDIR=$INSTALL_DIR install
 	[ $? -ne 0 ] && return 1
 
+	# install the man page
+	install -D -m644 doc/rtorrent.1 $INSTALL_DIR/$MAN_DIR/man1/rtorrent.1
+	[ $? -ne 0 ] && return 1
+
 	# install the list of authors
 	install -D -m644 AUTHORS $INSTALL_DIR/$LEGAL_DIR/$PKG_NAME/AUTHORS
 	[ $? -ne 0 ] && return 1
