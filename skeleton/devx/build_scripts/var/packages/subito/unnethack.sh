@@ -1,26 +1,29 @@
 #!/bin/sh
 
 PKG_NAME="unnethack"
-PKG_VER="3.6.1-20120205"
+PKG_VER="4.0.0"
 PKG_REV="1"
 PKG_DESC="A variant of the roguelike game NetHack"
 PKG_CAT="Fun"
 PKG_DEPS=""
 
+# the source package release date
+PKG_DATE="20120401"
+
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0
+	[ -f $PKG_NAME-$PKG_VER-$PKG_DATE.tar.gz ] && return 0
 	# download the sources tarball
-	download_file http://downloads.sourceforge.net/project/unnethack/unnethack/3.6.1/$PKG_NAME-$PKG_VER.tar.gz
+	download_file http://downloads.sourceforge.net/project/unnethack/unnethack/$PKG_VER/$PKG_NAME-$PKG_VER-$PKG_DATE.tar.gz
 	[ $? -ne 0 ] && return 1
 	return 0
 }
 
 build() {
 	# extract the sources tarball
-	tar -xzvf $PKG_NAME-$PKG_VER.tar.gz
+	tar -xzvf $PKG_NAME-$PKG_VER-$PKG_DATE.tar.gz
 	[ $? -ne 0 ] && return 1
 
-	cd $PKG_NAME-$PKG_VER
+	cd $PKG_NAME-$PKG_VER-$PKG_DATE
 
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
