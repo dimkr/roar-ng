@@ -7,9 +7,6 @@
 # is used
 TMPFS_SIZE="75%"
 
-# include the distribution information file
-. /etc/distrorc
-
 # include the boot configuration
 . /etc/bootrc
 
@@ -27,8 +24,6 @@ clear
 
 # set the executable search path
 export PATH="/bin:/sbin:/usr/bin"
-
-echo "Starting $DISTRO_NAME $DISTRO_VERSION"
 
 # mount all virtual file systems
 mount -t rootfs -o remount,rw rootfs /
@@ -79,9 +74,7 @@ case "$sleep" in
 esac
 
 # generate device nodes for all recognized partitions
-echo -n "Recognizing partitions ..."
 mdev -s
-echo " done"
 
 # if the home partition was specified through its UUID, determine its name
 case "$home_partition" in
@@ -94,59 +87,45 @@ case "$home_partition" in
 		;;
 esac
 
-# mount the main file system Squashfs image
-echo -n "Preparing main file system ..."
-
 # mount the main Squashfs image, located at the file system root
 mount /rootfs.sfs /mnt/rootfs -t squashfs -o loop,ro
 [ 0 -ne $? ] && show_error "failed to mount the main file system image"
-echo " done"
 
 # prepare the writeable layer
 case $boot_mode in
 	# under "live" mode, use a tmpfs file system
 	live)
-		echo -n "Preparing live environment ..."
 		mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/save
 		[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
-		echo " done"
 		;;
 
 	# under "full" mode, use the home partition
 	full)
 		# mount the home partition
-		echo -n "Preparing home partition ..."
 		mount /dev/$home_partition /mnt/save
 		[ 0 -ne $? ] && show_error "failed to mount the home partition"
-		echo " done"
 		;;
 
 	# under "frugal" mode, use an image file contained in the home partition
 	frugal)
-		echo -n "Preparing home partition ..."
-
 		# create a mount point
 		mkdir /mnt/$home_partition
 
 		# mount the home partition
 		mount /dev/$home_partition /mnt/$home_partition
 		[ 0 -ne $? ] && show_error "failed to mount the home partition"
-		echo " done"
 
 		# if there is no save file, offer the user to create one now
 		[ ! -f /mnt/$home_partition/$SAVE_FILE_NAME ] && \
 		                   create_save_file /mnt/$home_partition/$SAVE_FILE_NAME
 
 		# mount the save file
-		echo -n "Loading save file ..."
 		mount /mnt/$home_partition/$SAVE_FILE_NAME /mnt/save -o loop,rw
 		[ 0 -ne $? ] && show_error "failed to mount the save file"
-		echo " done"
 		;;
 esac
 
 # create a union of the writeable file system and the main file system
-echo -n "Setting up the layered file system ..."
 mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
 
@@ -176,11 +155,6 @@ done
 # unmount virtual file systems
 umount /proc
 umount /sys
-
-# create the boot mode file
-echo "$boot_mode" > /mnt/union/var/run/boot_mode
-
-echo " done"
 
 # switch to the union file system
 exec switch_root /mnt/union /sbin/init

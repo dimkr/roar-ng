@@ -165,6 +165,7 @@ subito|advancecomp|advancecomp|exe>dev,dev,doc,nls
 subito|optipng|optipng|exe>dev,dev,doc,nls
 subito|mktemp|mktemp|exe,dev,doc,nls
 subito|dash|dash|exe,dev,doc,nls
+subito|ncsplash|ncsplash|exe,dev,doc,nls
 subito|bash|bash|exe,dev,doc,nls
 subito|squashfs-tools|squashfs-tools|exe,dev,doc,nls
 # use the Slackware kernel headers inside

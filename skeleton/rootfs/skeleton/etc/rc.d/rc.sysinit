@@ -1,76 +1,117 @@
 #!/bin/dash
 
 # /etc/rc.d/rc.sysinit: a system init script
-# dependencies: dash, busybox and udev
+# dependencies: dash, busybox, udev and ncsplash
 
 # set the executable search path
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/usr/local/sbin"
 
+# include the distribution information file
+. /etc/distrorc
+
 # include the boot configuration file
 . /etc/bootrc
 
-# mount all virtual file systems
-echo -n "Mounting file systems ..."
-mount -t proc proc /proc
-mount -t sysfs sysfs /sys
-mount -a
-echo " done"
+# create a FIFO
+fifo="$(mktemp -u -p /var/run)"
+mkfifo $fifo
 
-# enable all swap partitions specified in /etc/fstab
-echo -n "Setting up swap partitions ..."
-swapon -a
-echo " done"
+# set the current terminal's font
+setfont /usr/share/kbd/consolefonts/$CONSOLE_FONT
 
-# generate module dependency files
-if [ ! -f /lib/modules/$(uname -r)/modules.dep ]
-then
-	echo -n "Generating module dependency files ..."
-	depmod -a
-	echo " done"
-fi
+first_stage() {
+	# mount all virtual file systems
+	echo "Mounting virtual file systems" >> $fifo
+	mount -t proc proc /proc
+	mount -t sysfs sysfs /sys
+	mount -t tmpfs tmpfs /tmp
 
-# set the hostname
-echo -n "Setting the hostname ..."
-hostname -F /etc/hostname
-echo " done"
+	# generate module dependency files
+	if [ ! -f /lib/modules/$(uname -r)/modules.dep ]
+	then
+		echo "Generating module dependency files" >> $fifo
+		depmod -a
+	fi
 
-# set up up a loopback interface
-echo -n "Setting up a loopback interface ..."
-ifconfig lo 127.0.0.1 up
-route add -net 127.0.0.0 netmask 255.0.0.0 lo
-echo " done"
+	# start udev and wait for it to load all required modules
+	echo "Recognising devices" >> $fifo
+	udevd --daemon
+	udevadm trigger
+	udevadm settle
 
-# start logging daemons
-echo -n "Starting logging services ..."
-klogd
-syslogd -D -S
-echo " done"
+	# set the console font for all terminals, because it reverts back to the
+	# default when KMS is enabled - this time, the terminal won't be changed
+	# again, so it's safe
+	echo "Setting the console font" >> $fifo
+	for i in 1 2 3 4
+	do
+		setfont /usr/share/kbd/consolefonts/$CONSOLE_FONT -C /dev/tty$i
+	done
 
-# start udev and wait for it to load all required modules
-echo -n "Recognising devices ..."
-udevd --daemon
-udevadm trigger
-udevadm settle
-echo " done"
+	# stop ncsplash, because KMS may change the terminal
+	echo "exit" >> $fifo
+}
 
-# set the console font
-echo -n "Setting the console font ..."
-for i in 1 2 3 4
+second_stage() {
+	# mount all fstab file systems
+	echo "Mounting file systems" >> $fifo
+	mount -a
+
+	# enable all swap partitions specified in /etc/fstab
+	echo "Setting up swap partitions" >> $fifo
+	swapon -a
+
+	# set the hostname
+	echo "Setting the hostname" >> $fifo
+	hostname -F /etc/hostname
+
+	# set up up a loopback interface
+	echo "Setting up a loopback interface" >> $fifo
+	ifconfig lo 127.0.0.1 up
+	route add -net 127.0.0.0 netmask 255.0.0.0 lo
+
+	# start logging daemons
+	echo "Starting logging services" >> $fifo
+	klogd
+	syslogd -D -S
+
+	# update cache and all sorts of generated files
+	echo "Updating cache" >> $fifo
+	/etc/rc.d/rc.update > /dev/null 2>&1
+
+	# start extra daemons
+	echo "Starting daemons" >> $fifo
+	for i in /etc/init.d/*
+	do
+		[ -x $i ] && $i start
+	done
+
+	# run the user's custom init script, if it exists
+	[ -x /etc/rc.local ] && . /etc/rc.local
+
+	# stop ncsplash
+	echo "exit" >> $fifo
+}
+
+# start the boot sequence
+for stage in first_stage second_stage
 do
-	setfont /usr/share/kbd/consolefonts/$CONSOLE_FONT -C /dev/tty$i
+	$stage > /dev/null 2>&1 &
+
+	# run ncsplash; it will block the shell until "exit" is received
+	ncsplash $fifo "$DISTRO_NAME $DISTRO_VERSION"
+
+	# if ncsplash ended because of an error, attach to the FIFO read end to
+	# unblock the shell and delete it, so further I/O doesn't block anymore
+	if [ 0 -ne $? ]
+	then
+		cat $fifo > /dev/null 2>&1
+		rm -f $fifo
+	fi
 done
-echo " done"
 
-# update cache and all sorts of generated files
-echo -n "Updating cache ..."
-/etc/rc.d/rc.update > /dev/null 2>&1
-echo " done"
+# delete the FIFO
+[ -f $fifo ] && rm -f $fifo
 
-# start extra daemons
-for i in /etc/init.d/*
-do
-	[ -x $i ] && $i start
-done
-
-# run the user's custom init script, if it exists
-[ -x /etc/rc.local ] && . /etc/rc.local
+# clear the screen
+clear

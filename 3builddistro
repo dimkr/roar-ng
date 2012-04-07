@@ -226,9 +226,6 @@ build_module iso sandbox/iso ""
 # initramfs #
 #############
 
-# add distrorc to the initramfs
-cp conf/distrorc sandbox/initramfs/etc
-
 # copy bootrc to the initramfs
 cp conf/bootrc sandbox/initramfs/etc
 
