@@ -4,7 +4,7 @@
 
 # the default groups new users belong to
 DEFAULT_GROUPS="audio cdrom dialout disk floppy lp netdev plugdev tape tty video
-                users"
+                users scanner"
 
 # the command-line usage message
 USAGE="create_user USER

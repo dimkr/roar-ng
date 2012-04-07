@@ -11,5 +11,6 @@ plugdev:x:9:
 tape:x:10:
 tty:x:11:
 video:x:12:
+scanner:x:13:
 messagebus:x:503:messagebus
-users:x:13:
+users:x:14:
