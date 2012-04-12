@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="links"
-PKG_VER="2.5"
+PKG_VER="2.6"
 PKG_REV="1"
 PKG_DESC="Text web browser"
 PKG_CAT="Internet"
