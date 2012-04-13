@@ -17,38 +17,14 @@ delayed_run()
 	fi
 }
 
-# include the default configuration file
-. /etc/desktoprc
-
 # include the user's configuration file
-[ -f ~/.desktoprc ] && . ~/.desktoprc
+. ~/.desktoprc
 
 # set the desktop background
-if [ ! -f "/usr/share/backgrounds/$DESKTOP_BG" ]
-then
-	bg="/usr/share/backgrounds/$DEFAULT_DESKTOP_BG"
-else
-	bg="/usr/share/backgrounds/$DESKTOP_BG"
-fi
-
-if [ -z "$DESKTOP_BG_MODE" ]
-then
-	mode="$DEFAULT_DESKTOP_BG_MODE"
-else
-	mode="$DESKTOP_BG_MODE"
-fi
-
-hsetroot -$mode "$bg" &
+hsetroot -$DESKTOP_BG_MODE "/usr/share/backgrounds/$DESKTOP_BG" &
 
 # start all startup applications
 delayed_run &
 
 # execute the window manager
-if [ -n "$WINDOW_MANAGER" ]
-then
-	exec $WINDOW_MANAGER
-else
-	exec $DEFAULT_WINDOW_MANAGER
-fi
-
-
+exec $WINDOW_MANAGER

@@ -3,14 +3,16 @@
 # /usr/bin/desksetup: a desktop configuration tool
 # dependencies: dash and dialog
 
+# sane defaults
+DEFAULT_WINDOW_MANAGER="cwm"
+DEFAULT_DESKTOP_BG="pinstriped_suit.png"
+DEFAULT_DESKTOP_BG_MODE="tile"
+
 if [ -f ~/.desktoprc ]
 then
 	# include the user's configuration
 	. ~/.desktoprc
 else
-	# include the default configuration
-	. /etc/desktoprc
-	
 	# use the sane defaults
 	WINDOW_MANAGER="$DEFAULT_WINDOW_MANAGER"
 	DESKTOP_BG="$DEFAULT_DESKTOP_BG"
@@ -22,7 +24,7 @@ temp_file="$(mktemp -u)"
 
 # list all available window managers
 for i in jwm icewm fluxbox openbox dwm evilwm ratpoison cwm wmaker pekwm \
-         evilwm e16 enlightenment_start xfce4-session startkde
+         evilwm e16 enlightenment_start xfce4-session
 do
 	path="$(which $i)"
 	[ -z "$path" ] && continue

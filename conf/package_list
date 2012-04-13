@@ -215,7 +215,6 @@ subito|geany|geany|exe,dev,doc,nls
 subito|imlib2|imlib2|exe,dev,doc,nls
 subito|hsetroot|hsetroot|exe,dev,doc,nls
 subito|sxiv|sxiv|exe,dev,doc,nls
-subito|wbar|wbar|exe,dev,doc,nls
 subito|libsigc++|libsigc++|exe,dev,doc,nls
 subito|libtorrent|libtorrent|exe,dev,doc,nls
 subito|rtorrent|rtorrent|exe,dev,doc,nls
@@ -225,7 +224,6 @@ subito|cmus|cmus|exe,dev,doc,nls
 subito|mplayer2|mplayer2|exe,dev,doc,nls
 subito|terminus-font|terminus-font|exe,dev,doc,nls
 subito|subtlepatterns|subtlepatterns|exe,dev,doc,nls
-subito|clarity-icon-theme|clarity-icon-theme|exe,dev,doc,nls
 subito|parcellite|parcellite|exe,dev,doc,nls
 subito|volumeicon|volumeicon|exe,dev,doc,nls
 subito|grun|grun|exe,dev,doc,nls

@@ -52,13 +52,3 @@ XDG_CONFIG_HOME="$HOME/.config"
 XDG_DATA_DIRS="/usr/share:/usr/local/share:/opt/share"
 XDG_CONFIG_DIRS="/etc/xdg"
 XDG_CACHE_HOME="$HOME/.cache"
-
-############
-# X server #
-############
-
-# if desksetup was not executed already, run it
-[ ! -f ~/.desktoprc ] && desksetup
-
-# start the X server
-[ -z "$(pidof -s X)" ] && startx
