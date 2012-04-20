@@ -13,7 +13,6 @@ command lock slock
 # applications menu
 command Vifm "urxvt -title Vifm -e vifm"
 command Links "urxvt -title Links -e links"
-command Mutt "urxvt -title Mutt -e mutt"
 command Snownews "urxvt -title Snownews -e snownews"
 command Irssi "urxvt -title Irssi -e irssi"
 command rTorrent "urxvt -title rTorrent -e rtorrent"

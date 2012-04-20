@@ -197,7 +197,6 @@ subito|snownews|snownews|exe,dev,doc,nls
 subito|calcurse|calcurse|exe,dev,doc,nls
 subito|vifm|vifm|exe,dev,doc,nls
 subito|screen|screen|exe,dev,doc,nls
-subito|nano|nano|exe,dev,doc,nls
 subito|dropbear|dropbear|exe,dev,doc,nls
 subito|irssi|irssi|exe,dev,doc,nls
 subito|lftp|lftp|exe,dev,doc,nls
@@ -208,7 +207,6 @@ subito|aria2|aria2|exe,dev,doc,nls
 subito|vim|vim|exe,dev,doc,nls
 subito|msmtp|msmtp|exe,dev,doc,nls
 subito|fetchmail|fetchmail|exe,dev,doc,nls
-subito|mutt|mutt|exe,dev,doc,nls
 subito|netsurf|netsurf|exe,dev,doc,nls
 subito|rxvt-unicode|rxvt-unicode|exe,dev,doc,nls
 subito|geany|geany|exe,dev,doc,nls
