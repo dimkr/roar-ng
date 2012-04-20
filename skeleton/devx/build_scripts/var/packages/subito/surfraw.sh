@@ -24,9 +24,7 @@ build() {
 
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
-	            --disable-opensearch \
-	            --with-text-browser=/$BIN_DIR/links \
-	            --with-graphical-browser=/$BIN_DIR/netsurf
+	            --disable-opensearch
 	[ $? -ne 0 ] && return 1
 
 	# build the package
