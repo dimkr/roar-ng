@@ -207,7 +207,6 @@ subito|aria2|aria2|exe,dev,doc,nls
 subito|vim|vim|exe,dev,doc,nls
 subito|msmtp|msmtp|exe,dev,doc,nls
 subito|fetchmail|fetchmail|exe,dev,doc,nls
-subito|netsurf|netsurf|exe,dev,doc,nls
 subito|rxvt-unicode|rxvt-unicode|exe,dev,doc,nls
 subito|geany|geany|exe,dev,doc,nls
 subito|imlib2|imlib2|exe,dev,doc,nls
