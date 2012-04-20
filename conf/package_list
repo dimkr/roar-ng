@@ -200,7 +200,6 @@ subito|screen|screen|exe,dev,doc,nls
 subito|dropbear|dropbear|exe,dev,doc,nls
 subito|irssi|irssi|exe,dev,doc,nls
 subito|lftp|lftp|exe,dev,doc,nls
-subito|conky|conky|exe,dev,doc,nls
 subito|links|links|exe,dev,doc,nls
 subito|unnethack|unnethack|exe,dev,doc,nls
 subito|aria2|aria2|exe,dev,doc,nls
