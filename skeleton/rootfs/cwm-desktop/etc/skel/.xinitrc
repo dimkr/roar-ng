@@ -1,7 +1,7 @@
 #!/bin/dash
 
-# /etc/X11/xinit/xinitrc: a startup script for the X server
-# dependencies: dash and hsetroot
+# ~/.xinitrc: a startup script for the X server
+# dependencies: dash, hsetroot and cwm
 
 delayed_run()
 {
@@ -17,14 +17,11 @@ delayed_run()
 	fi
 }
 
-# include the user's configuration file
-. ~/.desktoprc
-
 # set the desktop background
-hsetroot -$DESKTOP_BG_MODE "/usr/share/backgrounds/$DESKTOP_BG" &
+hsetroot -solid \#505075
 
 # start all startup applications
 delayed_run &
 
 # execute the window manager
-exec $WINDOW_MANAGER
+exec cwm
