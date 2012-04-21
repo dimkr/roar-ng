@@ -187,7 +187,6 @@ subito|dvtm|dvtm|exe,dev,doc,nls
 subito|ncdu|ncdu|exe,dev,doc,nls
 subito|shed|shed|exe>dev,dev,doc,nls
 subito|tudu|tudu|exe,dev,doc,nls
-subito|xpad|xpad|exe,dev,doc,nls
 subito|aspell|aspell|exe,dev,doc,nls
 subito|aspell6-en|aspell6-en|exe,dev,doc,nls
 subito|stalonetray|stalonetray|exe,dev,doc,nls
@@ -218,7 +217,5 @@ subito|cmus|cmus|exe,dev,doc,nls
 subito|mplayer2|mplayer2|exe,dev,doc,nls
 subito|terminus-font|terminus-font|exe,dev,doc,nls
 subito|subtlepatterns|subtlepatterns|exe,dev,doc,nls
-subito|parcellite|parcellite|exe,dev,doc,nls
-subito|volumeicon|volumeicon|exe,dev,doc,nls
 subito|grun|grun|exe,dev,doc,nls
 subito|xbindkeys|xbindkeys|exe,dev,doc,nls
