@@ -176,7 +176,7 @@ subito|licenses|licenses|exe,dev,doc,nls
 subito|iana-etc|iana-etc|exe,dev,doc,nls
 subito|libbsd|libbsd|exe,dev,doc,nls
 subito|cwm|cwm|exe,dev,doc,nls
-subito|zathura|zathura|exe,dev,doc,nls
+subito|epdfview|epdfview|exe,dev,doc,nls
 subito|slock|slock|exe,dev,doc,nls
 subito|dtach|dtach|exe,dev,doc,nls
 subito|fbshot|fbshot|exe,dev,doc,nls
