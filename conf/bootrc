@@ -1,8 +1,2 @@
-# the file system used in save files
-SAVE_FILE_FS="ext2"
-
-# the save file name
-SAVE_FILE_NAME="save_file.$SAVE_FILE_FS"
-
 # the console font
 CONSOLE_FONT="ter-u16n.psf.gz"

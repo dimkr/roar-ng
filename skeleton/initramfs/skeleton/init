@@ -30,8 +30,8 @@ mount -t rootfs -o remount,rw rootfs /
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 
-# initialize the boot mode variable
-boot_mode="live"
+# initialize the boot mode boolean
+is_live=1
 
 # parse the kernel command-line
 for argument in $(cat /proc/cmdline)
@@ -39,30 +39,13 @@ do
 	case "$argument" in
 		home=*)
 			home_partition="${argument#*=}"
-			;;
-		boot_mode=*)
-			boot_mode="${argument#*=}"
+			is_live=0
 			;;
 		sleep=*)
 			sleep="${argument#*=}"
 			;;
 	esac
 done
-
-# make sure a valid boot mode was specified
-case "$boot_mode" in
-	full|frugal)
-		[ -z "$home_partition" ] && \
-		    show_error "no home partition was specified for \"$boot_mode\" mode"
-		;;
-	live)
-		[ -n "$home_partition" ] && \
-		           show_error "a home partition was specified for \"live\" mode"
-		;;
-	*)
-		show_error "invalid boot mode"
-		;;
-esac
 
 # if the "sleep" argument was passed, sleep for the given number of seconds
 case "$sleep" in
@@ -77,75 +60,41 @@ esac
 mdev -s
 
 # if the home partition was specified through its UUID, determine its name
-case "$home_partition" in
-	*-*-*-*-*)
-		home_partition="$(blkid | \
-		                  grep UUID=\"$home_partition\" | \
-		                  cut -f 1 -d : | cut -f 3- -d /)"
-		[ -z "$home_partition" ] && \
-		       show_error "the specified home partition UUID was not recognized"
-		;;
-esac
+if [ 0 -eq $is_live ]
+then
+	case "$home_partition" in
+		*-*-*-*-*)
+			home_partition="$(blkid | \
+							  grep UUID=\"$home_partition\" | \
+							  cut -f 1 -d : | cut -f 3- -d /)"
+			[ -z "$home_partition" ] && \
+			   show_error "the specified home partition UUID was not recognized"
+			;;
+	esac
+fi
 
 # mount the main Squashfs image, located at the file system root
 mount /rootfs.sfs /mnt/rootfs -t squashfs -o loop,ro
 [ 0 -ne $? ] && show_error "failed to mount the main file system image"
 
 # prepare the writeable layer
-case $boot_mode in
+if [ 1 -eq $is_live ]
+then
 	# under "live" mode, use a tmpfs file system
-	live)
-		mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/save
-		[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
-		;;
-
+	mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/save
+	[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
+else
 	# under "full" mode, use the home partition
-	full)
-		# mount the home partition
-		mount /dev/$home_partition /mnt/save
-		[ 0 -ne $? ] && show_error "failed to mount the home partition"
-		;;
-
-	# under "frugal" mode, use an image file contained in the home partition
-	frugal)
-		# create a mount point
-		mkdir /mnt/$home_partition
-
-		# mount the home partition
-		mount /dev/$home_partition /mnt/$home_partition
-		[ 0 -ne $? ] && show_error "failed to mount the home partition"
-
-		# if there is no save file, offer the user to create one now
-		[ ! -f /mnt/$home_partition/$SAVE_FILE_NAME ] && \
-		                   create_save_file /mnt/$home_partition/$SAVE_FILE_NAME
-
-		# mount the save file
-		mount /mnt/$home_partition/$SAVE_FILE_NAME /mnt/save -o loop,rw
-		[ 0 -ne $? ] && show_error "failed to mount the save file"
-		;;
-esac
+	mount /dev/$home_partition /mnt/save
+	[ 0 -ne $? ] && show_error "failed to mount the home partition"
+fi
 
 # create a union of the writeable file system and the main file system
 mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
 
-# list the mounted file systems
-file_systems="rootfs"
-case $boot_mode in
-	# under "live" or "frugal" mode - just the main file system and the
-	# writeable layer
-	live|full)
-		file_systems="$file_systems save"
-		;;
-
-	# under "frugal" mode, the home partition has its own mount point
-	frugal)
-		file_systems="$file_systems $home_partition save"
-		;;
-esac
-
 # move the mounted file systems to the union file system's /mnt
-for file_system in $file_systems
+for file_system in rootfs save
 do
 	mkdir -p /mnt/union/mnt/$file_system
 	mount --move /mnt/$file_system /mnt/union/mnt/$file_system

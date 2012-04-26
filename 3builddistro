@@ -226,9 +226,6 @@ build_module iso sandbox/iso ""
 # initramfs #
 #############
 
-# copy bootrc to the initramfs
-cp conf/bootrc sandbox/initramfs/etc
-
 # clean up the initramfs
 rm -rf sandbox/initramfs/usr/share
 
