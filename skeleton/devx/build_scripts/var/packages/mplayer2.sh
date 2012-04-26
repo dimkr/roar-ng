@@ -43,7 +43,6 @@ build() {
 	            --disable-vesa \
 	            --disable-svga \
 	            --disable-sdl \
-	            --disable-kva \
 	            --disable-aa \
 	            --disable-caca \
 	            --disable-ggi \
@@ -72,7 +71,6 @@ build() {
 	            --disable-yuv4mpeg \
 	            --disable-coreaudio \
 	            --disable-cocoa \
-	            --disable-quartz \
 	            --disable-ossaudio \
 	            --disable-arts \
 	            --disable-esd \
@@ -83,8 +81,6 @@ build() {
 	            --disable-nas \
 	            --disable-sgiaudio \
 	            --disable-sunaudio \
-	            --disable-kai \
-	            --disable-dart \
 	            --disable-win32waveout \
 	            --language-msg=en \
 	            --disable-runtime-cpudetection \
