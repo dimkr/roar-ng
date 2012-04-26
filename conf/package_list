@@ -198,6 +198,7 @@ subito|vifm|vifm|exe,dev,doc,nls
 subito|screen|screen|exe,dev,doc,nls
 subito|dropbear|dropbear|exe,dev,doc,nls
 subito|irssi|irssi|exe,dev,doc,nls
+subito|bitlbee|bitlbee|exe,dev,doc,nls
 subito|lftp|lftp|exe,dev,doc,nls
 subito|links|links|exe,dev,doc,nls
 subito|unnethack|unnethack|exe,dev,doc,nls
