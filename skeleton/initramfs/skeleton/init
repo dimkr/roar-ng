@@ -7,9 +7,6 @@
 # is used
 TMPFS_SIZE="75%"
 
-# include the boot configuration
-. /etc/bootrc
-
 # usage: show_error $error
 show_error()
 {
