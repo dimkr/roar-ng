@@ -22,6 +22,11 @@ build() {
 
 	cd $PKG_NAME-$PKG_VER
 
+	# set the pkgconfig files directory
+	sed -i s~"pcdir='\$prefix/lib/pkgconfig'"~"pcdir='/$LIB_DIR/pkgconfig'"~ \
+	    configure
+	[ $? -ne 0 ] && return 1
+
 	# configure the package
 	./configure --prefix=/$BASE_INSTALL_PREFIX \
 	            --bindir=/$BIN_DIR \
