@@ -178,6 +178,7 @@ subito|libbsd|libbsd|exe,dev,doc,nls
 subito|cwm|cwm|exe,dev,doc,nls
 subito|epdfview|epdfview|exe,dev,doc,nls
 subito|slock|slock|exe,dev,doc,nls
+subito|frost|frost|exe,dev,doc,nls
 subito|dtach|dtach|exe,dev,doc,nls
 subito|bwm-ng|bwm-ng|exe,dev,doc,nls
 subito|htop|htop|exe,dev,doc,nls
