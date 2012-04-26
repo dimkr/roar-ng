@@ -3,20 +3,20 @@
 ################
 
 # the executable search path
-PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/usr/local/sbin"
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/usr/local/sbin"
 
 # the new file permissions mask
 umask 022
 
-################
+#################
 # shell options #
-################
+#################
 
 # the history file size
-HISTFILESIZE=1000
+export HISTFILESIZE=1000
 
 # ignore duplicates in the history
-HISTCONTROL="ignoredups"
+export HISTCONTROL="ignoredups"
 
 ##########
 # extras #
@@ -34,21 +34,21 @@ done
 #######################
 
 # the terminal type
-TERM="rxvt"
+export TERM="rxvt"
 
 # the default text editor
-EDITOR="vi"
+export EDITOR="vi"
 
 # the system locale
-LANG="C"
-LC_COLLATE="C"
+export LANG="C"
+export LC_COLLATE="C"
 
 ###############################
 # freedesktop.org directories #
 ###############################
 
-XDG_DATA_HOME="$HOME/.local/share"
-XDG_CONFIG_HOME="$HOME/.config"
-XDG_DATA_DIRS="/usr/share:/usr/local/share:/opt/share"
-XDG_CONFIG_DIRS="/etc/xdg"
-XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_DIRS="/usr/share:/usr/local/share:/opt/share"
+export XDG_CONFIG_DIRS="/etc/xdg"
+export XDG_CACHE_HOME="$HOME/.cache"

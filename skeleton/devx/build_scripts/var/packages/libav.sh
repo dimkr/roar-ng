@@ -42,6 +42,8 @@ build() {
 
 	# configure the package
 	./configure --prefix=/$BASE_INSTALL_PREFIX \
+	            --libdir=/$LIB_DIR \
+	            --shlibdir=/$LIB_DIR \
 	            --disable-static \
 	            --enable-shared \
 	            --enable-gpl \

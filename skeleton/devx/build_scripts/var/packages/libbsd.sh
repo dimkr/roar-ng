@@ -25,6 +25,8 @@ build() {
 	# configure the package
 	sed -e s~'^prefix.*=.*'~"prefix=/$BASE_INSTALL_PREFIX"~ \
 	    -e s~'^exec_prefix.*=.*'~"exec_prefix=/$BASE_INSTALL_PREFIX"~ \
+	    -e s~'^libdir.*=.*'~"libdir=/$LIB_DIR"~ \
+	    -e s~'^usrlibdir.*=.*'~"usrlibdir=/$LIB_DIR"~ \
 	    -i Makefile
 	[ $? -ne 0 ] && return 1
 
