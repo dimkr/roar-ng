@@ -22,5 +22,6 @@ command TuDu "urxvt -title TuDu -e tudu"
 command AlsaMixer "urxvt -title AlsaMixer -e alsamixer"
 command cmus "urxvt -title cmus -e cmus"
 command UnNetHack "urxvt -title UnNetHack -e unnethack"
+command Geany geany
 command Vim "urxvt -title Vim -e vim"
 command htop "urxvt -title htop -e htop"
