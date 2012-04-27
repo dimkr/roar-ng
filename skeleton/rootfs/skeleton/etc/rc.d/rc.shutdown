@@ -10,7 +10,7 @@ do
 done
 
 # stop logging daemons
-echo "Stopping logging services ..."
+echo -n "Stopping logging services ..."
 kill $(pidof syslogd)
 kill $(pidof klogd)
 echo " done"
@@ -20,9 +20,12 @@ echo -n "Stopping system services ..."
 kill $(pidof udevd)
 echo " done"
 
-# unmount all virtual file systems
-echo -n "Unmounting file systems ..."
-sync
+# disable swap
+echo -n "Turning off swap ..."
 swapoff -a
-umount -a -r
+echo " done"
+
+# flush all file system buffers
+echo -n "Flushing file system buffers ..."
+sync
 echo " done"

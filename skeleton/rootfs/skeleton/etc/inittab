@@ -11,9 +11,12 @@ tty4::respawn:/sbin/getty 38400 tty4
 
 # system shutdown
 ::shutdown:/etc/rc.d/rc.shutdown
+::shutdown:/bin/umount -ar
 
 # system reboot
 ::restart:/etc/rc.d/rc.shutdown
+::restart:/bin/umount -ar
 ::restart:/sbin/init
-::ctrlaltdel:/etc/rc.d/rc.shutdown
+
+# CTRL + ALT + DEL
 ::ctrlaltdel:/sbin/reboot
