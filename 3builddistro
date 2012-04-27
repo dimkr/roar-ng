@@ -355,11 +355,8 @@ advdef -z4 iso/initrd.gz
 mkdir dist
 
 # create the devx module
-if [ -n "$DEVX_PACKAGES" ]
-then
-	mksquashfs devx dist/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
-	cp dist/$DEVX_SFS_NAME iso
-fi
+[ -n "$DEVX_PACKAGES" ] && mksquashfs devx \
+                                      iso/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
 
 #######
 # ISO #
