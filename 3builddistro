@@ -16,7 +16,7 @@
 #######################
 
 # the flags passed to mksquashfs
-MKSQUASHFS_OPTIONS="-comp xz -Xbcj x86"
+MKSQUASHFS_OPTIONS="-no-exports -comp xz -Xbcj x86"
 
 ##############
 # file names #
