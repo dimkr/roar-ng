@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="rtorrent"
-PKG_VER="0.8.9"
+PKG_VER="0.9.2"
 PKG_REV="1"
 PKG_DESC="BitTorrent client"
 PKG_CAT="Internet"

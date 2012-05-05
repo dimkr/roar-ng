@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="libtorrent"
-PKG_VER="0.12.9"
+PKG_VER="0.13.2"
 PKG_REV="1"
 PKG_DESC="BitTorrent library"
 PKG_CAT="Internet"
