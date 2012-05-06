@@ -10,6 +10,9 @@
 # create /etc/hostname
 echo -n "$DISTRO_NICKNAME" > ./etc/hostname
 
+# add the machine itself to the hosts file
+echo "127.0.0.1	$DISTRO_NICKNAME	localhost" >> ./etc/hosts
+
 # replace DISTRO_NAME and DISTRO_VERSION with their values
 echo "  creating /etc/motd and /etc/issue"
 for i in issue motd
