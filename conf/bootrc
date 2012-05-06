@@ -1,2 +1,2 @@
 # the console font
-CONSOLE_FONT="ter-u16n.psf.gz"
+CONSOLE_FONT="default8x16.psfu.gz"

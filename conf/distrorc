@@ -1,14 +1,14 @@
 # the distribution name
-DISTRO_NAME="Subito GNU/Linux"
+DISTRO_NAME="a friendly name"
 
 # the distribution nickname, used as a prefix for file names and the hostname
-DISTRO_NICKNAME="subito"
+DISTRO_NICKNAME="short_name"
 
 # the distribution version, in a nicely-printable representation
-DISTRO_VERSION="1.0.0 Stable"
+DISTRO_VERSION="a friendly version number and maybe even a codename"
 
 # the distribution version, in a numeric representation
-DISTRO_VERSION_NUMERIC="1.0.0"
+DISTRO_VERSION_NUMERIC="1.0"
 
 # the distribution processor architecture
-DISTRO_ARCH="x86_64"
+DISTRO_ARCH="architecture name"
