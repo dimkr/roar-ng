@@ -375,7 +375,7 @@ mkdir dist
 #######
 
 # copy the boot image the ISO root
-cp -af $(find processed-packages/$BOOT_LOADER -name $BOOT_IMAGE) iso
+cp -af $(find ../processed-packages/$BOOT_LOADER -name $BOOT_IMAGE) iso
 
 # run the boot loader's configuration script
 if [ -f iso/post_install.sh ]
