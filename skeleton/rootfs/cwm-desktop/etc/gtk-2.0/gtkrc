@@ -1,3 +1,0 @@
-# /etc/gtk-2.0/gtkrc: default GTK+ 2.x appearance
-
-include "/usr/share/themes/Raleigh/gtk-2.0/gtkrc"
