@@ -8,6 +8,9 @@
 # generate the loader cache
 [ ! -f /etc/ld.so.cache ] && ldconfig
 
+# generate the locale archive
+[ ! -f /usr/lib$suffix/locale/locale-archive ] && locale-gen
+
 # update the MIME database
 [ ! -f /usr/share/mime/mime.cache ] && update-mime-database /usr/share/mime
 
@@ -33,16 +36,8 @@ then
 fi
 
 # update the GTK+ icon cache
-if [ ! -f /usr/share/icons/hicolor/icon-theme.cache ]
-then
-	/usr/bin/gtk-update-icon-cache -f /usr/share/icons/hicolor
-fi
-
-# generate the locale archive
-if [ ! -f /usr/lib$suffix/locale/locale-archive ]
-then
-	localedef -i en_US -f UTF-8 en_US.UTF-8
-fi
+[ ! -f /usr/share/icons/hicolor/icon-theme.cache ] && \
+                      /usr/bin/gtk-update-icon-cache -f /usr/share/icons/hicolor
 
 # generate the font cache
 if [ "/var/cache/fontconfig/*" = "$(echo /var/cache/fontconfig/*)" ]
@@ -56,7 +51,7 @@ then
 		[ ! -e "$directory" ] && continue
 
 		for sub_directory in $(find $directory -type d)
-		do 	
+		do
 			cd $sub_directory
 			[ ! -f fonts.scale ] && mkfontscale
 			[ ! -f fonts.dir ] && mkfontdir
