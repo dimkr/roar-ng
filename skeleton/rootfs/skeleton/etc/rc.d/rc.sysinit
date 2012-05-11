@@ -17,7 +17,7 @@ fifo="$(mktemp -u -p /var/run)"
 mkfifo $fifo
 
 # set the current terminal's font
-setfont /usr/share/kbd/consolefonts/$CONSOLE_FONT
+setfont $CONSOLE_FONT
 
 first_stage() {
 	# mount all virtual file systems
@@ -45,7 +45,7 @@ first_stage() {
 	echo "Setting the console font" >> $fifo
 	for i in 1 2 3 4
 	do
-		setfont /usr/share/kbd/consolefonts/$CONSOLE_FONT -C /dev/tty$i
+		setfont $CONSOLE_FONT -C /dev/tty$i
 	done
 
 	# stop ncsplash, because KMS may change the terminal

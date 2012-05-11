@@ -38,6 +38,12 @@ then
 	/usr/bin/gtk-update-icon-cache -f /usr/share/icons/hicolor
 fi
 
+# generate the locale archive
+if [ ! -f /usr/lib$suffix/locale/locale-archive ]
+then
+	localedef -i en_US -f UTF-8 en_US.UTF-8
+fi
+
 # generate the font cache
 if [ "/var/cache/fontconfig/*" = "$(echo /var/cache/fontconfig/*)" ]
 then

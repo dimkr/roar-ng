@@ -49,8 +49,8 @@ export TERM="rxvt"
 export EDITOR="vi"
 
 # the system locale
-export LANG="C"
-export LC_COLLATE="C"
+export LANG="en_US.UTF-8"
+export LC_ALL="$LANG"
 
 ###############################
 # freedesktop.org directories #
