@@ -1094,8 +1094,21 @@ package() {
 	make install
 	[ $? -ne 0 ] && return 1
 
-	# make sure /bin/busybox has the right permissions
-	chmod 4755 $INSTALL_DIR/bin/busybox
+	# move the BusyBox binary
+	if [ "bin" != "$BIN_DIR" ]
+	then
+		mkdir -p $INSTALL_DIR/$BIN_DIR
+		[ $? -ne 0 ] && return 1
+		mv $INSTALL_DIR/bin/busybox $INSTALL_DIR/$BIN_DIR
+		[ $? -ne 0 ] && return 1
+
+		# create a backwards-compatibility symlink
+		ln -s ../$BIN_DIR/busybox $INSTALL_DIR/bin/busybox
+		[ $? -ne 0 ] && return 1
+	fi
+
+	# make sure the executable has the right permissions
+	chmod 4755 $INSTALL_DIR/$BIN_DIR/busybox
 	[ $? -ne 0 ] && return 1
 
 	# add /etc/busybox.conf
