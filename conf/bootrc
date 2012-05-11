@@ -1,2 +1,2 @@
 # the console font
-CONSOLE_FONT="default8x16.psfu.gz"
+CONSOLE_FONT="default8x16"
