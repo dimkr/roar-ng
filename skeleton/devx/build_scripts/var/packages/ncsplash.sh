@@ -3,7 +3,7 @@
 PKG_NAME="ncsplash"
 PKG_VER="git$(date +%d%m%Y)"
 PKG_REV="1"
-PKG_DESC="A small and fast POSIX-compliant shell"
+PKG_DESC="A lightweight ncurses-based splash screen"
 PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
