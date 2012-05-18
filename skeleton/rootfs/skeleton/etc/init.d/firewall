@@ -4,13 +4,10 @@
 # dependencies: dash and iptables
 
 # allowed ports for incmoing TCP traffic
-# 631 - CUPS
-TCP_ALLOW="631"
+TCP_ALLOW=""
 
 # same, for UDP
-# 67, 68 - DHCP
-# 546 - DHCPv6
-UDP_ALLOW="67 68 546"
+UDP_ALLOW=""
 
 case "$1" in
 
