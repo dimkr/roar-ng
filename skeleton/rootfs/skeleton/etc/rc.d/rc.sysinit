@@ -21,7 +21,7 @@ setfont $CONSOLE_FONT
 
 first_stage() {
 	# mount all virtual file systems
-	echo "Mounting virtual file systems" >> $fifo
+	echo -n "Mounting virtual file systems" >> $fifo
 	mount -t proc proc /proc
 	mount -t sysfs sysfs /sys
 	mount -t tmpfs tmpfs /tmp
@@ -29,12 +29,12 @@ first_stage() {
 	# generate module dependency files
 	if [ ! -f /lib/modules/$(uname -r)/modules.dep ]
 	then
-		echo "Generating module dependency files" >> $fifo
+		echo -n "Generating module dependency files" >> $fifo
 		depmod -a
 	fi
 
 	# start udev and wait for it to load all required modules
-	echo "Recognising devices" >> $fifo
+	echo -n "Recognising devices" >> $fifo
 	udevd --daemon
 	udevadm trigger
 	udevadm settle
@@ -42,45 +42,45 @@ first_stage() {
 	# set the console font for all terminals, because it reverts back to the
 	# default when KMS is enabled - this time, the terminal won't be changed
 	# again, so it's safe
-	echo "Setting the console font" >> $fifo
+	echo -n "Setting the console font" >> $fifo
 	for i in 1 2 3 4
 	do
 		setfont $CONSOLE_FONT -C /dev/tty$i
 	done
 
 	# stop ncsplash, because KMS may change the terminal
-	echo "exit" >> $fifo
+	echo -n "exit" >> $fifo
 }
 
 second_stage() {
 	# mount all fstab file systems
-	echo "Mounting file systems" >> $fifo
+	echo -n "Mounting file systems" >> $fifo
 	mount -a
 
 	# enable all swap partitions specified in /etc/fstab
-	echo "Setting up swap partitions" >> $fifo
+	echo -n "Setting up swap partitions" >> $fifo
 	swapon -a
 
 	# set the hostname
-	echo "Setting the hostname" >> $fifo
+	echo -n "Setting the hostname" >> $fifo
 	hostname -F /etc/hostname
 
 	# set up up a loopback interface
-	echo "Setting up a loopback interface" >> $fifo
+	echo -n "Setting up a loopback interface" >> $fifo
 	ifconfig lo 127.0.0.1 up
 	route add -net 127.0.0.0 netmask 255.0.0.0 lo
 
 	# start logging daemons
-	echo "Starting logging services" >> $fifo
+	echo -n "Starting logging services" >> $fifo
 	klogd
 	syslogd -D -S
 
 	# update cache and all sorts of generated files
-	echo "Updating cache" >> $fifo
+	echo -n "Updating cache" >> $fifo
 	/etc/rc.d/rc.update > /dev/null 2>&1
 
 	# start extra daemons
-	echo "Starting daemons" >> $fifo
+	echo -n "Starting daemons" >> $fifo
 	for i in /etc/init.d/*
 	do
 		[ -x $i ] && $i start
@@ -90,7 +90,7 @@ second_stage() {
 	[ -x /etc/rc.local ] && . /etc/rc.local
 
 	# stop ncsplash
-	echo "exit" >> $fifo
+	echo -n "exit" >> $fifo
 }
 
 # start the boot sequence
