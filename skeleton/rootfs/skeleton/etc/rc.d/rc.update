@@ -9,7 +9,7 @@
 [ ! -f /etc/ld.so.cache ] && ldconfig
 
 # generate the locale archive
-[ ! -f /usr/lib$suffix/locale/locale-archive ] && locale-gen
+[ ! -f LIB_DIR/locale/locale-archive ] && locale-gen
 
 # update the MIME database
 [ ! -f /usr/share/mime/mime.cache ] && update-mime-database /usr/share/mime
@@ -17,16 +17,7 @@
 # update the gdk-pixbuf list of available loaders
 if [ ! -f /etc/gtk-2.0/gdk-pixbuf.loaders ]
 then
-	case "$DISTRO_ARCH" in
-		*64)
-			suffix="64"
-			;;
-		*)
-			suffix=""
-			;;
-	esac
-	gdk-pixbuf-query-loaders > \
-	                         /usr/lib$suffix/gdk-pixbuf-2.0/2.10.0/loaders.cache
+	gdk-pixbuf-query-loaders > LIB_DIR/gdk-pixbuf-2.0/2.10.0/loaders.cache
 fi
 
 # update the list of Pango modules
