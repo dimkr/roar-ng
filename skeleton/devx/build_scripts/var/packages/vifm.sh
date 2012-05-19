@@ -4,7 +4,7 @@ PKG_NAME="vifm"
 PKG_VER="0.7.2a"
 PKG_REV="1"
 PKG_DESC="File manager with vi-like key bindings"
-PKG_CAT="system"
+PKG_CAT="System"
 PKG_DEPS="+file"
 
 # the actual package version

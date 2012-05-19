@@ -4,7 +4,7 @@ PKG_NAME="ncdu"
 PKG_VER="1.8"
 PKG_REV="1"
 PKG_DESC="Disk usage analyzer"
-PKG_CAT="system"
+PKG_CAT="System"
 PKG_DEPS=""
 
 download() {
