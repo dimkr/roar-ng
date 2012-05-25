@@ -19,7 +19,7 @@ case "$1" in
 		iptables -X
 
 		# create two chains
-		iptables -N TCP 
+		iptables -N TCP
 		iptables -N UDP
 
 		# disble NAT
@@ -37,7 +37,7 @@ case "$1" in
 		# allow established connections and related ICMP traffic
 		iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-		# drop invalid connections 
+		# drop invalid connections
 		iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 
 		# accept IPv6 Neighbor Discovery packets
@@ -63,13 +63,17 @@ case "$1" in
 
 		echo " done"
 		;;
-	
+
 	stop)
 		echo -n "Stopping firewall ..."
 
 		# remove the current configuration
 		iptables -F
 		iptables -X
+		for chain in INPUT FORWARD OUTPUT
+		do
+			iptables -P $chain ACCEPT
+		done
 
 		echo " done"
 		;;
