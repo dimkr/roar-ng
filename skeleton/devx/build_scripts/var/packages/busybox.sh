@@ -8,7 +8,7 @@ PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
 # the required bug-fix patches
-PATCHES="buildsys getty lineedit sed"
+PATCHES="buildsys ext4 find getty lineedit mdev sed"
 
 download() {
 	# download the sources tarball
