@@ -1,0 +1,7 @@
+# /etc/firewall: firewall (/etc/init.d/firewall) configuration
+
+# allowed ports for incmoing TCP traffic
+TCP_ALLOW=""
+
+# same, for UDP
+UDP_ALLOW=""

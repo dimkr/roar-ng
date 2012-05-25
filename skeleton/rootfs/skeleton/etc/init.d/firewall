@@ -3,11 +3,8 @@
 # /etc/init.d/firewall: a basic firewall
 # dependencies: dash and iptables
 
-# allowed ports for incmoing TCP traffic
-TCP_ALLOW=""
-
-# same, for UDP
-UDP_ALLOW=""
+# include the configuration file
+. /etc/firewallrc
 
 case "$1" in
 
