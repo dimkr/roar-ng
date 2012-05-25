@@ -1,4 +1,4 @@
-# /etc/firewall: firewall (/etc/init.d/firewall) configuration
+# /etc/firewallrc: firewall (/etc/init.d/firewall) configuration
 
 # allowed ports for incmoing TCP traffic
 TCP_ALLOW=""
