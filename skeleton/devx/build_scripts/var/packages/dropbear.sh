@@ -87,7 +87,7 @@ case "\$1" in
 		# generate the keys
 		for i in rsa dss
 		do
-			[ -f /$CONF_DIR/dropbear/dropbear_${i}_host_key ] && continue
+			[ -f /$CONF_DIR/dropbear/dropbear_\${i}_host_key ] && continue
 			dropbearkey -t \$i -f /$CONF_DIR/dropbear/dropbear_\${i}_host_key
 			if [ \$? -ne 0 ]
 			then
