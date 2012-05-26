@@ -28,7 +28,7 @@ build() {
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --disable-pam \
-	            --disable-syslog \
+	            --enable-syslog \
 	            --disable-lastlog \
 	            --disable-utmp \
 	            --disable-utmpx \
