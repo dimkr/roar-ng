@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="aria2"
-PKG_VER="1.15.0"
+PKG_VER="1.15.1"
 PKG_REV="1"
 PKG_DESC="Multi-protoocol download tool"
 PKG_CAT="Internet"
@@ -35,7 +35,8 @@ build() {
 	            --without-libxml2 \
 	            --with-libexpat \
 	            --without-libcares \
-	            --with-libz
+	            --with-libz \
+	            --with-bashcompletiondir=/$CONF_DIR/bash_completion.d
 	[ $? -ne 0 ] && return 1
 
 	# build the package

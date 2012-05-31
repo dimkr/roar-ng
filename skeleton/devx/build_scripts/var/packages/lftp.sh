@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="lftp"
-PKG_VER="4.3.6"
+PKG_VER="4.3.7"
 PKG_REV="1"
 PKG_DESC="FTP client"
 PKG_CAT="Internet"
