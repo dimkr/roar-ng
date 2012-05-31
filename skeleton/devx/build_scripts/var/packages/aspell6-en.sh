@@ -35,7 +35,7 @@ package() {
 	[ $? -ne 0 ] && return 1
 
 	# install the copyright statement
-	install -D -m644 Copyright $INSTALL_DIR/$LEGAL_DIR/Copyright
+	install -D -m644 Copyright $INSTALL_DIR/$LEGAL_DIR/$PKG_NAME/Copyright
 	[ $? -ne 0 ] && return 1
 
 	return 0
