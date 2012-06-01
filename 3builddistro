@@ -332,9 +332,6 @@ echo " done"
 # hacks #
 #########
 
-# disable Dropbear
-chmod -x rootfs/etc/init.d/dropbear
-
 # set DASH as the default initramfs shell
 rm -f initramfs/bin/sh
 ln -s dash initramfs/bin/sh

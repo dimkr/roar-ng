@@ -1,0 +1,47 @@
+#!/bin/dash
+
+# /etc/init.d/sshd: a Dropbear init script
+
+case "$1" in
+
+	start)
+		echo -n "Starting Dropbear ..."
+		
+		# generate the keys
+		for i in rsa dss
+		do
+			[ -f /etc/dropbear/dropbear_${i}_host_key ] && continue
+			dropbearkey -t $i -f /etc/dropbear/dropbear_${i}_host_key
+			if [ $? -ne 0 ]
+			then
+				echo "Error: failed to generate the $(echo $i | tr \[:lower:\] \[:upper:\]) key."
+				exit 1
+			fi
+		done
+
+		# start the server
+		dropbear -P /var/run/dropbear.pid
+		echo " done"
+		exit $?
+		;;
+
+	stop)
+		echo -n "Stopping Dropbear ..."
+		kill $(cat /var/run/dropbear.pid)
+		success=$?
+		[ -f /var/run/dropbear.pid ] && rm -f /var/run/dropbear.pid
+		echo " done"
+		exit $success
+		;;
+
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "sshd {start|stop|restart}"
+		exit 1
+		;;
+
+esac
