@@ -14,7 +14,7 @@ case "$1" in
 
 	stop)
 		echo -n "Stopping gpm ..."
-		kill $(pidof gpm)
+		kill $(cat /var/run/gpm.pid)
 		success=$?
 		echo " done"
 		exit $success
