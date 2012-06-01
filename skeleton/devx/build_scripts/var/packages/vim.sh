@@ -1,72 +1,36 @@
 #!/bin/sh
 
 PKG_NAME="vim"
-PKG_VER="7.3.530"
+PKG_VER="hg$(date +%d%m%Y)"
 PKG_REV="1"
 PKG_DESC="Improved implementation of the vi text editor"
 PKG_CAT="Document"
 PKG_DEPS=""
 
-# the package major version
-PKG_MAJOR_VER="$(echo $PKG_VER | cut -f 1-2 -d .)"
-
-# the patch version
-PKG_PATCH_VER="$(echo $PKG_VER | cut -f 3 -d .)"
-
 download() {
-	# download the sources tarball
-	if [ ! -f $PKG_NAME-$PKG_MAJOR_VER.tar.bz2 ]
-	then
-		download_file ftp://ftp.vim.org/pub/vim/unix/$PKG_NAME-$PKG_MAJOR_VER.tar.bz2
-		[ $? -ne 0 ] && return 1
-	fi
+	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0
 
-	if [ ! -f $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER.tar.xz ]
-	then
-		# create a directory for the patches
-		mkdir $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER
-		[ $? -ne 0 ] && return 1
+	# download the sources
+	hg clone https://vim.googlecode.com/hg/ $PKG_NAME-$PKG_VER
+	[ $? -ne 0 ] && return 1
 
-		cd $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER
+	# create a sources tarball
+	tar -c $PKG_NAME-$PKG_VER | xz -e -9 > $PKG_NAME-$PKG_VER.tar.xz
+	[ $? -ne 0 ] && return 1
 
-		# download the patches
-		for i in $(seq -w $PKG_PATCH_VER)
-		do
-			download_file ftp://ftp.vim.org/pub/vim/patches/$PKG_MAJOR_VER/$PKG_MAJOR_VER.$i
-			[ $? -ne 0 ] && return 1
-		done
-
-		cd ..
-
-		# create a patches tarball
-		tar -c $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER | xz -9 > $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER.tar.xz
-		[ $? -ne 0 ] && return 1ls
-
-		# clean up
-		rm -rf $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER
-		[ $? -ne 0 ] && return 1
-	fi
+	# clean up
+	rm -rf $PKG_NAME-$PKG_VER
+	[ $? -ne 0 ] && return 1
 
 	return 0
 }
 
 build() {
 	# extract the sources tarball
-	tar -xjvf $PKG_NAME-$PKG_MAJOR_VER.tar.bz2
+	tar -xJvf $PKG_NAME-$PKG_VER.tar.xz
 	[ $? -ne 0 ] && return 1
 
-	# extract the patches tarball
-	tar -xJvf $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER.tar.xz
-	[ $? -ne 0 ] && return 1
-
-	cd $PKG_NAME$(echo $PKG_MAJOR_VER | sed s/\\.//)
-
-	# apply the patches
-	for i in $(seq -w $PKG_PATCH_VER)
-	do
-		patch -p0 < ../$PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER/$PKG_MAJOR_VER.$i
-		[ $? -ne 0 ] && return 1
-	done
+	cd $PKG_NAME-$PKG_VER
 
 	# set the location of the vimrc file
 	echo "#define SYS_VIMRC_FILE \"/$CONF_DIR/vimrc\"" >> src/feature.h
@@ -101,7 +65,7 @@ build() {
 	            --disable-nextaw-check \
 	            --disable-carbon-check \
 	            --disable-acl \
-	            --disable-gpm \
+	            --enable-gpm \
 	            --disable-sysmouse \
 	            --with-features=normal \
 	            --without-x \

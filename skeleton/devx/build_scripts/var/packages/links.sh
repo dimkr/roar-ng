@@ -30,8 +30,8 @@ build() {
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --enable-debuglevel=0 \
 	            --disable-graphics \
-	            --disable-utf8 \
-	            --without-gpm \
+	            --enable-utf8 \
+	            --with-gpm \
 	            --with-ssl \
 	            --with-zlib \
 	            --with-bzip2 \

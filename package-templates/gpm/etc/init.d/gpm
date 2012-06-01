@@ -1,0 +1,33 @@
+#!/bin/dash
+
+# /etc/init.d/gpm: an init script for gpm
+
+case "$1" in
+
+	start)
+		echo -n "Starting gpm ..."
+		gpm -m /dev/mouse -t imps2
+		success=$?
+		echo " done"
+		exit $success
+		;;
+
+	stop)
+		echo -n "Stopping gpm ..."
+		kill $(pidof gpm)
+		success=$?
+		echo " done"
+		exit $success
+		;;
+
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "gpm {start|stop|restart}"
+		exit 1
+		;;
+
+esac
