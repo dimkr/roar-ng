@@ -10,7 +10,7 @@ PKG_DEPS=""
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0
 	# download the sources tarball
-	download_file http://www.cauterized.net/~meskio/tudu/$PKG_NAME-$PKG_VER.tar.gz
+	download_file http://code.meskio.net/$PKG_NAME/$PKG_NAME-$PKG_VER.tar.gz
 	[ $? -ne 0 ] && return 1
 	return 0
 }
