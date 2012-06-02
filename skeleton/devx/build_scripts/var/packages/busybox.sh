@@ -1,14 +1,14 @@
 #!/bin/sh
 
 PKG_NAME="busybox"
-PKG_VER="1.20.0"
+PKG_VER="1.20.1"
 PKG_REV="1"
 PKG_DESC="A tiny implementation of many Unix utilities"
 PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
 # the required bug-fix patches
-PATCHES="buildsys ext4 find getty lineedit mdev sed"
+PATCHES=""
 
 download() {
 	# download the sources tarball
