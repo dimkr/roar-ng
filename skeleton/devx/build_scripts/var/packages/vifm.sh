@@ -1,14 +1,11 @@
 #!/bin/sh
 
 PKG_NAME="vifm"
-PKG_VER="0.7.2a"
+PKG_VER="0.7.3"
 PKG_REV="1"
 PKG_DESC="File manager with vi-like key bindings"
 PKG_CAT="System"
 PKG_DEPS="+file"
-
-# the actual package version
-PKG_ACTUAL_VER="0.7.2"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0
@@ -23,12 +20,13 @@ build() {
 	tar -xjvf $PKG_NAME-$PKG_VER.tar.bz2
 	[ $? -ne 0 ] && return 1
 
-	cd $PKG_NAME-$PKG_ACTUAL_VER
+	cd $PKG_NAME-$PKG_VER
 
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --disable-extended-keys \
 	            --disable-compatibility-mode \
+	            --disable-desktop-files \
 	            --without-gtk \
 	            --with-libmagic
 	[ $? -ne 0 ] && return 1
