@@ -18,18 +18,11 @@ Build a binary package, according to a build script."
 # downloads a file
 download_file()
 {
-	# do not check certificates, since this fails a lot
-	case "$1" in
-		https://*)
-			options="--no-check-certificate"
-			;;
-	esac
-
 	if [ -z "$2" ]
 	then
-		wget $options "$1"
+		wget --no-check-certificate "$1"
 	else
-		wget $options -O "$2" "$1"
+		wget --no-check-certificate -O "$2" "$1"
 	fi
 	return $?
 }
