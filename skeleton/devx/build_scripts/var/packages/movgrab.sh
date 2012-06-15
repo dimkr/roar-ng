@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="movgrab"
-PKG_VER="1.1.8"
+PKG_VER="1.1.9"
 PKG_REV="1"
 PKG_DESC="Video downloader"
 PKG_CAT="Internet"
