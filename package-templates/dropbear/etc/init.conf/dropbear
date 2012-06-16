@@ -1,0 +1,4 @@
+# /etc/init.conf/dropbear: configuration file for the Dropbear init script
+
+# addtional options to pass to Dropbear
+ADDITIONAL_OPTS="-p 9888 -w"

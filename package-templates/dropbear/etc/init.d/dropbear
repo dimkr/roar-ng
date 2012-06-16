@@ -1,12 +1,12 @@
 #!/bin/dash
 
-# /etc/init.d/sshd: a Dropbear init script
+# /etc/init.d/dropbear: a Dropbear init script
 
 case "$1" in
 
 	start)
 		echo -n "Starting Dropbear ..."
-		
+	
 		# generate the keys
 		for i in rsa dss
 		do
@@ -19,8 +19,11 @@ case "$1" in
 			fi
 		done
 
+		# include the configuration file
+		. /etc/init.conf/dropbear
+
 		# start the server
-		dropbear -P /var/run/dropbear.pid
+		dropbear -P /var/run/dropbear.pid $ADDITIONAL_OPTS
 		echo " done"
 		exit $?
 		;;
@@ -29,7 +32,7 @@ case "$1" in
 		echo -n "Stopping Dropbear ..."
 		kill $(cat /var/run/dropbear.pid)
 		success=$?
-		[ -f /var/run/dropbear.pid ] && rm -f /var/run/dropbear.pid
+		rm -f /var/run/dropbear.pid
 		echo " done"
 		exit $success
 		;;
@@ -40,7 +43,7 @@ case "$1" in
 		;;
 
 	*)
-		echo "sshd {start|stop|restart}"
+		echo "dropbear {start|stop|restart}"
 		exit 1
 		;;
 

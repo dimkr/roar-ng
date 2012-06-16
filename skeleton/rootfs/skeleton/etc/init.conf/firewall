@@ -1,7 +1,7 @@
 # /etc/init.conf/firewall: firewall configuration
 
 # allowed ports for incmoing TCP traffic
-TCP_ALLOW=""
+TCP_ALLOW="9888"
 
 # same, for UDP
 UDP_ALLOW=""
