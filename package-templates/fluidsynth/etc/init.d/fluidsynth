@@ -1,0 +1,33 @@
+#!/bin/dash
+
+# /etc/init.d/fluidsynth: a FluidSynth init script
+
+case "$1" in
+
+	start)
+		echo -n "Starting FluidSynth ..."
+		fluidsynth -s -i -a alsa -R no -C no /usr/share/sounds/sf2/TimGM6mb.sf2 > /dev/null 2>&1 &
+		pidof fluidsynth > /var/run/fluidsynth.pid
+		echo " done"
+		;;
+
+	stop)
+		echo -n "Stopping FluidSynth ..."
+		kill $(cat /var/run/fluidsynth.pid)
+		success=$?
+		rm -f /var/run/fluidsynth.pid
+		echo " done"
+		exit $success
+		;;
+
+	restart)
+		"$0" stop
+		"$0" start
+		;;
+
+	*)
+		echo "fluidsynth {start|stop|restart}"
+		exit 1
+		;;
+
+esac
