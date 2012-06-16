@@ -3,13 +3,13 @@
 # /etc/init.d/firewall: a basic firewall
 # dependencies: dash and iptables
 
-# include the configuration file
-. /etc/firewallrc
-
 case "$1" in
 
 	start)
 		echo -n "Starting firewall ..."
+	
+		# include the configuration file
+		. /etc/init.conf/firewall
 
 		# remove the current configuration
 		iptables -F

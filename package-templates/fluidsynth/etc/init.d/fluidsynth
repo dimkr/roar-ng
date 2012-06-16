@@ -2,11 +2,15 @@
 
 # /etc/init.d/fluidsynth: a FluidSynth init script
 
+# include the configuration file
+. /etc/init.conf/fluidsynth
+
 case "$1" in
 
 	start)
 		echo -n "Starting FluidSynth ..."
-		fluidsynth -s -i -a alsa -R no -C no /usr/share/sounds/sf2/TimGM6mb.sf2 > /dev/null 2>&1 &
+		. /etc/init.conf/fluidsynth
+		fluidsynth -s -i -a alsa $ADDITIONAL_OPTS $SOUND_FONT > /dev/null 2>&1 &
 		pidof fluidsynth > /var/run/fluidsynth.pid
 		echo " done"
 		;;
