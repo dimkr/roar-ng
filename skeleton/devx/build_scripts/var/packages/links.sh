@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="links"
-PKG_VER="2.6"
+PKG_VER="2.7"
 PKG_REV="1"
 PKG_DESC="Text web browser"
 PKG_CAT="Internet"
@@ -41,6 +41,7 @@ build() {
 	            --without-fb \
 	            --without-directfb \
 	            --without-pmshell \
+	            --without-windows \
 	            --without-atheos \
 	            --without-x \
 	            --disable-png-pkgconfig \

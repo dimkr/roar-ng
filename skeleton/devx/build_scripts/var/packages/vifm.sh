@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="vifm"
-PKG_VER="0.7.3"
+PKG_VER="0.7.3a"
 PKG_REV="1"
 PKG_DESC="File manager with vi-like key bindings"
 PKG_CAT="System"
