@@ -8,7 +8,7 @@ PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
 # the required bug-fix patches
-PATCHES="ash ifupdown man ps tar"
+PATCHES="ash ifupdown man mke2fs ps tar"
 
 download() {
 	# download the sources tarball
