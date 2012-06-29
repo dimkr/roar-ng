@@ -22,6 +22,11 @@ build() {
 
 	cd $PKG_NAME-$PKG_VER
 
+	# set the CFLAGS
+	sed -i s~'^GCCCFLAGS=.*'~"GCCCFLAGS=$CFLAGS"~ \
+	       imap/src/osdep/unix/Makefile
+	[ $? -ne 0 ] && return 1
+
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --disable-static \
