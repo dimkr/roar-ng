@@ -3,6 +3,9 @@
 # /init: a system init script
 # dependencies: dash and busybox
 
+# files to load into the page cache
+FILES_TO_PRELOAD="/bin/dash /bin/busybox"
+
 # the size of the tmpfs file system used as the writeable layer, if no save file
 # is used
 TMPFS_SIZE="75%"
@@ -21,6 +24,12 @@ clear
 
 # set the executable search path
 export PATH="/bin:/sbin:/usr/bin"
+
+# preload all frequently executed binaries
+for file in $FILES_TO_PRELOAD
+do
+	readahead $file
+done
 
 # mount all virtual file systems
 mount -t rootfs -o remount,rw rootfs /
