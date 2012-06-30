@@ -33,7 +33,7 @@ case "$1" in
 		. /etc/init.conf/dropbear
 
 		# start the server
-		dropbear -P $PIDFILE_PATH $ADDITIONAL_OPTS
+		su -c "dropbear -P $PIDFILE_PATH $ADDITIONAL_OPTS" ssh
 		echo " done"
 		exit $?
 		;;
