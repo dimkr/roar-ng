@@ -343,6 +343,13 @@ ln -s dash initramfs/bin/sh
 [ -e rootfs/bin/sh ] && rm -f rootfs/bin/sh
 ln -s bash rootfs/bin/sh
 
+# make Dropbear always run as ssh
+if [ -f rootfs/usr/bin/dropbear ]
+then
+	chown ssh:ssh rootfs/usr/bin/dropbear
+	chmod 4755 rootfs/usr/bin/dropbear
+fi
+
 # make /root readable only by root
 chmod 700 rootfs/root
 
