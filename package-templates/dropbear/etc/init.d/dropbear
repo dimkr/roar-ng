@@ -2,6 +2,9 @@
 
 # /etc/init.d/dropbear: a Dropbear init script
 
+# the pidfile path
+PIDFILE_PATH="/var/run/dropbear/dropbear.pid"
+
 case "$1" in
 
 	start)
@@ -17,22 +20,29 @@ case "$1" in
 				echo "Error: failed to generate the $(echo $i | tr \[:lower:\] \[:upper:\]) key."
 				exit 1
 			fi
+			chown ssh:ssh /etc/dropbear/dropbear_${i}_host_key
+			chmod 600 /etc/dropbear/dropbear_${i}_host_key
 		done
+
+		# create a directory for the pidfile
+		[ ! -d /var/run/dropbear ] && mkdir /var/run/dropbear
+		chown ssh:ssh /var/run/dropbear
+		chmod 755 /var/run/dropbear
 
 		# include the configuration file
 		. /etc/init.conf/dropbear
 
 		# start the server
-		dropbear -P /var/run/dropbear.pid $ADDITIONAL_OPTS
+		sh -c "dropbear -P $PIDFILE_PATH $ADDITIONAL_OPTS" ssh
 		echo " done"
 		exit $?
 		;;
 
 	stop)
 		echo -n "Stopping Dropbear ..."
-		kill $(cat /var/run/dropbear.pid)
+		kill $(cat $PIDFILE_PATH)
 		success=$?
-		rm -f /var/run/dropbear.pid
+		rm -f $PIDFILE_PATH
 		echo " done"
 		exit $success
 		;;

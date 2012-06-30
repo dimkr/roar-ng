@@ -13,4 +13,5 @@ tty:x:11:
 video:x:12:
 scanner:x:13:
 messagebus:x:503:messagebus
+ssh:x:504:ssh
 users:x:14:
