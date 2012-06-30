@@ -8,10 +8,20 @@ PKG_CAT="Fun"
 PKG_DEPS="+sdl"
 
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0
 	# download the sources tarball
-	download_file http://downloads.sourceforge.net/project/$PKG_NAME/$PKG_NAME/$PKG_VER/$PKG_NAME-$PKG_VER.tar.gz
-	[ $? -ne 0 ] && return 1
+	if [ ! -f $PKG_NAME-$PKG_VER.tar.gz ]
+	then
+		download_file http://downloads.sourceforge.net/project/$PKG_NAME/$PKG_NAME/$PKG_VER/$PKG_NAME-$PKG_VER.tar.gz
+		[ $? -ne 0 ] && return 1
+	fi
+
+	# download a patch required for GCC 4.6 and above
+	if [ ! -f gcc46.patch ]
+	then
+		download_file https://projects.archlinux.org/svntogit/community.git/plain/trunk/gcc46.patch?h=packages/dosbox gcc46.patch
+		[ $? -ne 0 ] && return 1
+	fi
+
 	return 0
 }
 
@@ -21,6 +31,10 @@ build() {
 	[ $? -ne 0 ] && return 1
 
 	cd $PKG_NAME-$PKG_VER
+	
+	# apply the patch
+	patch -p1 < ../gcc46.patch
+	[ $? -ne 0 ] && return 1
 
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
