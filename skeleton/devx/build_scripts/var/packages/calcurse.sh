@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="calcurse"
-PKG_VER="2.9.2"
+PKG_VER="3.0.0"
 PKG_REV="1"
 PKG_DESC="Calendar and scheduling application"
 PKG_CAT="Utility"
