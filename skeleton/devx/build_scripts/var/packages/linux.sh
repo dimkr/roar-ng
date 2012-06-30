@@ -35,7 +35,7 @@ download() {
 		cd ..
 
 		# create a sources tarball
-		tar -c $AUFS_TARBALL_NAME | xz -9 > $AUFS_TARBALL_NAME.tar.xz
+		tar -c $AUFS_TARBALL_NAME | xz -9 -e > $AUFS_TARBALL_NAME.tar.xz
 		[ $? -ne 0 ] && return 1
 
 		# clean up

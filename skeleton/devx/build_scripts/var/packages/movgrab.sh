@@ -10,7 +10,7 @@ PKG_DEPS=""
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tgz ] && return 0
 	# download the sources tarball
-	download_file http://sites.google.com/site/columscode/files/$PKG_NAME-$PKG_VER.tgz $PKG_NAME-$PKG_VER.tgz
+	download_file http://sites.google.com/site/columscode/files/$PKG_NAME-$PKG_VER.tgz
 	[ $? -ne 0 ] && return 1
 	return 0
 }

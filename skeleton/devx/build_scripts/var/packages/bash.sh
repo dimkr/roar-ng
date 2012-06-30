@@ -41,8 +41,8 @@ download() {
 		cd ..
 
 		# create a patches tarball
-		tar -c $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER | xz -9 > $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER.tar.xz
-		[ $? -ne 0 ] && return 1ls
+		tar -c $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER | xz -9 -e > $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER.tar.xz
+		[ $? -ne 0 ] && return 1
 
 		# clean up
 		rm -rf $PKG_NAME-$PKG_MAJOR_VER.001-$PKG_PATCH_VER

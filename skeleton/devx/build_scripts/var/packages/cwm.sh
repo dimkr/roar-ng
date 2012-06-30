@@ -30,7 +30,7 @@ download() {
 	done
 
 	# create a sources tarball
-	tar -c $PKG_NAME-$PKG_VER | xz -9 > $PKG_NAME-$PKG_VER.tar.xz
+	tar -c $PKG_NAME-$PKG_VER | xz -9 -e > $PKG_NAME-$PKG_VER.tar.xz
 	[ $? -ne 0 ] && return 1
 
 	# clean up
