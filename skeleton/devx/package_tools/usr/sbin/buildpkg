@@ -18,12 +18,16 @@ Build a binary package, according to a build script."
 # downloads a file
 download_file()
 {
-	if [ -z "$2" ]
+	if [ -n "$(which aria2c)" ]
 	then
-		wget --no-check-certificate "$1"
+		command_line="aria2c -s3"
+		[ -n "$2" ] && command_line="$command_line -o $2"
 	else
-		wget --no-check-certificate -O "$2" "$1"
+		command_line="wget --no-check-certificate"
+		[ -n "$2" ] && command_line="$command_line -O $2"
 	fi
+
+	$command_line "$1"
 	return $?
 }
 
