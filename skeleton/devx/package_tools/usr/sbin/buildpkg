@@ -20,7 +20,7 @@ download_file()
 {
 	if [ -n "$(which aria2c)" ]
 	then
-		command_line="aria2c -s3"
+		command_line="aria2c -s3 --check-certificate=false"
 		[ -n "$2" ] && command_line="$command_line -o $2"
 	else
 		command_line="wget --no-check-certificate"
