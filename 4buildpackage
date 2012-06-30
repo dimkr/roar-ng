@@ -89,6 +89,9 @@ cp -r sources/$1 $mount_point/tmp/build
 # create a wrapper for buildpkg; install the built package, but ignore Busybox
 # because it breaks things
 cat << EOF > $mount_point/tmp/build/$1/build.sh
+#!/bin/dash
+export LANG="C"
+export LC_ALL="C"
 ldconfig
 cd /tmp/build/$1
 buildpkg build \$(find /$BUILD_SCRIPT_DIR -name $1.sh)
