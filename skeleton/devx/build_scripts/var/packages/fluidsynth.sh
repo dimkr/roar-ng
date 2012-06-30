@@ -22,6 +22,10 @@ build() {
 
 	cd $PKG_NAME-$PKG_VER
 
+	# prevent the use of the hardcoded compiler flags	
+	sed -i s/'-O2.*'/\"/g configure
+	[ $? -ne 0 ] && return 1
+
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --enable-shared \
@@ -48,7 +52,7 @@ build() {
 	            --disable-ladcca \
 	            --without-readline
 	[ $? -ne 0 ] && return 1
-
+	
 	# build the package
 	make -j $BUILD_THREADS
 	[ $? -ne 0 ] && return 1
