@@ -26,6 +26,10 @@ build() {
 	sed -i s~'^CC =.*'~"CC = cc $CFLAGS"~ Makefile
 	[ $? -ne 0 ] && return 1
 
+	# set the path to fb.modes
+	sed -i s~'#define DEFAULT_MODEDBFILE.*'~"#define DEFAULT_MODEDBFILE \"/$CONF_DIR/fb.modes\""~ fbset.c
+	[ $? -ne 0 ] && return 1
+
 	# build the package
 	make -j $BUILD_THREADS
 	[ $? -ne 0 ] && return 1
