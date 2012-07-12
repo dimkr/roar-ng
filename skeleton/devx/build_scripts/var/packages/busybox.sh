@@ -1,14 +1,14 @@
 #!/bin/sh
 
 PKG_NAME="busybox"
-PKG_VER="1.20.1"
+PKG_VER="1.20.2"
 PKG_REV="1"
 PKG_DESC="A tiny implementation of many Unix utilities"
 PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
 # the required bug-fix patches
-PATCHES="ash ifupdown man mke2fs ps tar"
+PATCHES=""
 
 download() {
 	# download the sources tarball
