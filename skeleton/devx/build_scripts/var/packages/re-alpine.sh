@@ -1,23 +1,35 @@
 #!/bin/sh
 
 PKG_NAME="re-alpine"
-PKG_VER="2.02"
+PKG_VER="git$(date +%d%m%Y)"
 PKG_REV="1"
 PKG_DESC="E-mail client, continuation of Alpine"
 PKG_CAT="Internet"
 PKG_DEPS="+ncurses,+openssl,+cyrus-sasl2,+openldap"
 
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0
-	# download the sources tarball
-	download_file http://sourceforge.net/projects/$PKG_NAME/files/$PKG_NAME-$PKG_VER.tar.bz2
+	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0
+
+	# download the sources
+	git clone --depth 1 \
+	    git://re-alpine.git.sourceforge.net/gitroot/re-alpine/re-alpine \
+	    $PKG_NAME-$PKG_VER
 	[ $? -ne 0 ] && return 1
+
+	# create a sources tarball
+	tar -c $PKG_NAME-$PKG_VER | xz -9 -e > $PKG_NAME-$PKG_VER.tar.xz
+	[ $? -ne 0 ] && return 1
+
+	# clean up
+	rm -rf $PKG_NAME-$PKG_VER
+	[ $? -ne 0 ] && return 1
+
 	return 0
 }
 
 build() {
 	# extract the sources tarball
-	tar -xjvf $PKG_NAME-$PKG_VER.tar.bz2
+	tar -xJvf $PKG_NAME-$PKG_VER.tar.xz
 	[ $? -ne 0 ] && return 1
 
 	cd $PKG_NAME-$PKG_VER
