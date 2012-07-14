@@ -43,7 +43,7 @@ done
 #######################
 
 # the terminal type
-export TERM="rxvt"
+export TERM="linux"
 
 # the default text editor
 export EDITOR="vi"
