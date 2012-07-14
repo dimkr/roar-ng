@@ -12,6 +12,10 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/us
 # include the boot configuration file
 . /etc/bootrc
 
+# mount a tmpfs file system under /run; it is also used to keep /var/run and 
+# /var/lock clean
+mount -t tmpfs run /run
+
 # create a FIFO
 fifo="$(mktemp -u -p /var/run)"
 mkfifo $fifo
