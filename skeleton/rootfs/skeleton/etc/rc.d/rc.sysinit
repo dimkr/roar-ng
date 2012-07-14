@@ -111,7 +111,7 @@ do
 done
 
 # delete the FIFO
-[ -f $fifo ] && rm -f $fifo
+[ -p $fifo ] && rm -f $fifo
 
 # clear the screen
 clear
