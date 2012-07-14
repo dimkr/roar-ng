@@ -15,11 +15,12 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/us
 # mount a tmpfs file system under /run; it is also used to keep /var/run and 
 # /var/lock clean
 mount -t tmpfs run /run
-mkdir /run/lock
+mkdir /run/lock /run/shm
 
 # bind /var/lock to /run/lock and /var/run to /run
 mount --bind /run /var/run
 mount --bind /run/lock /var/lock
+mount --bind /run/shm /dev/shm
 
 # create a FIFO
 fifo="$(mktemp -u -p /var/run)"
