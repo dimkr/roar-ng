@@ -5,7 +5,7 @@ PKG_VER="1.15"
 PKG_REV="1"
 PKG_DESC="Hex editor"
 PKG_CAT="Develop"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

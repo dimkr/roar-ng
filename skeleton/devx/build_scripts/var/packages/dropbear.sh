@@ -5,7 +5,7 @@ PKG_VER="2012.55"
 PKG_REV="1"
 PKG_DESC="SSH2 server and client"
 PKG_CAT="Network"
-PKG_DEPS=""
+PKG_DEPS="+zlib"
 
 # the programs to build
 PROGRAMS="dbclient dropbearkey"

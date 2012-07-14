@@ -5,7 +5,7 @@ PKG_VER="3.0.5"
 PKG_REV="1"
 PKG_DESC="An IRC to other networks gateway"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+gnutls,+glib2"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="1.15.1"
 PKG_REV="1"
 PKG_DESC="Multi-protoocol download tool"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+expat,+gnutls"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0

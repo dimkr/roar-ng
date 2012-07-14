@@ -5,7 +5,7 @@ PKG_VER="2.7"
 PKG_REV="1"
 PKG_DESC="Text web browser"
 PKG_CAT="Internet"
-PKG_DEPS="+gpm"
+PKG_DEPS="+zlib,+bzip2,+xz,+openssl,+gpm"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="3.0.0"
 PKG_REV="1"
 PKG_DESC="Calendar and scheduling application"
 PKG_CAT="Utility"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

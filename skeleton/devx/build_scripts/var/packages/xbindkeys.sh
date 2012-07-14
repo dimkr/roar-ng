@@ -5,7 +5,7 @@ PKG_VER="1.8.5"
 PKG_REV="1"
 PKG_DESC="A key bindings tool"
 PKG_CAT="Utility"
-PKG_DEPS=""
+PKG_DEPS="+xorg-base"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

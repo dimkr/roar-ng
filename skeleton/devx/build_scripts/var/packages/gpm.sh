@@ -5,7 +5,7 @@ PKG_VER="1.20.6"
 PKG_REV="1"
 PKG_DESC="A mouse server"
 PKG_CAT="BuildingBlock"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

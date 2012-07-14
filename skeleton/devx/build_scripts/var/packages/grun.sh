@@ -5,7 +5,7 @@ PKG_VER="0.9.3"
 PKG_REV="1"
 PKG_DESC="Application execution dialog"
 PKG_CAT="Utility"
-PKG_DEPS=""
+PKG_DEPS="+gtk+"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

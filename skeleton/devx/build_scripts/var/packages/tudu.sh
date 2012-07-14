@@ -5,7 +5,7 @@ PKG_VER="0.8.1"
 PKG_REV="1"
 PKG_DESC="Hierarchical TODOs management application"
 PKG_CAT="Personal"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

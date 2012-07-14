@@ -5,7 +5,7 @@ PKG_VER="2.02"
 PKG_REV="1"
 PKG_DESC="E-mail client, continuation of Alpine"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+ncurses,+openssl,+cyrus-sasl2,+openldap"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

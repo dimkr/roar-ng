@@ -5,7 +5,7 @@ PKG_VER="4.0.3"
 PKG_REV="1"
 PKG_DESC="Terminal multiplexer"
 PKG_CAT="Utility"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="4.0.0"
 PKG_REV="1"
 PKG_DESC="A variant of the roguelike game NetHack"
 PKG_CAT="Fun"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 # the source package release date
 PKG_DATE="20120401"

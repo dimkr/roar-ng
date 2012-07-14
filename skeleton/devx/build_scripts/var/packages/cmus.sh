@@ -5,7 +5,7 @@ PKG_VER="2.4.3"
 PKG_REV="1"
 PKG_DESC="Console music player"
 PKG_CAT="Multimedia"
-PKG_DEPS="+libmad,+libvorbis,+flac,+libav"
+PKG_DEPS="+ncurses,+alsa-lib,+libmad,+libvorbis,+flac,+libav"
 
 download() {
 	[ -f $PKG_NAME-v$PKG_VER.tar.bz2 ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="0.60.6.1"
 PKG_REV="1"
 PKG_DESC="Spell checker"
 PKG_CAT="BuildingBlock"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

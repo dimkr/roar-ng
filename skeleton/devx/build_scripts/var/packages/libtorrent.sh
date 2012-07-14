@@ -5,7 +5,7 @@ PKG_VER="0.13.2"
 PKG_REV="1"
 PKG_DESC="BitTorrent library"
 PKG_CAT="Internet"
-PKG_DEPS="+libsigc++"
+PKG_DEPS="+openssl,+libsigc++"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

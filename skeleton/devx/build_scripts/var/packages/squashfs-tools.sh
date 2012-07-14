@@ -5,7 +5,7 @@ PKG_VER="4.2"
 PKG_REV="1"
 PKG_DESC="Tools for the Squashfs file system"
 PKG_CAT="BuildingBlock"
-PKG_DEPS=""
+PKG_DEPS="+zlib,+xz"
 
 download() {
 	[ -f squashfs$PKG_VER.tar.gz ] && return 0

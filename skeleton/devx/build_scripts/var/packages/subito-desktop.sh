@@ -5,7 +5,7 @@ PKG_VER="git$(date +%d%m%Y)"
 PKG_REV="1"
 PKG_DESC="The Subito GNU/Linux desktop"
 PKG_CAT="BuildingBlock"
-PKG_DEPS=""
+PKG_DEPS="+xorg_base,+cwm,+rxvt-unicode,+stalonetray,+grun,+xbindkeys"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="9.15"
 PKG_REV="1"
 PKG_DESC="Terminal emulator"
 PKG_CAT="Utility"
-PKG_DEPS=""
+PKG_DEPS="+xorg_base"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

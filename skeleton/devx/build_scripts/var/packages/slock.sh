@@ -5,7 +5,7 @@ PKG_VER="1.0"
 PKG_REV="1"
 PKG_DESC="A simple X server locking application"
 PKG_CAT="Desktop"
-PKG_DEPS=""
+PKG_DEPS="+xorg_base"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

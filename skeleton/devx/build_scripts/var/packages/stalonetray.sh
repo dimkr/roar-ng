@@ -5,7 +5,7 @@ PKG_VER="0.8.1"
 PKG_REV="1"
 PKG_DESC="Standlone system tray"
 PKG_CAT="Desktop"
-PKG_DEPS=""
+PKG_DEPS="+util-linux,+xorg_base"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

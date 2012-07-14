@@ -5,7 +5,7 @@ PKG_VER="4.3.8"
 PKG_REV="1"
 PKG_DESC="FTP client"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+ncurses,+readline"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="0.8.15"
 PKG_REV="1"
 PKG_DESC="IRC client"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+ncurses,+openssl,+glib2"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="1.5.12"
 PKG_REV="1"
 PKG_DESC="RSS news reader"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+zlib,+ncurses,+libxml2"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

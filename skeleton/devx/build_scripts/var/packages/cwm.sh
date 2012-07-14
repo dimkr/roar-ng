@@ -5,7 +5,7 @@ PKG_VER="cvs$(date +%d%m%Y)"
 PKG_REV="1"
 PKG_DESC="Minimalistic window manager"
 PKG_CAT="Desktop"
-PKG_DEPS="+libbsd"
+PKG_DEPS="+xorg_base,+libbsd"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0

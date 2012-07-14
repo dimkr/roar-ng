@@ -5,7 +5,7 @@ PKG_VER="2.2.8"
 PKG_REV="1"
 PKG_DESC="Search engines frontend"
 PKG_CAT="Internet"
-PKG_DEPS="+links,+netsurf"
+PKG_DEPS="+perl"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

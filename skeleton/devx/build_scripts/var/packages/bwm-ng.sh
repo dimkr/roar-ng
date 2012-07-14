@@ -5,7 +5,7 @@ PKG_VER="0.6"
 PKG_REV="1"
 PKG_DESC="Simple bandwidth monitor"
 PKG_CAT="Network"
-PKG_DEPS=""
+PKG_DEPS="+ncurses"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.gz ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="0.8-git$(date +%d%m%Y)"
 PKG_REV="1"
 PKG_DESC="Complete audio and video conversion, recording and streaming solution forked from FFmpeg"
 PKG_CAT="Multimedia"
-PKG_DEPS="+libvorbis,+libtheora"
+PKG_DEPS="+libvorbis,+libogg,+libtheora"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0

@@ -5,7 +5,7 @@ PKG_VER="0.7.3a"
 PKG_REV="1"
 PKG_DESC="File manager with vi-like key bindings"
 PKG_CAT="System"
-PKG_DEPS="+file"
+PKG_DEPS="+ncurses,+file"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tar.bz2 ] && return 0

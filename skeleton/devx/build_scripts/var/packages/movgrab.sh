@@ -5,7 +5,7 @@ PKG_VER="1.1.9"
 PKG_REV="1"
 PKG_DESC="Video downloader"
 PKG_CAT="Internet"
-PKG_DEPS=""
+PKG_DEPS="+zlib,+openssl"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tgz ] && return 0
