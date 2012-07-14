@@ -52,7 +52,6 @@ echo "  populating /dev"
 mknod -m 0622 ./dev/console c 5 1
 mknod -m 666 ./dev/null c 1 3
 mknod -m 666 ./dev/zero c 1 5
-mkdir ./dev/pts ./dev/shm
 
 # create loop devices
 for n in `seq 0 7`
