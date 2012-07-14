@@ -1,7 +1,0 @@
-# /etc/init.conf/fluidsynth: configuration file for the FluidSynth init script
-
-# the sound font to use
-SOUND_FONT="/usr/share/sounds/sf2/TimGM6mb.sf2"
-
-# addtional options to pass to FluidSynth
-ADDITIONAL_OPTS="-R no -C no"

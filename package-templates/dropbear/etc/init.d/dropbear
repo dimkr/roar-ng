@@ -3,7 +3,7 @@
 # /etc/init.d/dropbear: a Dropbear init script
 
 # the pidfile path
-PIDFILE_PATH="/var/run/dropbear/dropbear.pid"
+PIDFILE_PATH="/run/dropbear/dropbear.pid"
 
 case "$1" in
 
@@ -25,9 +25,9 @@ case "$1" in
 		done
 
 		# create a directory for the pidfile
-		[ ! -d /var/run/dropbear ] && mkdir /var/run/dropbear
-		chown ssh:ssh /var/run/dropbear
-		chmod 755 /var/run/dropbear
+		[ ! -d /run/dropbear ] && mkdir /run/dropbear
+		chown ssh:ssh /run/dropbear
+		chmod 755 /run/dropbear
 
 		# include the configuration file
 		. /etc/init.conf/dropbear
