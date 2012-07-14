@@ -4,16 +4,19 @@
 . /etc/distrorc
 
 # compiler flags
-case $(uname -m) in
+arch="$(uname -m)"
+case $arch in
 	i?86)
 		LIBDIR_SUFFIX=""
 		CFLAGS="-march=i486 -mtune=i686"
+		LDFLAGS=""
 		PKG_ARCH="i486"
 		PKG_CPU="i486"
 		;;
 	x86_64)
 		LIBDIR_SUFFIX="64"
-		CFLAGS="-march=x86-64 -mtune=generic"
+		CFLAGS="-march=x86-64 -mtune=generic -fPIC"
+		LDFLAGS="-fPIC"
 		PKG_ARCH="x86_64"
 		PKG_CPU="x86_64"
 		;;
