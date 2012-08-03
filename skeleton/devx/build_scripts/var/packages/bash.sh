@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="bash"
-PKG_VER="4.2.036"
+PKG_VER="4.2.037"
 PKG_REV="1"
 PKG_DESC="A sh-compatible shell"
 PKG_CAT="BuildingBlock"

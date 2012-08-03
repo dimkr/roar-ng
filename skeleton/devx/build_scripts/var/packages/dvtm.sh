@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="dvtm"
-PKG_VER="0.7"
+PKG_VER="0.8"
 PKG_REV="1"
 PKG_DESC="A console tiling window manager"
 PKG_CAT="Utility"
