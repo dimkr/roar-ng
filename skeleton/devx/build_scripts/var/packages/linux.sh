@@ -87,6 +87,10 @@ build() {
 	sed -i s/'^SUBLEVEL = .*'/'SUBLEVEL ='/ Makefile
 	[ $? -ne 0 ] && return 1
 
+	# reduce "swappiness", to make the kernel perform less swapping
+	sed -i s/'int vm_swappiness = 60;'/'int vm_swappiness = 20;'/ mm/vmscan.c
+	[ $? -ne 0 ] && return 1
+
 	# reduce the kernel verbosity to make the boot sequence quiet
 	sed -i s~'DEFAULT_CONSOLE_LOGLEVEL 7'~'DEFAULT_CONSOLE_LOGLEVEL 3'~ kernel/printk.c
 	[ $? -ne 0 ] && return 1
