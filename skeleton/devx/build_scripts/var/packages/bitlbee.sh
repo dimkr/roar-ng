@@ -35,7 +35,7 @@ build() {
 	            --mandir=/$MAN_DIR \
 	            --datadir=/$SHARE_DIR/$PKG_NAME \
 	            --plugindir=/$LIB_DIR/$PKG_NAME \
-	            --pidfile=/$VAR_DIR/run/$PKG_NAME \
+	            --pidfile=/$RUN_DIR/$PKG_NAME \
 	            --config=/$VAR_DIR/lib/$PKG_NAME \
 	            --msn=1 \
 	            --jabber=1 \

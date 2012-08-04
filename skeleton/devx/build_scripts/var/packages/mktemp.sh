@@ -22,6 +22,10 @@ build() {
 
 	cd $PKG_NAME-$PKG_VER
 
+	# set the temporary directory path
+	sed -i s~'/tmp'~"/$TMP_DIR"~ mktemp.c
+	[ $? -ne 0 ] && return 1
+
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
 	            --with-libc

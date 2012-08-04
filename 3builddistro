@@ -322,8 +322,7 @@ echo " done"
 
 echo -n "Setting permissions and ownership ..."
 
-# set the permissions for system directories so they're writeable by all users
-chmod 777 rootfs/tmp
+# set the permissions for /var so it's writeable by all users
 chmod 777 rootfs/var
 
 echo " done"

@@ -23,6 +23,9 @@ mount --bind /run /var/run
 mount --bind /run/lock /var/lock
 mount --bind /run/shm /dev/shm
 
+# set the sticky bit of /run/tmp
+chmod 1777 /run/tmp
+
 # create a FIFO
 fifo="$(mktemp -u -p /run)"
 mkfifo $fifo
@@ -35,6 +38,7 @@ first_stage() {
 	echo -n "Mounting virtual file systems" >> $fifo
 	mount -t proc proc /proc
 	mount -t sysfs sysfs /sys
+	mount -t devpts devpts /dev/pts
 
 	# generate module dependency files
 	if [ ! -f /lib/modules/$(uname -r)/modules.dep ]

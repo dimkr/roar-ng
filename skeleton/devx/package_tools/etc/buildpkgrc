@@ -44,6 +44,12 @@ CONF_DIR="etc"
 # the variable data directory
 VAR_DIR="var"
 
+# the run-time information directory
+RUN_DIR="run"
+
+# the temporary files directory
+TMP_DIR="run/tmp"
+
 ##################
 # relative paths #
 ##################
