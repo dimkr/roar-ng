@@ -5,14 +5,14 @@
 case "$1" in
 
 	start)
-		if [ -e /etc/asound.state ]
+		if [ -f /var/lib/alsa/asound.state ]
 		then
 			echo -n "Restoring ALSA state ..."
 			alsactl restore
 			echo " done"
 		else
 			echo -n "Initializing ALSA state ..."
-			alsactl init > /dev/null 2>&1
+			alsactl init
 			echo " done"
 		fi
 		;;
