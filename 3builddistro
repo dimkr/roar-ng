@@ -15,8 +15,18 @@
 # build configuration #
 #######################
 
+# decide which compression to use with Squashfs
+case $DISTRO_ARCH in
+	arm*)
+		options="-comp lzo"
+		;;
+	*)
+		options="-comp xz -Xbcj x86"
+		;;
+esac
+
 # the flags passed to mksquashfs
-MKSQUASHFS_OPTIONS="-no-exports -comp xz -Xbcj x86"
+MKSQUASHFS_OPTIONS="-no-exports $options"
 
 # determine which boot loader to use
 case $DISTRO_ARCH in
