@@ -20,9 +20,11 @@ case $DISTRO_ARCH in
 	arm*)
 		options="-comp lzo"
 		;;
-	*)
+	i?86|x86|x86_64|amd64)
 		options="-comp xz -Xbcj x86"
 		;;
+	*)
+		options="-comp xz"
 esac
 
 # the flags passed to mksquashfs
