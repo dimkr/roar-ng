@@ -20,6 +20,13 @@ case $arch in
 		PKG_ARCH="x86_64"
 		PKG_CPU="x86_64"
 		;;
+	armv6)
+		LIBDIR_SUFFIX=""
+		CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard"
+		LDFLAGS=""
+		PKG_ARCH="armv6"
+		PKG_CPU="armv6"
+		;;
 esac
 
 export CFLAGS="$CFLAGS -Os -fomit-frame-pointer -pipe"
