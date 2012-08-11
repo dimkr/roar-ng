@@ -5,7 +5,17 @@ PKG_VER="4.2"
 PKG_REV="1"
 PKG_DESC="Tools for the Squashfs file system"
 PKG_CAT="BuildingBlock"
-PKG_DEPS="+zlib,+xz"
+PKG_DEPS="+zlib,+xz,+lzo"
+
+# choose the default compression - LZO for ARM, otherwise XZ
+case $PKG_ARCH in
+	arm*)
+		DEFAULT_COMPRESSION="lzo"
+		;;
+	*)
+		DEFAULT_COMPRESSION="xz"
+		;;
+esac
 
 download() {
 	[ -f squashfs$PKG_VER.tar.gz ] && return 0
@@ -24,8 +34,10 @@ build() {
 
 	# configure the package
 	sed -e s~'^#XZ_SUPPORT = 1'~'XZ_SUPPORT = 1'~ \
+	    -e s~'^#LZO_SUPPORT = 1'~'LZO_SUPPORT = 1'~ \
 	    -e s~'^XATTR_SUPPORT = 1'~'XATTR_SUPPORT = 0'~ \
 	    -e s~'^XATTR_DEFAULT = 1'~'XATTR_DEFAULT = 0'~ \
+	    -e S~'^COMP_DEFAULT = gzip'~"COMP_DEFAULT = $DEFAULT_COMPRESSION"~ \
 	    -i Makefile
 	[ $? -ne 0 ] && return 1
 
