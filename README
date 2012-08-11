@@ -1,5 +1,52 @@
-roar-ng is a generic distribution building system originally forked (but now independent) from Woof, the Puppy Linux build system.
+############
+# Overview #
+############
 
-It provides an architecture-independent, flexible and portable infrastructure for the creation of fast and portable "live" GNU/Linux distributions. It provides support for the binary package format and repositories of various GNU/Linux distributions.
+roar-ng is a generic GNU/Linux distribution building system.
 
-The development of roar-ng started as a collection of source hacks of Woof and evolved into a complete, independent re-implementation. It provides advanced features not found in Woof, such as parallel downloads, automatic package splitting, simple branding and easy porting to different processor architectures.
+It provides an architecture-independent, flexible and portable infrastructure 
+for the creation of fast and portable "live" GNU/Linux distributions. It 
+provides support for the binary package format and repositories of various 
+GNU/Linux distributions.
+
+The development of roar-ng started as a collection of source hacks of Woof (the 
+Puppy Linux build system) and evolved into a complete, independent 
+re-implementation. It provides advanced features not found in Woof, such as 
+parallel downloads, automatic package splitting, simple branding and easy 
+porting to different processor architectures.
+
+#############################################
+# Supported Architectures and Distributions #
+#############################################
+
+At the time of writing, roar-ng supports the x86 family (both x86 and x86_64) of
+processor architectures, with ARM support under heavy development. More 
+specifically, roar-ng is currently being adapted to for use with the Raspberry
+Pi (http://www.raspberrypi.org/).
+
+Packages originating in the following distributions are supported:
+ - Slackware
+ - Debian GNU/Linux
+ - Arch Linux
+ - Ubuntu
+ - Subito GNU/Linux (e.g packages built through roar-ng itself)
+
+#########
+# Usage #
+#########
+
+Using roar-ng is pretty straight-forward: edit the configuration (under "conf") 
+and run the scripts whose name begins with a digit.
+
+Always use a recent snapshot of roar-ng. Since its development model is based on 
+incremental improvements, rather than "stable" releases, always obtain a fresh 
+copy of the "master" branch before using it.
+
+#####################
+# Legal Information #
+#####################
+
+roar-ng is licensed under the GPLv3 license, see COPYING for the license text.
+For a list of its authors, see AUTHORS.
+
+Raspberry Pi is a trademark of the Raspberry Pi Foundation.
