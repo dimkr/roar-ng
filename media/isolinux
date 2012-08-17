@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# isolinux: builds a bootable ISO9660 image
+# dependencies: syslinux
+
 # include the distribution information file
 . ../conf/distrorc
 
