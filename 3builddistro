@@ -256,8 +256,8 @@ rm -rf sandbox/initramfs/usr/share
 # run the merged post-installation script
 run_post_install sandbox/initramfs
 
-# move the kernel to the results directory
-mv sandbox/rootfs/boot/vmlinuz sandbox/iso
+# move the kernel to the ISO
+mv sandbox/rootfs/boot/vmlinuz sandbox/iso/boot
 
 ############
 # clean up #
@@ -362,15 +362,15 @@ chmod 700 rootfs/root
 ##################
 
 # create the main Squashfs image
-mksquashfs rootfs initramfs/rootfs.sfs $MKSQUASHFS_OPTIONS
+mksquashfs rootfs iso/boot/rootfs.sfs $MKSQUASHFS_OPTIONS
 
 # create the initramfs
 cd initramfs
-find . | cpio -o -H newc | gzip --best > ../iso/initrd.gz
+find . | cpio -o -H newc | gzip --best > ../iso/boot/initrd.gz
 cd ..
 
 # re-compress the initramfs to make it smaller
-advdef -z4 iso/initrd.gz
+advdef -z4 iso/boot/initrd.gz
 
 mkdir dist
 

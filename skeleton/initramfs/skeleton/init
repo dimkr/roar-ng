@@ -10,6 +10,13 @@ FILES_TO_PRELOAD="/bin/dash /bin/busybox"
 # is used
 TMPFS_SIZE="75%"
 
+# the directory containing the kernel, the initramfs and other files required to
+# boot the system
+BOOT_DIR="boot"
+
+# the main Squashfs image path
+MAIN_SFS_NAME="rootfs.sfs"
+
 # usage: show_error $error
 show_error()
 {
@@ -36,8 +43,8 @@ mount -t rootfs -o remount,rw rootfs /
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 
-# initialize the boot mode boolean
-is_live=1
+# the session is non-persistent, unless the "parsistent" boot code was passed
+is_persistent=0
 
 # parse the kernel command-line
 for argument in $(cat /proc/cmdline)
@@ -45,13 +52,18 @@ do
 	case "$argument" in
 		root=*)
 			root="${argument#*=}"
-			is_live=0
 			;;
 		sleep=*)
 			sleep="${argument#*=}"
 			;;
+		persistent)
+			is_persistent=1
+			;;
 	esac
 done
+
+# make sure a root partition was specified
+[ -z "$root" ] && show_error "no root partition was specified"
 
 # if the "sleep" argument was passed, sleep for the given number of seconds
 case "$sleep" in
@@ -66,46 +78,50 @@ esac
 mdev -s
 
 # if the root partition was specified through its UUID, determine its name
-if [ 0 -eq $is_live ]
-then
-	case "$root" in
-		*-*-*-*-*)
-			root="$(blkid | \
-			        grep UUID=\"$root\" | \
-			        cut -f 1 -d : | cut -f 3- -d /)"
-			[ -z "$root" ] && \
-	       show_error "the specified root partition UUID was not recognized"
-			;;
-	esac
-fi
+case "$root" in
+	*-*-*-*-*)
+		root="$(blkid | \
+		        grep UUID=\"$root\" | \
+		        cut -f 1 -d : | cut -f 3- -d /)"
+		[ -z "$root" ] && show_error "the given UUID was not found"
+		;;
+esac
 
-# mount the main Squashfs image, located at the file system root
-mount /rootfs.sfs /mnt/rootfs -t squashfs -o loop,ro
+# mount the root partition
+mount /dev/$root /mnt/root
+[ 0 -ne $? ] && show_error "failed to mount the root partition"
+
+# mount the main Squashfs image, located under the root partition
+mount /mnt/root/$BOOT_DIR/$MAIN_SFS_NAME /mnt/ro -t squashfs -o loop,ro
 [ 0 -ne $? ] && show_error "failed to mount the main file system image"
 
-# prepare the writeable layer
-if [ 1 -eq $is_live ]
+# prepare a writeable file system
+if [ 0 -eq $is_persistent ]
 then
-	# under "live" mode, use a tmpfs file system
-	mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/save
+	# under non-persistent mode, use a tmpfs file system
+	mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/rw
 	[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
 else
-	# under "frugal" mode, use the root partition
-	mount /dev/$root /mnt/save
-	[ 0 -ne $? ] && show_error "failed to mount the root partition"
+	# under persistent mode, use the root partition
+	mount --bind /mnt/root /mnt/rw
+	[ 0 -ne $? ] && show_error "failed to bind the root partition"
 fi
 
-# create a union of the writeable file system and the main file system
-mount -t aufs -o br=/mnt/save=rw:/mnt/rootfs=ro aufs /mnt/union
+# create a union of the writeable file system and the main Squashfs image
+mount -t aufs -o br=/mnt/rw=rw:/mnt/ro=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
 
-# move the mounted file systems to the union file system's /mnt
-for file_system in rootfs save
+# move all mounted file systems to the union file system's /mnt
+for file_system in ro rw root
 do
 	mkdir -p /mnt/union/mnt/$file_system
 	mount --move /mnt/$file_system /mnt/union/mnt/$file_system
 	[ 0 -ne $? ] && show_error "failed to set up the layered file system"
 done
+
+# if /boot doesn't exist, create a symlink to the root partition's
+[ ! -e "/mnt/union/$BOOT_DIR" ] && \
+                                  ln -s /mnt/root/$BOOT_DIR /mnt/union/$BOOT_DIR
 
 # unmount virtual file systems
 umount /proc

@@ -2,8 +2,9 @@
 07Welcome to DISTRO_NAME!
 
 Available boot codes:
-- root (e.g root=sdb1) - specifies the partition used for persistency.
+- root (e.g root=sr0) - specifies the partition to boot from.
 - sleep (e.g sleep=5) - wait for a given number of seconds.
+- persistent          - run in persistent, non-live mode
 
 To use the default live session, just press ENTER; otherwise, type "DISTRO_NICKNAME", followed by boot codes.
 
