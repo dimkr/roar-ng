@@ -23,7 +23,7 @@ show_error()
 clear
 
 # set the executable search path
-export PATH="/bin:/sbin:/usr/bin"
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin"
 
 # preload all frequently executed binaries
 for file in $FILES_TO_PRELOAD
@@ -43,8 +43,8 @@ is_live=1
 for argument in $(cat /proc/cmdline)
 do
 	case "$argument" in
-		home=*)
-			home_partition="${argument#*=}"
+		root=*)
+			root="${argument#*=}"
 			is_live=0
 			;;
 		sleep=*)
@@ -65,16 +65,16 @@ esac
 # generate device nodes for all recognized partitions
 mdev -s
 
-# if the home partition was specified through its UUID, determine its name
+# if the root partition was specified through its UUID, determine its name
 if [ 0 -eq $is_live ]
 then
-	case "$home_partition" in
+	case "$root" in
 		*-*-*-*-*)
-			home_partition="$(blkid | \
-							  grep UUID=\"$home_partition\" | \
-							  cut -f 1 -d : | cut -f 3- -d /)"
-			[ -z "$home_partition" ] && \
-			   show_error "the specified home partition UUID was not recognized"
+			root="$(blkid | \
+			        grep UUID=\"$root\" | \
+			        cut -f 1 -d : | cut -f 3- -d /)"
+			[ -z "$root" ] && \
+	       show_error "the specified root partition UUID was not recognized"
 			;;
 	esac
 fi
@@ -90,9 +90,9 @@ then
 	mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/save
 	[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
 else
-	# under "full" mode, use the home partition
-	mount /dev/$home_partition /mnt/save
-	[ 0 -ne $? ] && show_error "failed to mount the home partition"
+	# under "frugal" mode, use the root partition
+	mount /dev/$root /mnt/save
+	[ 0 -ne $? ] && show_error "failed to mount the root partition"
 fi
 
 # create a union of the writeable file system and the main file system
