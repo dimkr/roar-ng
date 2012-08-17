@@ -8,7 +8,7 @@ PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
 # the required bug-fix patches
-PATCHES=""
+PATCHES="kernel_ver"
 
 download() {
 	# download the sources tarball
