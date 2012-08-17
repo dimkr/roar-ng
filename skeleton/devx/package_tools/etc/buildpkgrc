@@ -55,7 +55,7 @@ VAR_DIR="var"
 RUN_DIR="run"
 
 # the temporary files directory
-TMP_DIR="run/tmp"
+TMP_DIR="tmp"
 
 ##################
 # relative paths #
