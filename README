@@ -38,6 +38,23 @@ Packages originating in the following distributions are supported:
 Using roar-ng is pretty straight-forward: edit the configuration (under "conf") 
 and run the scripts whose name begins with a digit.
 
+The configuration consists of three files: bootrc, distrorc and package_list.
+They contain various boot parameters, the distribution details (e.g its name,
+version, etc') and the packages included in it, respectively.
+
+Once the configuration is ready, roar-ng's can be executed. It consists of four
+independent scripts:
+ - 0setup, which downloads package lists from repositories and converts them to
+   a common, simple format.
+ - 1download, which downloads all packages included in the distribution.
+ - 2createpackages, which extracts, optimizes and processes the packages.
+ - 3builddistro, which builds a bootable media image. It accepts one parameter:
+   the media type. Each media has a script under the "media" directory, which
+   builds an image.
+ - 4buildpackage, an optional script which builds a binary package from source,
+   using chroot and 3builddistro's result. It accepts the package name as a
+   parameter.
+
 Always use a recent snapshot of roar-ng. Since its development model is based on 
 incremental improvements, rather than "stable" releases, always obtain a fresh 
 copy of the "master" branch before using it.
