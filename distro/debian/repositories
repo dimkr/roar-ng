@@ -8,6 +8,12 @@ case $DISTRO_ARCH in
 	i?86)
 		arch="i386"
 		;;
+	armv6)
+		arch="armel"
+		;;
+	arm*)
+		arch="armhf"
+		;;
 esac
 
 version="$(cat distro/debian/version)"
