@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# include the distribution information file
+. ../conf/distrorc
+
+# the boot image name
+BOOT_IMAGE="isolinux.bin"
+
+# copy the boot loader's skeleton
+cp -ar ../skeleton/media/iso_isolinux/* media
+
+# copy the boot image the ISO root
+cp -af $(find ../processed-packages/syslinux -name $BOOT_IMAGE) media 
+
+# run the boot loader's configuration script
+cd media 
+chmod +x post_install.sh
+./post_install.sh
+rm -f post_install.sh
+cd ..
+
+# create the ISO image
+mkisofs -D -R \
+        -o dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso \
+        -b $BOOT_IMAGE \
+        -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table media
+
+# make the ISO image hybrid, so it can be written to other media
+echo -n "Making the ISO image hybrid ..."
+isohybrid dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso
+echo " done"

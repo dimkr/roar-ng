@@ -1,15 +1,22 @@
 #!/bin/sh
 
-# 3builddistro: a script which assmbles a bootable ISO9660 image from the
+# 3builddistro: a script which assmbles a bootable media image from the
 #               distribution skeleton and the processed packages
 
-# usage: 3builddistro (to build the image)
+# usage: 3builddistro TYPE (to build a bootable media image of a given type)
 
 # include the distribution information file
 . ./conf/distrorc
 
 # include the functions file
 . ./functions
+
+# check the command-line
+if [ 1 -ne $# ] || [ ! -f "media/$1" ]
+then
+	echo "Error: must supply a valid media type."
+	exit 1
+fi
 
 #######################
 # build configuration #
@@ -29,17 +36,6 @@ esac
 
 # the flags passed to mksquashfs
 MKSQUASHFS_OPTIONS="-no-exports $options"
-
-# determine which boot loader to use
-case $DISTRO_ARCH in
-	i?86|x86|x86_64|amd64)
-		BOOT_LOADER="syslinux"
-		BOOT_IMAGE="isolinux.bin"
-		;;
-	*)
-		echo "Error: roar-ng does not support a boot loader for $DISTRO_ARCH."
-		;;
-esac
 
 ##############
 # file names #
@@ -109,7 +105,7 @@ do
 done
 
 # usage: build_module $name $directory $packages
-# isos a module from its skeleton and a list of packages
+# builds a module from its skeleton and a list of packages
 build_module()
 {
 	echo "Building the \"$1\" module"
@@ -239,12 +235,12 @@ fi
 
 build_module initramfs sandbox/initramfs "$INITRAMFS_PACKAGES"
 
-#############
-# ISO image #
-#############
+###############
+# media image #
+###############
 
-# copy the boot loader's skeleton
-cp -ar skeleton/iso/$BOOT_LOADER sandbox/iso
+# create the media directory
+mkdir -p sandbox/media/boot
 
 #############
 # initramfs #
@@ -256,8 +252,8 @@ rm -rf sandbox/initramfs/usr/share
 # run the merged post-installation script
 run_post_install sandbox/initramfs
 
-# move the kernel to the ISO
-mv sandbox/rootfs/boot/vmlinuz sandbox/iso/boot
+# move the kernel to the media's /boot directory
+mv sandbox/rootfs/boot/vmlinuz sandbox/media/boot
 
 ############
 # clean up #
@@ -362,49 +358,29 @@ chmod 700 rootfs/root
 ##################
 
 # create the main Squashfs image
-mksquashfs rootfs iso/boot/rootfs.sfs $MKSQUASHFS_OPTIONS
+mksquashfs rootfs media/boot/rootfs.sfs $MKSQUASHFS_OPTIONS
 
 # create the initramfs
 cd initramfs
-find . | cpio -o -H newc | gzip --best > ../iso/boot/initrd.gz
+find . | cpio -o -H newc | gzip --best > ../media/boot/initrd.gz
 cd ..
 
 # re-compress the initramfs to make it smaller
-advdef -z4 iso/boot/initrd.gz
+advdef -z4 media/boot/initrd.gz
 
 mkdir dist
 
 # create the devx module
 [ -n "$DEVX_PACKAGES" ] && mksquashfs devx \
-                                      iso/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
+                                      media/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
 
-#######
-# ISO #
-#######
+##################
+# bootable media #
+##################
 
-# copy the boot image the ISO root
-cp -af $(find ../processed-packages/$BOOT_LOADER -name $BOOT_IMAGE) iso
-
-# run the boot loader's configuration script
-if [ -f iso/post_install.sh ]
-then
-	cd iso
-	chmod +x post_install.sh
-	./post_install.sh
-	rm -f post_install.sh
-	cd ..
-fi
-
-# create the ISO image
-mkisofs -D -R \
-        -o dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso \
-        -b $BOOT_IMAGE \
-        -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table iso
-
-# make the ISO image hybrid, so it can be written to other media
-echo -n "Making the ISO image hybrid ..."
-isohybrid dist/$DISTRO_NICKNAME-$DISTRO_VERSION_NUMERIC.iso
-echo " done"
+# generate the bootable media image
+../media/$1
+[ 0 -ne $? ] && exit 1
 
 #######
 # MD5 #
