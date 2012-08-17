@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="linux"
-PKG_VER="3.0.40"
+PKG_VER="3.0.41"
 PKG_REV="1"
 PKG_DESC="A monolithic kernel"
 PKG_CAT="BuildingBlock"
