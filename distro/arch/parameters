@@ -1,24 +1,25 @@
 # include the distribution information file
 . ./conf/distrorc
 
+# the distribution version
+VERSION="rolling_release"
+
 case $DISTRO_ARCH in
-	x86_64)
+	amd64|x86_64)
 		arch="x86_64"
 		;;
-	i?86)
+	x86|i?86)
 		arch="i686"
 		;;
 esac
 
-version="$(cat distro/arch/version)"
-
 # repositories - package list URL|repository name
-repositories="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$arch/core.db.tar.gz|arch-core
+REPOSITORIES="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$arch/core.db.tar.gz|arch-core
               http://mirror.csclub.uwaterloo.ca/archlinux/extra/os/$arch/extra.db.tar.gz|arch-extra
               http://mirror.csclub.uwaterloo.ca/archlinux/community/os/$arch/community.db.tar.gz|arch-community"
 
 # package download mirrors - more at http://www.archlinux.org/mirrors/status/
-mirrors="http://mirror.csclub.uwaterloo.ca/archlinux
+MIRRORS="http://mirror.csclub.uwaterloo.ca/archlinux
          http://mirror.ece.vt.edu/archlinux
          http://mirror.rit.edu/archlinux
          http://ftp5.gwdg.de/pub/linux/archlinux

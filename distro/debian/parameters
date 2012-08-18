@@ -1,0 +1,30 @@
+# include the distribution information file
+. ./conf/distrorc
+
+# the distribution version
+VERSION="stable"
+
+case $DISTRO_ARCH in
+	amd64|x86_64)
+		arch="amd64"
+		;;
+	x86|i?86)
+		arch="i386"
+		;;
+	# "armel" is ARMv4; Wheezy has "armhf", which is ARMv7 with hardware 
+	# float
+	arm*)
+		arch="armel"
+		;;
+esac
+
+# repositories - package list URL|repository name
+REPOSITORIES="http://mirror.csclub.uwaterloo.ca/debian/dists/$VERSION/main/binary-$arch/Packages.bz2|debian-main
+              http://mirror.csclub.uwaterloo.ca/debian/dists/$VERSION/contrib/binary-$arch/Packages.bz2|debian-contrib
+              http://mirror.csclub.uwaterloo.ca/debian/dists/$VERSION/non-free/binary-$arch/Packages.bz2|debian-non_free"
+
+# package download mirrors - more at http://www.debian.org/mirror/list
+MIRRORS="http://mirror.csclub.uwaterloo.ca/debian
+         http://http.us.debian.org/debian
+         http://debian.lcs.mit.edu/debian
+         http://ftp.iinet.net.au/debian/debian"

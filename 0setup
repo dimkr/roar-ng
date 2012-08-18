@@ -11,10 +11,10 @@
 # download and convert all package lists
 for distro in distro/*
 do
-	# include the repositories list
-	. $distro/repositories
+	# include the distribution parameters file
+	. $distro/parameters
 
-	for repository in $repositories
+	for repository in $REPOSITORIES
 	do
 		# parse the entry
 		repository_name="${repository##*|}"

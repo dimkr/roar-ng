@@ -1,9 +1,0 @@
-version="$(cat distro/raspbian/version)"
-
-# repositories - package list URL|repository name
-repositories="http://archive.raspbian.org/raspbian/dists/wheezy/main/binary-armhf/Packages.bz2|raspbian-main
-              http://archive.raspbian.org/raspbian/dists/wheezy/main/binary-armhf/Packages.bz2|raspbian-contrib
-              http://archive.raspbian.org/raspbian/dists/wheezy/main/binary-armhf/Packages.bz2|raspbian-non_free"
-
-# package download mirrors
-mirrors="http://archive.raspbian.org/raspbian"

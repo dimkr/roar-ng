@@ -86,11 +86,11 @@ get_package_redirection_rules()
 # receives a package name and returns the most appropriate package's entry
 get_package_entry()
 {
-	# include the list of repositores
-	. distro/$2/repositories
+	# include the distribution parameters file
+	. distro/$2/parameters
 
 	# find the first match
-	for repository in $repositories
+	for repository in $REPOSITORIES
 	do
 		repository_name="${repository##*|}"
 		[ ! -f repos/$repository_name ] && continue
@@ -122,8 +122,8 @@ get_package_file_name()
 # returns a list of download links for a given package
 get_download_links()
 {
-	# include the list of mirrors
-	. distro/$2/repositories
+	# include the distribution parameters file
+	. distro/$2/parameters
 
 	# get the package entry
 	entry="$(get_package_entry $1 $2)"
@@ -133,7 +133,7 @@ get_download_links()
 	location="$(get_package_location $entry)"
 
 	# create download links from each mirror's URL and the package location
-	for mirror in $mirrors
+	for mirror in $MIRRORS
 	do
 		echo $mirror/$location
 	done

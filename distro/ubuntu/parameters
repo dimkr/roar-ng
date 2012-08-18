@@ -1,0 +1,31 @@
+# include the distribution information file
+. ./conf/distrorc
+
+# the distribution version
+VERSION="precise"
+
+case $DISTRO_ARCH in
+	amd64|x86_64)
+		arch="amd64"
+		;;
+	x86|i?86)
+		arch="i386"
+		;;
+esac
+
+# repositories - package list URL|repository name
+REPOSITORIES="http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION-updates/main/binary-$arch/Packages.bz2|ubuntu-updates_main
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION-updates/universe/binary-$arch/Packages.bz2|ubuntu-updates_universe
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION-updates/multiverse/binary-$arch/Packages.bz2|ubuntu-updates_multiverse
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION-updates/restricted/binary-$arch/Packages.bz2|ubuntu-updates_restricted
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION/main/binary-$arch/Packages.bz2|ubuntu-main
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION/universe/binary-$arch/Packages.bz2|ubuntu-universe
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION/multiverse/binary-$arch/Packages.bz2|ubuntu-multiverse
+              http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION/restricted/binary-$arch/Packages.bz2|ubuntu-restricted"
+
+# package download mirrors - more at https://launchpad.net/ubuntu/+archivemirrors
+MIRRORS="http://ubuntu.mirror.tudos.de/ubuntu
+         http://mirror.aarnet.edu.au/pub/ubuntu/archive
+         http://mirror.csclub.uwaterloo.ca/ubuntu
+         http://ubuntu.c3sl.ufpr.br/ubuntu
+         http://ftp.halifax.rwth-aachen.de/ubuntu"

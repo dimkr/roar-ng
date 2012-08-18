@@ -1,0 +1,11 @@
+# include the distribution information file
+. ./conf/distrorc
+
+# the distribution version
+VERSION="2"
+
+# repositories - package list URL|repository name
+REPOSITORIES="http://www.dimakrasner.com/subito/$DISTRO_ARCH/subito-$VERSION|subito-official"
+
+# package download mirrors
+MIRRORS="http://www.dimakrasner.com/subito/$DISTRO_ARCH"

@@ -1,0 +1,10 @@
+# the distribution version
+VERSION="wheezy"
+
+# repositories - package list URL|repository name
+REPOSITORIES="http://archive.raspbian.org/raspbian/dists/$VERSION/main/binary-armhf/Packages.bz2|raspbian-main
+              http://archive.raspbian.org/raspbian/dists/$VERSION/main/binary-armhf/Packages.bz2|raspbian-contrib
+              http://archive.raspbian.org/raspbian/dists/$VERSION/main/binary-armhf/Packages.bz2|raspbian-non_free"
+
+# package download mirrors
+MIRRORS="http://archive.raspbian.org/raspbian"
