@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="linux"
-PKG_VER="3.0.41"
+PKG_VER="3.2.27"
 PKG_REV="1"
 PKG_DESC="A monolithic kernel"
 PKG_CAT="BuildingBlock"
@@ -17,7 +17,7 @@ download() {
 	# download the sources tarball
 	if [ ! -f $PKG_NAME-$PKG_VER.tar.xz ]
 	then
-		download_file http://www.kernel.org/pub/linux/kernel/v$PKG_MAJOR_VER/$PKG_NAME-$PKG_VER.tar.xz
+		download_file http://www.kernel.org/pub/linux/kernel/v3.0/$PKG_NAME-$PKG_VER.tar.xz
 		[ $? -ne 0 ] && return 1
 	fi
 
