@@ -23,9 +23,9 @@ build() {
 	cd $PKG_NAME
 
 	# configure the package
-	sed -e s~'^CC\t :=.*'~"CC := cc"~ \
+	sed -e s~'^CC\t :=.*'~"CC := $CC"~ \
 	    -e s~'^CFLAGS :=.*'~"CFLAGS = $CFLAGS -fPIC"~ \
-	    -e s~'^LD :=.*'~"LD := cc"~ \
+	    -e s~'^LD :=.*'~"LD := $CC"~ \
 	    -e s~'^LDFLAGS :=.*'~"LDFLAGS = $LDFLAGS -shared -lasound"~ \
 	    -e s~'/usr/lib/alsa-lib'~"/$LIB_DIR/alsa-lib"~g \
 	    -i Makefile

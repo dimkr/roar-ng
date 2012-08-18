@@ -23,7 +23,7 @@ build() {
 	cd $PKG_NAME-$PKG_VER
 
 	# build the package
-	make -j $BUILD_THREADS CC=cc LD=cc \
+	make -j $BUILD_THREADS CC=$CC LD=$CC \
 	                       CFLAGS="$CFLAGS" \
 	                       DEFAULTFONTDIR=/$SHARE_DIR/$PKG_NAME/fonts \
 	                       all

@@ -23,7 +23,7 @@ build() {
 	cd $PKG_NAME-$PKG_VER
 
 	# configure the package
-	sed -i s~'^CC =.*'~"CC = cc $CFLAGS"~ Makefile
+	sed -i s~'^CC =.*'~"CC = $CC $CFLAGS"~ Makefile
 	[ $? -ne 0 ] && return 1
 
 	# set the path to fb.modes

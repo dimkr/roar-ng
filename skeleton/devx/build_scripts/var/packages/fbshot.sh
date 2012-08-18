@@ -23,7 +23,7 @@ build() {
 	cd $PKG_NAME-$PKG_VER
 	
 	# set the compiler flags
-	sed -i s~'gcc'~"cc $CFLAGS"~ Makefile
+	sed -i s~'gcc'~"$CC $CFLAGS"~ Makefile
 	[ $? -ne 0 ] && return 1
 
 	# build the package

@@ -32,6 +32,9 @@ esac
 export CFLAGS="$CFLAGS -Os -fomit-frame-pointer -pipe"
 export CXXFLAGS="$CFLAGS"
 
+# the C compiler
+export CC="cc"
+
 # the number of build threads
 BUILD_THREADS="$(cat /proc/cpuinfo | grep processor | wc -l)"
 
