@@ -36,19 +36,43 @@ Packages originating in the following distributions are supported:
 # Usage #
 #########
 
-Using roar-ng is pretty straight-forward: edit the configuration (under "conf") 
-and run the scripts whose name begins with a digit.
+Before roar-ng can be executed to produce a distribution, it must be properly
+configured. Its configuration resides under the "conf" directory and consists
+of three files:
+ - bootrc - various boot-related or system initialization parameters, such as 
+            the console font.
+ - distrorc - the distribution's details, such as its name, version and most
+              importantly, its target processor architecture.
+ - package_list - the list of packages included in the distribution's bootable
+                  media. Entries in the file have a special syntax and consist
+                  of four fields: the distribution the binary packages come
+                  from, a meta-package name (e.g "utilities" for a text editor
+                  and a calculator), the names of packages (i.e the exact names,
+                  as the source distribution uses) to include and how to split
+                  the result package.
 
-The configuration consists of three files: bootrc, distrorc and package_list.
-They contain various boot parameters, the distribution details (e.g its name,
-version, etc') and the packages included in it, respectively.
+Just in case it isn't clear enough: here's another explanation. roar-ng reads
+a package list, which consists of entries which describe "meta-packages", which
+are "big packages" that consist of multiple packages of a supported
+distribution. For instance, it is possible to group a package (for example, 
+Bash) with its dependencies (e.g readline) as one meta-package, like this:
+	debian|bash_and_deps|bash,readline|exe,dev,doc,nls
 
-Once the configuration is ready, roar-ng's can be executed. It consists of four
+The fourth field (e.g the package splitting rules) can be confusing. Its syntax
+is consistent: each of the tokens ("exe", "dev", "doc" or "nls") can be suffixed
+with the ">" operator, followed by another, to change the way the meta-package 
+is split. When a package is processed by roar-ng, it gets split into four parts:
+the main package, development files, documentation and language support files.
+Thse tokens represent those parts: for example, "exe,dev,doc>dev,nls" will 
+instruct roar-ng to place all documentation alongside the development files.
+
+Once the configuration is ready, roar-ng can be executed. It consists of four
 independent scripts:
  - 0setup, which downloads package lists from repositories and converts them to
    a common, simple format.
  - 1download, which downloads all packages included in the distribution.
- - 2createpackages, which extracts, optimizes and processes the packages.
+ - 2createpackages, which extracts, optimizes, splits and processes the 
+   packages.
  - 3builddistro, which builds a bootable media image. It accepts one parameter:
    the media type. Each media has a script under the "media" directory, which
    builds an image.
