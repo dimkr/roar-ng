@@ -37,7 +37,7 @@ build() {
 	    -e s~'^#LZO_SUPPORT = 1'~'LZO_SUPPORT = 1'~ \
 	    -e s~'^XATTR_SUPPORT = 1'~'XATTR_SUPPORT = 0'~ \
 	    -e s~'^XATTR_DEFAULT = 1'~'XATTR_DEFAULT = 0'~ \
-	    -e S~'^COMP_DEFAULT = gzip'~"COMP_DEFAULT = $DEFAULT_COMPRESSION"~ \
+	    -e s~'^COMP_DEFAULT = gzip'~"COMP_DEFAULT = $DEFAULT_COMPRESSION"~ \
 	    -i Makefile
 	[ $? -ne 0 ] && return 1
 
