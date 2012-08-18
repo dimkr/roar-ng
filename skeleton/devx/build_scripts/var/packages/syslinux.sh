@@ -15,7 +15,8 @@ download() {
 		[ $? -ne 0 ] && return 1
 	fi
 
-	# download a required patch
+	# download a required patch: the boot loader fails when built with
+	# GCC 4.7
 	if [ ! -f handle-ctors-dtors-via-init_array-and-fini_array.patch ]
 	then
 		download_file \
@@ -54,8 +55,9 @@ build() {
 	sed -i s~'^OPTFLAGS.*=.*'~"OPTFLAGS = $CFLAGS"~ mk/build.mk
 	[ $? -ne 0 ] && return 1
 
-	# build the package
-	make -j $BUILD_THREADS
+	# build the package; do not set LDFLAGS, since the package has its own
+	# and it's quite sensitive
+	LDFLAGS="" make -j $BUILD_THREADS
 	[ $? -ne 0 ] && return 1
 
 	return 0
