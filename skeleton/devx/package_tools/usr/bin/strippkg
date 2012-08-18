@@ -34,7 +34,7 @@ optimize() {
         do
                 case "$(file -bi "$file" | cut -f 1 -d \;)" in
 			application/x-executable|application/x-sharedlib)
-				echo "$file (executable) or library)"
+				echo "$file (executable or library)"
 				strip --strip-all "$file"
 				;;
 			application/x-object)
