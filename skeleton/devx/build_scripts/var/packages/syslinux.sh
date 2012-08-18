@@ -2,16 +2,28 @@
 
 PKG_NAME="syslinux"
 PKG_VER="4.05"
-PKG_REV="1"
+PKG_REV="2"
 PKG_DESC="Lightweight boot loaders"
 PKG_CAT="BuildingBlock"
 PKG_DEPS=""
 
 download() {
-	[ -f $PKG_NAME-$PKG_VER.tar.xz ] && return 0
 	# download the sources tarball
-	download_file http://www.kernel.org/pub/linux/utils/boot/syslinux/$PKG_NAME-$PKG_VER.tar.xz
-	[ $? -ne 0 ] && return 1
+	if [ ! -f $PKG_NAME-$PKG_VER.tar.xz ]
+	then
+		download_file http://www.kernel.org/pub/linux/utils/boot/syslinux/$PKG_NAME-$PKG_VER.tar.xz
+		[ $? -ne 0 ] && return 1
+	fi
+
+	# download a required patch
+	if [ ! -f handle-ctors-dtors-via-init_array-and-fini_array.patch ]
+	then
+		download_file \
+		https://projects.archlinux.org/svntogit/packages.git/plain/trunk/handle-ctors-dtors-via-init_array-and-fini_array.patch?h=packages/syslinux \
+		handle-ctors-dtors-via-init_array-and-fini_array.patch
+		[ $? -ne 0 ] && return 1
+	fi
+
 	return 0
 }
 
@@ -21,6 +33,10 @@ build() {
 	[ $? -ne 0 ] && return 1
 
 	cd $PKG_NAME-$PKG_VER
+
+	# patch the sources
+	patch -p1 < ../handle-ctors-dtors-via-init_array-and-fini_array.patch
+	[ $? -ne 0 ] && return 1
 
 	# do not build the DOS and Windows tools - it will fail
 	sed -i s/'dos win32 win64 dosutil'// Makefile
