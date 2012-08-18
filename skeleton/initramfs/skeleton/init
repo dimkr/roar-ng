@@ -95,24 +95,30 @@ mount /dev/$root /mnt/root
 mount /mnt/root/$BOOT_DIR/$MAIN_SFS_NAME /mnt/ro -t squashfs -o loop,ro
 [ 0 -ne $? ] && show_error "failed to mount the main file system image"
 
+# initialize a list of the mounted file systems
+file_systems="ro root"
+
 # prepare a writeable file system
 if [ 0 -eq $is_persistent ]
 then
 	# under non-persistent mode, use a tmpfs file system
 	mount -t tmpfs -o size=$TMPFS_SIZE,rw tmpfs /mnt/rw
 	[ 0 -ne $? ] && show_error "failed to mount a tmpfs file system"
+	writeable_layer="rw"
+
+	# append the newly mounted file system to the list
+	file_systems="rw $file_systems"
 else
 	# under persistent mode, use the root partition
-	mount --bind /mnt/root /mnt/rw
-	[ 0 -ne $? ] && show_error "failed to bind the root partition"
+	writeable_layer="root"
 fi
 
 # create a union of the writeable file system and the main Squashfs image
-mount -t aufs -o br=/mnt/rw=rw:/mnt/ro=ro aufs /mnt/union
+mount -t aufs -o br=/mnt/$writeable_layer=rw:/mnt/ro=ro aufs /mnt/union
 [ 0 -ne $? ] && show_error "failed to set up the layered file system"
 
 # move all mounted file systems to the union file system's /mnt
-for file_system in ro rw root
+for file_system in $file_systems
 do
 	mkdir -p /mnt/union/mnt/$file_system
 	mount --move /mnt/$file_system /mnt/union/mnt/$file_system
