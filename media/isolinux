@@ -10,7 +10,7 @@
 BOOT_IMAGE="isolinux.bin"
 
 # copy the boot loader's skeleton
-cp -ar ../skeleton/media/iso_isolinux/* media
+cp -ar ../skeleton/media/isolinux/* media
 
 # copy the boot image the ISO root
 cp -af $(find ../processed-packages/syslinux -name $BOOT_IMAGE) media 
