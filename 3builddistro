@@ -371,8 +371,9 @@ advdef -z4 media/boot/initrd.gz
 mkdir dist
 
 # create the devx module
-[ -n "$DEVX_PACKAGES" ] && mksquashfs devx \
-                                      media/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
+[ -n "$DEVX_PACKAGES" ] && mksquashfs \
+                                   devx \
+                                   media/boot/$DEVX_SFS_NAME $MKSQUASHFS_OPTIONS
 
 ##################
 # bootable media #

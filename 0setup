@@ -19,7 +19,6 @@ do
 		# parse the entry
 		repository_name="${repository##*|}"
 		package_list_url="${repository%|*}"
-		distribution="$(basename $distro)"
 
 		echo "Processing $repository_name"
 
@@ -53,7 +52,7 @@ do
 		then
 			echo -n "Decompressing ..."
 			temp="$(mktemp -u)"
-			cat $temp_file | $compression -d > $temp
+			$compression -c -d $temp_file > $temp
 			mv -f $temp $temp_file
 			echo " done"
 		fi

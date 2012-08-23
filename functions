@@ -45,7 +45,7 @@ download_file_parallel()
 # lists all packages in the package list
 list_packages()
 {
-	cat conf/package_list | grep -v \# | tr ' ' '\n' | sed s/'\#.*'//g
+	grep -v \# conf/package_list | tr ' ' '\n' | sed s/'\#.*'//g
 }
 
 # usage: get_package_distro $package_list_entry
@@ -53,7 +53,7 @@ list_packages()
 # to
 get_package_distro()
 {
-	echo $1 | cut -f 1 -d \|
+	echo ${1%%|*}
 }
 
 # usage: get_package_name $package_list_entry
@@ -94,7 +94,7 @@ get_package_entry()
 	do
 		repository_name="${repository##*|}"
 		[ ! -f repos/$repository_name ] && continue
-		result="$(cat repos/$repository_name | grep ^$1\| | tail -n 1)"
+		result="$(grep ^$1\| repos/$repository_name | tail -n 1)"
 		if [ -n "$result" ]
 		then
 			echo "$result"
