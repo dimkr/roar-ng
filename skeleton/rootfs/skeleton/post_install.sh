@@ -38,10 +38,6 @@ case $DISTRO_ARCH in
 		;;
 esac
 
-# set the libraries directory in rc.update
-. ../../skeleton/devx/package_tools/etc/buildpkgrc
-sed -i s~'LIB_DIR'~"/$LIB_DIR"~g ./etc/rc.d/rc.update
-
 ###################
 # /dev population #
 ###################

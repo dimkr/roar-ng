@@ -3,7 +3,6 @@ subito|busybox|busybox|exe,dev,doc,nls
 subito|advancecomp|advancecomp|exe>dev,dev,doc,nls
 subito|optipng|optipng|exe>dev,dev,doc,nls
 subito|dash|dash|exe,dev,doc,nls
-subito|ncsplash|ncsplash|exe,dev,doc,nls
 subito|syslinux|syslinux|exe,dev,doc,nls
 subito|locale-gen|locale-gen|exe,dev,doc,nls
 # ... and others

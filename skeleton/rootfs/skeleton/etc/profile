@@ -1,4 +1,4 @@
-
+################
 # search paths #
 ################
 
@@ -58,6 +58,6 @@ export LC_ALL="$LANG"
 
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_DIRS="/usr/share:/usr/local/share:/opt/share"
+export XDG_DATA_DIRS="/usr/share:/opt/share:/usr/local/share"
 export XDG_CONFIG_DIRS="/etc/xdg"
 export XDG_CACHE_HOME="$HOME/.cache"

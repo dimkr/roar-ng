@@ -1,13 +1,10 @@
 #!/bin/dash
 
 # /etc/rc.d/rc.sysinit: a system init script
-# dependencies: dash, busybox, udev and ncsplash
+# dependencies: dash, busybox and udev
 
 # set the executable search path
 export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/usr/local/sbin"
-
-# include the distribution information file
-. /etc/distrorc
 
 # include the boot configuration file
 . /etc/bootrc
@@ -26,106 +23,56 @@ mount --bind /run/shm /dev/shm
 # set the sticky bit of /run/tmp
 chmod 1777 /run/tmp
 
-# create a FIFO
-fifo="$(mktemp -u -p /run)"
-mkfifo $fifo
+# mount all virtual file systems
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devpts devpts /dev/pts
 
-# set the current terminal's font
-setfont $CONSOLE_FONT
+# generate the loader cache
+[ ! -f /etc/ld.so.cache ] && ldconfig
 
-first_stage() {
-	# mount all virtual file systems
-	echo -n "Mounting virtual file systems" >> $fifo
-	mount -t proc proc /proc
-	mount -t sysfs sysfs /sys
-	mount -t devpts devpts /dev/pts
+# generate module dependency files
+[ ! -f /lib/modules/$(uname -r)/modules.dep ] && depmod -a
 
-	# generate module dependency files
-	if [ ! -f /lib/modules/$(uname -r)/modules.dep ]
-	then
-		echo -n "Generating module dependency files" >> $fifo
-		depmod -a
-	fi
+# start udev and wait for it to load all required modules
+udevd --daemon
+udevadm trigger
+udevadm settle
 
-	# start udev and wait for it to load all required modules
-	echo -n "Recognising devices" >> $fifo
-	udevd --daemon
-	udevadm trigger
-	udevadm settle
-
-	# set the console font for all terminals, because it reverts back to the
-	# default when KMS is enabled - this time, the terminal won't be changed
-	# again, so it's safe
-	echo -n "Setting the console font" >> $fifo
-	for i in 1 2 3 4
-	do
-		setfont $CONSOLE_FONT -C /dev/tty$i
-	done
-
-	# stop ncsplash, because KMS may change the terminal
-	echo -n "exit" >> $fifo
-}
-
-second_stage() {
-	# mount all fstab file systems
-	echo -n "Mounting file systems" >> $fifo
-	mount -a
-
-	# enable all swap partitions specified in /etc/fstab
-	echo -n "Setting up swap partitions" >> $fifo
-	swapon -a
-
-	# set the hostname
-	echo -n "Setting the hostname" >> $fifo
-	hostname -F /etc/hostname
-
-	# set up up a loopback interface
-	echo -n "Setting up a loopback interface" >> $fifo
-	ifconfig lo 127.0.0.1 up
-	route add -net 127.0.0.0 netmask 255.0.0.0 lo
-
-	# start logging daemons
-	echo -n "Starting logging services" >> $fifo
-	klogd
-	syslogd -D -S
-
-	# update cache and all sorts of generated files
-	echo -n "Updating cache" >> $fifo
-	/etc/rc.d/rc.update > /dev/null 2>&1
-
-	# start extra daemons
-	echo -n "Starting daemons" >> $fifo
-	for i in /etc/init.d/*
-	do
-		[ -x $i ] && $i start
-	done
-
-	# run the user's custom init script, if it exists
-	[ -x /etc/rc.local ] && . /etc/rc.local
-
-	# stop ncsplash
-	echo -n "exit" >> $fifo
-}
-
-# start the boot sequence
-for stage in first_stage second_stage
+# set the console font
+for i in 1 2 3 4 5
 do
-	$stage > /dev/null 2>&1 &
-
-	# run ncsplash; it will block the shell until "exit" is received
-	ncsplash $fifo "$DISTRO_NAME $DISTRO_VERSION"
-
-	# if ncsplash ended because of an error, attach to the FIFO read end to
-	# unblock the shell and delete it, so further I/O doesn't block anymore
-	if [ 0 -ne $? ]
-	then
-		cat $fifo > /dev/null 2>&1
-		rm -f $fifo
-	fi
+	setfont $CONSOLE_FONT -C /dev/tty$i
 done
 
-# delete the FIFO
-[ -p $fifo ] && rm -f $fifo
+# mount all fstab file systems
+mount -a
+
+# enable all swap partitions specified in /etc/fstab
+swapon -a
+
+# set the hostname
+hostname -F /etc/hostname
+
+# set up up a loopback interface
+ifconfig lo 127.0.0.1 up
+route add -net 127.0.0.0 netmask 255.0.0.0 lo
+
+# start logging daemons
+klogd
+syslogd -D -S
+
+# start extra daemons
+for i in /etc/init.d/*
+do
+	[ -x $i ] && $i start
+done
+
+# run the user's custom init script, if it exists
+[ -x /etc/rc.local ] && . /etc/rc.local
+
+# generate the locale archive
+[ ! -f /usr/lib/locale/locale-archive ] && locale-gen
 
 # clear the screen
 clear

@@ -21,7 +21,7 @@ MAIN_SFS_NAME="rootfs.sfs"
 show_error()
 {
 	echo
-	echo "Error: $1"
+	echo "Error: $1."
 	sleep 20
 	exit 0
 }
