@@ -11,16 +11,6 @@
 # include the functions file
 . ./functions
 
-# determine which libraries directory is used
-case $DISTRO_ARCH in
-	*64)
-		LIBDIR_SUFFIX="64"
-		;;
-	*)
-		LIBDIR_SUFFIX=""
-		;;
-esac
-
 # include the hpm configuration file
 . ./skeleton/rootfs/hpm/etc/hpmrc
 
@@ -88,7 +78,7 @@ do
 		if [ -f hacks.sh ]
 		then
 			chmod 755 hacks.sh
-			LIBDIR_SUFFIX="$LIBDIR_SUFFIX" ./hacks.sh
+			./hacks.sh
 			rm -f hacks.sh
 		fi
 		cd "$base_dir"
