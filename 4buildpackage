@@ -19,7 +19,7 @@ then
 fi
 
 # make sure the directories the script relies on actually exist
-if [ ! -d sandbox/devx ] || [ ! -d sandbox/rootfs ]
+if [ ! -d sandbox/rootfs ]
 then
 	echo "Error: must run after 3builddistro."
 	exit 1
@@ -29,12 +29,12 @@ fi
 [ ! -d sandbox/rw ] && mkdir sandbox/rw
 
 # mount an Aufs file system to join the contents the main Squashfs image and the
-# devx module
+# writeable layer
 mount_point="$(mktemp -d -p /mnt)"
 mount -t aufs \
       -o udba=reval \
       -o diropq=w \
-      -o br=sandbox/rw:sandbox/devx:sandbox/rootfs \
+      -o br=sandbox/rw:sandbox/rootfs \
       none $mount_point
 if [ 0 -ne $? ]
 then
@@ -73,9 +73,9 @@ cp -f /etc/resolv.conf $mount_point/etc
 
 # download the sources
 cd sources/$1
-../../skeleton/devx/package_tools/usr/sbin/buildpkg \
-         download \
-         $(find ../../skeleton/devx/build_scripts/$BUILD_SCRIPT_DIR -name $1.sh)
+../../skeleton/rootfs/package_tools/usr/sbin/buildpkg \
+       download \
+       $(find ../../skeleton/rootfs/build_scripts/$BUILD_SCRIPT_DIR -name $1.sh)
 if [ 0 -ne $? ]
 then
 	echo "Error: failed to download the sources."
