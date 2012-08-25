@@ -5,9 +5,15 @@
 case "$1" in
 	start)
 		echo -n "Starting D-Bus ..."
-		[ -f /run/dbus/dbus.pid ] && rm -f /run/dbus/dbus.pid
+		if [ -d /run/dbus ]
+		then
+			[ -f /run/dbus/dbus.pid ] && rm -f /run/dbus/dbus.pid
+		else
+			mkdir /run/dbus
+		fi
 		dbus-daemon --system --fork
 		exit_code=$?
+		[ ! -d /var/lib/dbus ] && mkdir /var/lib/dbus
 	 	dbus-uuidgen > /var/lib/dbus/machine-id
 	 	echo " done"
 		exit $exit_code
