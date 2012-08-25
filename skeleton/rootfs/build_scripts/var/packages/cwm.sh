@@ -82,7 +82,12 @@ build() {
 	# build the package
 	bison parse.y
 	[ $? -ne 0 ] && return 1
-	$CC $CFLAGS $(pkg-config --libs libbsd xft xinerama xrandr xcb xft x11 xau xdmcp fontconfig xext) -lexpat -lfreetype -lz -o cwm *.c
+	$CC $CFLAGS \
+	    $(pkg-config --cflags freetype2) \
+	    $(pkg-config --libs libbsd xft xinerama xrandr xcb xft x11 xau \
+	      xdmcp fontconfig xext) \
+	    -lexpat -lfreetype -lz \
+	    -o cwm *.c
 	[ $? -ne 0 ] && return 1
 
 	return 0
