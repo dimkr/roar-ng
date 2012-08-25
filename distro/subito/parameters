@@ -4,6 +4,18 @@
 # the distribution version
 VERSION="2"
 
+case $DISTRO_ARCH in
+	amd64|x86_64)
+		arch="x86_64"
+		;;
+	x86|i?86)
+		arch="i686"
+		;;
+	arm*)
+		arch="armv6"
+		;;
+esac
+
 # repositories - package list URL|repository name
 REPOSITORIES="http://www.dimakrasner.com/subito/$DISTRO_ARCH/subito-$VERSION|subito-official"
 

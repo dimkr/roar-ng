@@ -2,4 +2,4 @@
 
 # usage: convert_package_list $package_list $repository_name
 
-cat "$1"
+exec cat "$1"
