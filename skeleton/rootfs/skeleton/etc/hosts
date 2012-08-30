@@ -1,2 +1,4 @@
 # /etc/hosts: lookup table for host names
 
+127.0.0.1	localhost.localdomain	localhost
+::1		localhost.localdomain	localhost
