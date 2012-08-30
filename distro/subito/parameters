@@ -17,7 +17,7 @@ case $DISTRO_ARCH in
 esac
 
 # repositories - package list URL|repository name
-REPOSITORIES="http://www.dimakrasner.com/subito/$DISTRO_ARCH/subito-$VERSION|subito-official"
+REPOSITORIES="http://www.dimakrasner.com/subito/$arch/subito-$VERSION|subito-official"
 
 # package download mirrors
-MIRRORS="http://www.dimakrasner.com/subito/$DISTRO_ARCH"
+MIRRORS="http://www.dimakrasner.com/subito/$arch"
