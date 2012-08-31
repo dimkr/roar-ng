@@ -87,8 +87,8 @@ do
 
 	# optimize the package
 	echo "  Optimizing"
-	#./skeleton/rootfs/package_tools/usr/bin/strippkg \
-	#                                              "processed-packages/$name"
+	./skeleton/rootfs/package_tools/usr/bin/strippkg \
+	                                              "processed-packages/$name"
 	if [ 0 -ne $? ]
 	then
 		echo "Error: failed to optimize $name."
