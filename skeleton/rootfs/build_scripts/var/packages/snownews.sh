@@ -29,6 +29,7 @@ build() {
 	[ $? -ne 0 ] && return 1
 
 	# build the package
+	EXTRA_LDFLAGS="-lm $(pkg-config --libs --cflags zlib)" \
 	make -j $BUILD_THREADS
 	[ $? -ne 0 ] && return 1
 
