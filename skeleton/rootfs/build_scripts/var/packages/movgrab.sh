@@ -5,7 +5,7 @@ PKG_VER="1.1.10"
 PKG_REV="1"
 PKG_DESC="Video downloader"
 PKG_CAT="Internet"
-PKG_DEPS="+zlib,+openssl"
+PKG_DEPS="+zlib"
 
 download() {
 	[ -f $PKG_NAME-$PKG_VER.tgz ] && return 0
@@ -30,7 +30,7 @@ build() {
 
 	# configure the package
 	./configure $AUTOTOOLS_BASE_OPTS \
-	            --enable-ssl
+	            --disable-ssl
 	[ $? -ne 0 ] && return 1
 
 	# set the binary location
