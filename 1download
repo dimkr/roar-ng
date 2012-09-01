@@ -43,7 +43,7 @@ do
 		fi
 
 		# download the package
-		download_file_parallel "$download_lins" \
+		download_file_parallel "$download_links" \
 		                        packages/$package_file_name
 		if [ 0 -ne $? ]
 		then
