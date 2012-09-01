@@ -28,6 +28,9 @@ fi
 # create a writeable layer
 [ ! -d sandbox/rw ] && mkdir sandbox/rw
 
+# create /run and directories under it
+mkdir -p sandbox/rw/run/lock sandbox/rw/run/shm sandbox/rw/run/tmp
+
 # mount an Aufs file system to join the contents the main Squashfs image and the
 # writeable layer
 mount_point="$(mktemp -d -p /mnt)"

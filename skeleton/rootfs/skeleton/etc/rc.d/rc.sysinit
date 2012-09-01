@@ -14,12 +14,6 @@ export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/opt/bin:/opt/sbin:/usr/local/bin:/us
 mount -t tmpfs run /run
 mkdir /run/lock /run/shm /run/tmp /run/udev
 
-# bind /tmp, /var/run, /var/lock and /dev/shm to /run
-mount -o bind /run/tmp /tmp
-mount -o bind /run /var/run
-mount -o bind /run/lock /var/lock
-mount -o bind /run/shm /dev/shm
-
 # set the sticky bit of /run/tmp
 chmod 1777 /run/tmp
 
