@@ -19,8 +19,6 @@ do
 	# download all sub-packages
 	for sub_package in $(get_package_sub_packages $package)
 	do
-		echo -n "  $sub_package"
-
 		# get the package entry
 		package_entry="$(get_package_entry $sub_package $distro)"
 		if [ -z "$package_entry" ]
@@ -31,33 +29,27 @@ do
 
 		# filter the package file name
 		package_file_name="$(get_package_file_name $package_entry)"
-		echo " ($package_file_name)"
+		echo "  $sub_package ($package_file_name)"
 
-		# check whether the package exists already
-		if [ -f packages/$package_file_name ]
-		then
-			echo "  $package_file_name already exists, skipping"
-			continue
-		fi
+		# if the package exists already, continue to the next package
+		[ -f packages/$package_file_name ] && continue
 
 		# find all available download links
-		echo -n "  Searching for mirrors ..."
 		download_links="$(get_download_links $sub_package $distro)"
 		if [ -z "$download_links" ]
 		then
 			echo "Error: no download links were found for $package_file_name."
 			exit 1
 		fi
-		echo " done"
 
 		# download the package
-		echo "  Downloading"
-		download_file_parallel "$download_links" packages/$package_file_name
+		download_file_parallel "$download_lins" \
+		                        packages/$package_file_name
 		if [ 0 -ne $? ]
 		then
 			echo "Error: failed to download $package_file_name."
 			[ -f packages/$package_file_name ] &&
-			                                   rm -f packages/$package_file_name
+			                       rm -f packages/$package_file_name
 			exit 1
 		fi
 	done
