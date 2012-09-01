@@ -133,7 +133,7 @@ umount $mount_point > /dev/null 2>&1
 if [ 0 -eq $exit_code ]
 then
 	[ ! -d built-packages/$1 ] && mkdir built-packages/$1
-	cp -f sandbox/rw/tmp/build/$1/*.rxz built-packages/$1
+	cp -f sandbox/rw/run/tmp/build/$1/*.rxz built-packages/$1
 fi
 
 # return the buildpkg exit code
