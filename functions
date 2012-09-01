@@ -82,25 +82,79 @@ get_package_redirection_rules()
 # package locating #
 ####################
 
+# usage: add_package_entry_to_list $entry $list
+# adds a given package entry to a package list
+add_package_entry_to_list()
+{
+	# if the package list does not exist, simply put the entry in a new file
+	if [ ! -f repos/$2 ]
+	then
+		echo "$1" > repos/$2
+		return
+	fi
+	
+	# otherwise, create a temporary file and copy the package list
+	temp_file="$(mktemp -u)"
+	cp -f repos/$2 $temp_file
+
+	# append the new entry
+	echo "$1" >> $temp_file
+
+	# sort the modified package list and make entries unique
+	sort $temp_file | uniq > repos/$2
+
+	# remove the temporary file
+	rm -f $temp_file
+}
+
+# usage: get_package_entry_from_list $name $list
+# receives a package name and a package list and returns the most appropriate
+# package entry
+get_package_entry_from_list()
+{
+	# if the package list does not exist, end immediately
+	[ ! -f repos/$2 ] && return
+	
+	# otherwise, filter the entry
+	grep ^$1\| repos/$2 | tail -n 1
+}
+
 # usage: get_package_entry $name $distribution
-# receives a package name and returns the most appropriate package's entry
+# receives a package name and returns the most appropriate package entry;
+# results are cached to improve efficiency
 get_package_entry()
 {
 	# include the distribution parameters file
 	. distro/$2/parameters
 
 	# find the first match
-	for repository in $REPOSITORIES
+	result=""
+	for entry in $REPOSITORIES
 	do
-		repository_name="${repository##*|}"
-		[ ! -f repos/$repository_name ] && continue
-		result="$(grep ^$1\| repos/$repository_name | tail -n 1)"
+		repository_name="${entry##*|}"
+		cache_file_name="$repository_name.cache"
+
+		# first, attempt to find an entry in the cache of previous
+		# search operations 
+		result="$(get_package_entry_from_list \
+		               $1 \
+		               $cache_file_name)"
+		[ -n "$result" ] && break
+
+		# if no cache entry was found, search the package list
+		result="$(get_package_entry_from_list \
+		          $1 \
+		          $repository_name)"
+		
+		# if a match was found, add it to the cache
 		if [ -n "$result" ]
 		then
-			echo "$result"
+			add_package_entry_to_list "$result" $cache_file_name
 			break
 		fi
 	done
+
+	echo "$result"
 }
 
 # usage: get_package_location $entry

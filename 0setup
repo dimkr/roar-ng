@@ -68,9 +68,16 @@ do
 		fi
 		echo " done"
 
-		# clean up
 		echo -n "Cleaning up ..."
+
+		# remove the temporary file
 		rm -f $temp_file
+
+		# remove previous cache, since they might contain entries from
+		# different package lists
+		[ -f repos/$repository_name.cache ] && \
+		                              rm -f repos/$repository_name.cache
+
 		echo " done"
 	done
 done
