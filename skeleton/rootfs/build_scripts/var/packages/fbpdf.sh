@@ -32,6 +32,10 @@ build() {
 
 	cd $PKG_NAME-$PKG_VER
 
+	# fix a typo in poppler.c to prevent build failure
+	sed -i s/'int page'/'int p'/ poppler.c
+	[ $? -ne 0 ] && return 1
+
 	# configure the package
 	sed -i s~'^CFLAGS = .*'~"CFLAGS = $CFLAGS"~ Makefile
 	[ $? -ne 0 ] && return 1
