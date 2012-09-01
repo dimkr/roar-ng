@@ -29,7 +29,7 @@ done
 # for 64-bit architectures, add lib64
 case $DISTRO_ARCH in
 	*64)
-		for directory in $(cat ./etc/ld.so.conf)
+		for directory in $(cat ./etc/ld.so.conf | grep ^/)
 		do
 			mkdir -p .${directory}64
 			sed -i s~"^$directory$"~"${directory}64\n$directory"~ \
