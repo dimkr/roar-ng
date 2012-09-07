@@ -109,52 +109,47 @@ add_package_entry_to_list()
 
 # usage: get_package_entry_from_list $name $list
 # receives a package name and a package list and returns the most appropriate
-# package entry
+# package entry; results are cached to improve efficiency
 get_package_entry_from_list()
 {
-	# if the package list does not exist, end immediately
-	[ ! -f repos/$2 ] && return
-	
-	# otherwise, filter the entry
-	grep ^$1\| repos/$2 | tail -n 1
+	# the cache file name
+	cache_file_name="$2.cache"
+
+	# try to search the cache first
+	if [ -f repos/$cache_file_name ]
+	then
+		result="$(grep ^$1\| repos/$cache_file_name | tail -n 1)"
+		if [ -n "$result" ]
+		then
+			echo "$result"
+			return
+		fi
+	fi
+
+	# otherwise, search the whole package list
+	result="$(grep ^$1\| repos/$2 | tail -n 1)"
+	[ -z "$result" ] && return
+
+	# if a match was found, add it to the cache
+	add_package_entry_to_list "$result" $cache_file_name
+	echo "$result"
 }
 
 # usage: get_package_entry $name $distribution
-# receives a package name and returns the most appropriate package entry;
-# results are cached to improve efficiency
+# receives a package name and returns the most appropriate package entry
 get_package_entry()
 {
 	# include the distribution parameters file
 	. distro/$2/parameters
 
-	# find the first match
-	result=""
-	for entry in $REPOSITORIES
+	# find the first match in all package lists of the given distribution	
+	for repository in $REPOSITORIES
 	do
-		repository_name="${entry##*|}"
-		cache_file_name="$repository_name.cache"
-
-		# first, attempt to find an entry in the cache of previous
-		# search operations 
-		result="$(get_package_entry_from_list \
-		               $1 \
-		               $cache_file_name)"
-		[ -n "$result" ] && break
-
-		# if no cache entry was found, search the package list
-		result="$(get_package_entry_from_list \
-		          $1 \
-		          $repository_name)"
-		
-		# if a match was found, add it to the cache
-		if [ -n "$result" ]
-		then
-			add_package_entry_to_list "$result" $cache_file_name
-			break
-		fi
+		result="$(get_package_entry_from_list $1 ${repository##*|})" 
+		[ -z "$result" ] && continue
+		echo "$result"
+		break
 	done
-
-	echo "$result"
 }
 
 # usage: get_package_location $entry
