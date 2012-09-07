@@ -17,7 +17,7 @@ esac
 REPOSITORIES="http://centos.spd.co.il/$VERSION/os/$arch/repodata/4d3cddf382e81c20b167a8d13c7c92067040a1947dbb3c29cfafa01a74a26a2b-primary.xml.gz|centos-os
              http://centos.spd.co.il/$VERSION/updates/$arch/repodata/e6f85309db27f35d4aa7e438d3e47edefda0afc3ce7c0ea8e107d36ae29e8e56-primary.xml.gz|centos-updates"
 
-# package download mirrors - more at http://www.debian.org/mirror/list
+# package download mirrors - more at http://www.centos.org/modules/tinycontent/index.php?id=30
 MIRRORS="http://centos.spd.co.il/$VERSION/os/$arch|centos-os
          http://centos.spd.co.il/$VERSION/updates/$arch|centos-updates
          http://centos.arcticnetwork.ca/$VERSION/os/$arch|centos-os
