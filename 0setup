@@ -9,10 +9,13 @@
 . ./functions
 
 # download and convert all package lists
-for distro in distro/*
+for package in $(list_packages)
+do
+	get_package_distro "$package"
+done | sort | uniq | while read distro
 do
 	# include the distribution parameters file
-	. $distro/parameters
+	. distro/$distro/parameters
 
 	for repository in $REPOSITORIES
 	do
@@ -59,7 +62,9 @@ do
 
 		# convert the package list to the common format
 		echo -n "Converting to the common format ..."
-		$distro/convert_package_list $temp_file $repository_name | sort > repos/$repository_name
+		distro/$distro/convert_package_list $temp_file \
+		                                    $repository_name | \
+		sort > repos/$repository_name
 		if [ 0 -ne $? ]
 		then
 			echo "Error: failed to convert the package list."
