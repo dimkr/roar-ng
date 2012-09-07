@@ -24,8 +24,8 @@ REPOSITORIES="http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION-updates/main/b
               http://ubuntu.mirror.tudos.de/ubuntu/dists/$VERSION/restricted/binary-$arch/Packages.bz2|ubuntu-restricted"
 
 # package download mirrors - more at https://launchpad.net/ubuntu/+archivemirrors
-MIRRORS="http://ubuntu.mirror.tudos.de/ubuntu
-         http://mirror.aarnet.edu.au/pub/ubuntu/archive
-         http://mirror.csclub.uwaterloo.ca/ubuntu
-         http://ubuntu.c3sl.ufpr.br/ubuntu
-         http://ftp.halifax.rwth-aachen.de/ubuntu"
+MIRRORS="http://ubuntu.mirror.tudos.de/ubuntu|ubuntu-updates_main,ubuntu-updates_universe,ubuntu-updates_multiverse,ubuntu-updates_restricted,ubuntu-main,ubuntu-universe,ubuntu-multiverse,ubuntu-restricted
+         http://mirror.aarnet.edu.au/pub/ubuntu/archive|ubuntu-updates_main,ubuntu-updates_universe,ubuntu-updates_multiverse,ubuntu-updates_restricted,ubuntu-main,ubuntu-universe,ubuntu-multiverse,ubuntu-restricted
+         http://mirror.csclub.uwaterloo.ca/ubuntu|ubuntu-updates_main,ubuntu-updates_universe,ubuntu-updates_multiverse,ubuntu-updates_restricted,ubuntu-main,ubuntu-universe,ubuntu-multiverse,ubuntu-restricted
+         http://ubuntu.c3sl.ufpr.br/ubuntu|ubuntu-updates_main,ubuntu-updates_universe,ubuntu-updates_multiverse,ubuntu-updates_restricted,ubuntu-main,ubuntu-universe,ubuntu-multiverse,ubuntu-restricted
+         http://ftp.halifax.rwth-aachen.de/ubuntu|ubuntu-updates_main,ubuntu-updates_universe,ubuntu-updates_multiverse,ubuntu-updates_restricted,ubuntu-main,ubuntu-universe,ubuntu-multiverse,ubuntu-restricted"

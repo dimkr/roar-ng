@@ -20,4 +20,4 @@ esac
 REPOSITORIES="http://www.dimakrasner.com/subito/$arch/subito-$VERSION|subito-official"
 
 # package download mirrors
-MIRRORS="http://www.dimakrasner.com/subito/$arch"
+MIRRORS="http://www.dimakrasner.com/subito/$arch|subito-official"

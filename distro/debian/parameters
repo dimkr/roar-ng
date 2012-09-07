@@ -24,7 +24,7 @@ REPOSITORIES="http://mirror.csclub.uwaterloo.ca/debian/dists/$VERSION/main/binar
               http://mirror.csclub.uwaterloo.ca/debian/dists/$VERSION/non-free/binary-$arch/Packages.bz2|debian-non_free"
 
 # package download mirrors - more at http://www.debian.org/mirror/list
-MIRRORS="http://mirror.csclub.uwaterloo.ca/debian
-         http://http.us.debian.org/debian
-         http://debian.lcs.mit.edu/debian
-         http://ftp.iinet.net.au/debian/debian"
+MIRRORS="http://mirror.csclub.uwaterloo.ca/debian|debian-main,debian-contrib,debian-nonfree
+         http://http.us.debian.org/debian|debian-main,debian-contrib,debian-nonfree
+         http://debian.lcs.mit.edu/debian|debian-main,debian-contrib,debian-nonfree
+         http://ftp.iinet.net.au/debian/debian|debian-main,debian-contrib,debian-nonfree"

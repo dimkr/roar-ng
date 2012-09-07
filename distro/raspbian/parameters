@@ -7,4 +7,4 @@ REPOSITORIES="http://archive.raspbian.org/raspbian/dists/$VERSION/main/binary-ar
               http://archive.raspbian.org/raspbian/dists/$VERSION/main/binary-armhf/Packages.bz2|raspbian-non_free"
 
 # package download mirrors
-MIRRORS="http://archive.raspbian.org/raspbian"
+MIRRORS="http://archive.raspbian.org/raspbian|raspbian-main,raspbian-contrib,raspbian-non_free"

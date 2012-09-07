@@ -18,7 +18,7 @@ REPOSITORIES="ftp://ftp.osuosl.org/pub/slackware/slackware$suffix-$VERSION/patch
               ftp://ftp.osuosl.org/pub/slackware/slackware$suffix-$VERSION/PACKAGES.TXT|slackware-main"
 
 # package download mirrors
-MIRRORS="ftp://ftp.gwdg.de/pub/linux/slackware/slackware$suffix-$VERSION
-         ftp://ftp.fu-berlin.de/unix/linux/mirrors/slackware/slackware$suffix-$VERSION
-         http://ftp.gwdg.de/pub/linux/slackware/slackware$suffix-$VERSION
-         http://slackware.mirrors.tds.net/pub/slackware/slackware$suffix-$VERSION"
+MIRRORS="ftp://ftp.gwdg.de/pub/linux/slackware/slackware$suffix-$VERSION|slackware-main,slackware-patches
+         ftp://ftp.fu-berlin.de/unix/linux/mirrors/slackware/slackware$suffix-$VERSION|slackware-main,slackware-patches
+         http://ftp.gwdg.de/pub/linux/slackware/slackware$suffix-$VERSION|slackware-main,slackware-patches
+         http://slackware.mirrors.tds.net/pub/slackware/slackware$suffix-$VERSION|slackware-main,slackware-patches"

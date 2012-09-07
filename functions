@@ -53,7 +53,7 @@ list_packages()
 # to
 get_package_distro()
 {
-	echo ${1%%|*}
+	echo "${1%%|*}"
 }
 
 # usage: get_package_name $package_list_entry
@@ -61,6 +61,14 @@ get_package_distro()
 get_package_name()
 {
 	echo $1 | cut -f 2 -d \|
+}
+
+# usage: get_package_repository $package_list_entry
+# receives a package list entry and returns the package repository it belongs
+# to
+get_package_repository()
+{
+	echo $1 | cut -f 6 -d \|
 }
 
 # usage: get_package_sub_packages $package_list_entry
@@ -145,9 +153,10 @@ get_package_entry()
 	# find the first match in all package lists of the given distribution	
 	for repository in $REPOSITORIES
 	do
-		result="$(get_package_entry_from_list $1 ${repository##*|})" 
+		repository_name="${repository##*|}"
+		result="$(get_package_entry_from_list $1 $repository_name)"
 		[ -z "$result" ] && continue
-		echo "$result"
+		echo "$result|$repository_name"
 		break
 	done
 }
@@ -167,6 +176,29 @@ get_package_file_name()
 	echo "${location##*/}"
 }
 
+# usgae: get_repository_mirrors $repository $distribution
+get_repository_mirrors()
+{
+	# include the distribution parameters file
+	. distro/$2/parameters
+
+	mirrors=""
+	for mirror in $MIRRORS
+	do
+		repositories="$(echo ${mirror##*|} | sed s/,/\ /g)"
+		belongs=0
+		for repository in $repositories
+		do
+			[ "$repository" != "$1" ] && continue
+			belongs=1
+			break
+		done
+		[ 1 -eq $belongs ] && mirrors="$mirrors ${mirror%%|*}"
+	done
+
+	echo $mirrors
+}
+
 # usage: get_download_links $name $distribution
 # returns a list of download links for a given package
 get_download_links()
@@ -178,11 +210,14 @@ get_download_links()
 	entry="$(get_package_entry $1 $2)"
 	[ -z "$entry" ] && return 1
 
-	# get the package location within each repository
+	# get the package list the entry was found in
+	package_list="$(get_package_repository "$entry")"
+
+	# get the package location
 	location="$(get_package_location $entry)"
 
-	# create download links from each mirror's URL and the package location
-	for mirror in $MIRRORS
+	# for each mirror, form a full download link
+	for mirror in $(get_repository_mirrors $package_list $2)
 	do
 		echo $mirror/$location
 	done

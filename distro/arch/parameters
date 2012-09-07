@@ -19,8 +19,8 @@ REPOSITORIES="http://mirror.csclub.uwaterloo.ca/archlinux/core/os/$arch/core.db.
               http://mirror.csclub.uwaterloo.ca/archlinux/community/os/$arch/community.db.tar.gz|arch-community"
 
 # package download mirrors - more at http://www.archlinux.org/mirrors/status/
-MIRRORS="http://mirror.csclub.uwaterloo.ca/archlinux
-         http://mirror.ece.vt.edu/archlinux
-         http://mirror.rit.edu/archlinux
-         http://ftp5.gwdg.de/pub/linux/archlinux
-         http://archlinux.mirrors.ovh.net/archlinux"
+MIRRORS="http://mirror.csclub.uwaterloo.ca/archlinux|arch-core,arch-extra,arch-community
+         http://mirror.ece.vt.edu/archlinux|arch-core,arch-extra,arch-community
+         http://mirror.rit.edu/archlinux|arch-core,arch-extra,arch-community
+         http://ftp5.gwdg.de/pub/linux/archlinux|arch-core,arch-extra,arch-community
+         http://archlinux.mirrors.ovh.net/archlinux|arch-core,arch-extra,arch-community"
