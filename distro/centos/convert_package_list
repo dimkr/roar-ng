@@ -1,0 +1,35 @@
+#!/usr/bin/python
+
+# usage: convert_package_list $package_list $repository_name
+
+import xml.etree.ElementTree as et
+from sys import argv
+
+# parse the XML file
+tree = et.parse(argv[1])
+
+# get the root tage
+root = tree.getroot()
+
+# the root tag's children are package tags - parse them
+for package in root.findall("./*"):
+	for tag in iter(package):
+		if tag.tag.endswith("name"):
+			name = tag.text
+	
+		elif tag.tag.endswith("version"):
+			version = tag.attrib["ver"]
+			revision = tag.attrib["rel"]
+
+		elif tag.tag.endswith("location"):
+			location = tag.attrib["href"]
+		
+		elif tag.tag.endswith("summary"):
+			description = unicode(tag.text)
+		
+	# print a package entry; encode it as a UTF-8 string, as the XML file
+	print ("%s|%s|%s|%s|%s" % (name, 
+	                           version, 
+	                           revision,
+	                           location,
+	                           description)).encode("utf-8")

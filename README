@@ -29,6 +29,7 @@ Packages originating in the following distributions are supported:
  - Debian GNU/Linux
  - Arch Linux
  - Ubuntu
+ - CentOS
  - Raspbian
  - Subito GNU/Linux (e.g packages built through roar-ng itself)
 
