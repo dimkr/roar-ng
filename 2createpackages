@@ -14,6 +14,9 @@
 # include the hpm configuration file
 . ./skeleton/rootfs/hpm/etc/hpmrc
 
+# obtain the working directory
+current_directory="$(pwd)"
+
 # list all packages
 for package in $(list_packages)
 do
@@ -56,9 +59,9 @@ do
 
 		# extract the package
 		echo -n "  Extracting $package_file_name ..."
-		./distro/$distro/extract_package packages/$package_file_name \
-		                                 processed-packages/$name \
-		                                 > /dev/null 2>&1
+		./distro/$distro/extract_package \
+		                $current_directory/packages/$package_file_name \
+		                processed-packages/$name > /dev/null 2>&1
 		if [ 0 -ne $? ]
 		then
 			echo "Error: failed to extract $package_file_name."
