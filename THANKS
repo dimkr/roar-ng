@@ -1,7 +1,8 @@
 I would like to thank the following people and organizations for their
 contribution to roar-ng:
 
- - noryb009, for translating the package list conversion scripts to awk.
+ - noryb009, for translating the package list conversion scripts to awk and
+   distribution support code.
  - Barry Kauler (www.bkhome.org), for creating Woof, the reason why roar-ng 
    exists.
  - Tomas M. (www.tomas-m.com), for writing the Linux Live scripts, another major

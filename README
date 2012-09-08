@@ -30,6 +30,7 @@ Packages originating in the following distributions are supported:
  - Arch Linux
  - Ubuntu
  - CentOS
+ - Fedora
  - Raspbian
  - Subito GNU/Linux (e.g packages built through roar-ng itself)
 
