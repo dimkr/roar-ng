@@ -105,8 +105,8 @@ can do (in the following priority):
  - Add bits of documentation.
 
 The easiest way to begin your development is obtaining your own copy of roar-ng,
-so you have something to work on. Clone the code repository or manually maintain
-a copy.
+so you have something to work on; do not work with manually-applied patches.
+Clone the code repository or manually maintain a copy.
 
 Before you send a request to merge your changes, please:
  - Make sure your code doesn't conflict with roar-ng's current state, due to
@@ -122,7 +122,7 @@ Before you send a request to merge your changes, please:
 
 The actual code should be accompanied by all this information. If everything 
 seems good (which is a very subjective thing), it might be merged into roar-ng
-and you well be credited. However, no guarantees are made.
+and you will be credited. However, no guarantees are made.
 
 Any code contributed to roar-ng should conform with its license. Code which
 doesn't simply won't be merged.
