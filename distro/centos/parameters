@@ -9,7 +9,7 @@ case $DISTRO_ARCH in
 		arch="x86_64"
 		;;
 	x86|i?86)
-		arch="x86"
+		arch="i386"
 		;;
 esac
 
