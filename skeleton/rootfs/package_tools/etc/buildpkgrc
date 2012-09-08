@@ -3,8 +3,10 @@
 # include the distribution information file
 . /etc/distrorc
 
-# compiler flags
+# get the processor architecture
 arch="$(uname -m)"
+
+# set the compiler and linker flags
 case $arch in
 	i?86)
 		LIBDIR_SUFFIX=""
@@ -29,16 +31,23 @@ case $arch in
 		;;
 esac
 
-export CFLAGS="$CFLAGS -Os -fomit-frame-pointer -pipe"
-export CXXFLAGS="$CFLAGS"
+# append shared flags
+CFLAGS="$CFLAGS -Os -fomit-frame-pointer -pipe"
+CXXFLAGS="$CFLAGS"
 
 # the C compiler
 export CC="cc"
 
-# the number of build threads
-BUILD_THREADS="$(cat /proc/cpuinfo | grep processor | wc -l)"
+# set the number of build threads; use the number of processors, if
+# /proc/cpuinfo is present
+if [ -f /proc/cpuinfo ]
+then
+	BUILD_THREADS="$(grep processor /proc/cpuinfo | wc -l)"
+else
+	BUILD_THREADS=1
+fi
 
-# the package target
+# the package build target
 BUILD_TARGET="$PKG_ARCH-$DISTRO_NICKNAME-$(uname -s | tr '[:upper:]' '[:lower:]')-gnu"
 
 ##############
@@ -99,17 +108,8 @@ LOCALE_DIR="$SHARE_DIR/locale"
 # special directories #
 #######################
 
-# the directory for icons
-PIXMAP_DIR="$SHARE_DIR/pixmaps"
-
-# the directory for .desktop files
-DESKTOP_DIR="$SHARE_DIR/applications"
-
 # the directory for legal information
 LEGAL_DIR="$DOC_DIR/legal"
-
-# the directory for init scripts
-INIT_SCRIPT_DIR="etc/init.d"
 
 ###########
 # generic #
@@ -131,13 +131,14 @@ AUTOTOOLS_BASE_OPTS="--build=$BUILD_TARGET \
                      --mandir=/$MAN_DIR \
                      --docdir=/$DOC_DIR/$PKG_NAME"
 
-# fix the compiler flags and set the pkgconfig search path
-for i in $(cat /etc/ld.so.conf)
+# set the pkgconfig search path
+for i in $(grep ^/ /etc/ld.so.conf)
 do
 	PKG_CONFIG_PATH="$i/pkgconfig:$PKG_CONFIG_PATH"
 done
 export PKG_CONFIG_PATH
 
+# export the compiler and linker flags
 export CFLAGS="$CFLAGS -I/$INCLUDE_DIR -L/$LIB_DIR"
 export CXXFLAGS="$CXXFLAGS -I/$INCLUDE_DIR -L/$LIB_DIR"
 export LDFLAGS="$LDFLAGS -L/$LIB_DIR"
