@@ -1,9 +1,9 @@
- _ __ ___   __ _ _ __ ______ _ __   __ _ 
-| '__/ _ \ / _` | '__|______| '_ \ / _` |
-| | | (_) | (_| | |         | | | | (_| |
-|_|  \___/ \__,_|_|         |_| |_|\__, |
-                                    __/ |
-                                   |___/ 
+ _ __ ___   __ _ _ __   ______   _ __   __ _ 
+| '__/ _ \ / _` | '__| |______| | '_ \ / _` |
+| | | (_) | (_| | |             | | | | (_| |
+|_|  \___/ \__,_|_|             |_| |_|\__, |
+                                        __/ |
+                                       |___/ 
 
 ############
 # Overview #
@@ -12,9 +12,9 @@
 roar-ng is a generic GNU/Linux distribution building system.
 
 It provides an architecture-independent, flexible and portable infrastructure 
-for the creation of fast and portable "live" GNU/Linux distributions. It 
-provides support for the binary package format and repositories of various 
-GNU/Linux distributions.
+for the creation of fast and portable GNU/Linux distributions. It provides
+support for the binary package format and repositories of various GNU/Linux
+distributions.
 
 The development of roar-ng started as a collection of source hacks of Woof (the 
 Puppy Linux build system) and evolved into a complete, independent 
@@ -22,11 +22,31 @@ re-implementation. It provides advanced features not found in Woof, such as
 parallel downloads, automatic package splitting, simple branding and easy 
 porting to different processor architectures.
 
+The name "roar-ng" was originally a pun on the name "Woof". roar-ng's early 
+prototypes were called "Moo", "Meow", "Tweet" and finally, "Roar". The latter
+was the first to show potential and roar-ng is originally a complete rewrite
+of it.
+
+#########
+# Goals #
+#########
+
+roar-ng's key goals are:
+ - Be simple.
+ - Be generic and independent.
+ - Be as thin as possible and provide extra functionality (e.g support for a new
+   distribution) via a file system hierarchy, rather than modification of the
+   core.
+
+roar-ng provides a simple API for all operations performed in order to build a
+distribution (e.g package search, file download, etc') via one common core
+("functions") and consists of scripts built on top of it.
+
 #############################################
 # Supported Architectures and Distributions #
 #############################################
 
-Packages originating in the following distributions are supported:
+roar-ng supports packages of the following distributions:
  - Slackware
  - Debian GNU/Linux
  - Arch Linux
@@ -36,12 +56,21 @@ Packages originating in the following distributions are supported:
  - Raspbian
  - Subito GNU/Linux (e.g packages built through roar-ng itself)
 
-Distribution support is provided by sub-directories under the "distro"
-directory.
+roar-ng is architecture-independent; it can be used to build a distribution for
+any processor architecture, as long as there are binary packages for it and
+roar-ng is able to produce an image of a supported bootable media.
 
-#########
-# Usage #
-#########
+Each supported distribution has its own sub-directory under the "distro"
+directory, containing tools required to handle its package format and
+repositories.
+
+Expanding roar-ng's distribution or architecture support is easy and does not
+involve changes in existing code: this is one of its main design goals and key
+strength.
+
+#################
+# Configuration #
+#################
 
 Before roar-ng can be executed to produce a distribution, it must be properly
 configured. Its configuration resides under the "conf" directory and consists
@@ -51,45 +80,52 @@ of three files:
  - distrorc - the distribution's details, such as its name, version and most
               importantly, its target processor architecture.
  - package_list - the list of packages included in the distribution's bootable
-                  media. Entries in the file have a special syntax and consist
-                  of four fields: the distribution the binary packages come
-                  from, a meta-package name (e.g "utilities" for a text editor
-                  and a calculator), the names of packages (i.e the exact names,
-                  as the source distribution uses) to include and how to split
-                  the result package.
+                  media.
 
-Just in case it isn't clear enough: here's another explanation. roar-ng reads
-a package list, which consists of entries which describe "meta-packages", which
-are "big packages" that consist of multiple packages of a supported
-distribution. For instance, it is possible to group a package (for example, 
-Bash) with its dependencies (e.g readline) as one meta-package, like this:
-	debian|bash_and_deps|bash,readline|exe,dev,doc,nls
+The package list is a text file containing package entries; each line contains
+one entry, which corresponds to a group of packages. Package entries
+consist of four fields, delimited by the "|" character:
+ - The distribution the packages come from.
+ - A name for the package group.
+ - A comma-delimited list of packages included in the group.
+ - How to split the result package.
 
-The fourth field (e.g the package splitting rules) can be confusing. Its syntax
-is consistent: each of the tokens ("exe", "dev", "doc" or "nls") can be suffixed
-with the ">" operator, followed by another, to change the way the meta-package 
-is split. When a package is processed by roar-ng, it gets split into four parts:
-the main package, development files, documentation and language support files.
-Thse tokens represent those parts: for example, "exe,dev,doc>dev,nls" will 
-instruct roar-ng to place all documentation alongside the development files.
+The fourth field can be confusing; in most cases, it will contain the sane
+default of "exe,dev,doc,nls". However, it can be also used to affect how roar-ng
+splits the result package, by suffixing one of the tokens with ">", followed by
+another, e.g "exe,dev,doc>dev,nls". Each token stands for a part of the package:
+the main package, development files, documentation or language support files.
+Once a token is suffixed this way, the relevant part of the package gets merged
+into another: in this example, documentation ("doc") gets redirected into the
+development files ("dev") part.
 
-Once the configuration is ready, roar-ng can be executed. It consists of four
-independent scripts:
+Remember, intimate knowledge of the contents of packages and proper use of
+package splitting rules (another key strength of roar-ng) are the key for the
+creation of compact, simple and tidy distributions.
+
+#########
+# Usage #
+#########
+
+roar-ng consists of independent scripts, intended to run in a given order, with
+the roar-ng directory as the working directory.
+
+The scripts are:
  - 0setup, which downloads package lists from repositories and converts them to
    a common, simple format.
  - 1download, which downloads all packages included in the distribution.
  - 2createpackages, which extracts, optimizes, splits and processes the 
    packages.
  - 3builddistro, which builds a bootable media image. It accepts one parameter:
-   the media type. Each media has a script under the "media" directory, which
-   builds an image.
+   the media type. Each media is built through a script under the "media"
+   directory.
  - 4buildpackage, an optional script which builds a binary package from source,
    using chroot and 3builddistro's result. It accepts the package name as a
-   parameter.
+   parameter and cannot be used for cross-compilation; it must run on a host
+   distribution of the same processor architecture as the result package's one.
 
-Always use a recent snapshot of roar-ng. Since its development model is based on 
-incremental improvements, rather than "stable" releases, always obtain a fresh 
-copy of the "master" branch before using it.
+roar-ng's development model is based on incremental improvements, rather than
+"stable" releases. Therefore, always obtain a fresh snapshot before using it.
 
 ################
 # Contributing #
@@ -103,10 +139,6 @@ can do (in the following priority):
    SoC).
  - Add support for another distribution.
  - Add bits of documentation.
-
-The easiest way to begin your development is obtaining your own copy of roar-ng,
-so you have something to work on; do not work with manually-applied patches.
-Clone the code repository or manually maintain a copy.
 
 Before you send a request to merge your changes, please:
  - Make sure your code doesn't conflict with roar-ng's current state, due to
