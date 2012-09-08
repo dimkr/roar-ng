@@ -1,0 +1,27 @@
+# include the distribution information file
+. ./conf/distrorc
+
+# the distribution version
+VERSION="12.2"
+
+case $DISTRO_ARCH in
+	amd64|x86_64)
+		arch="x86_64"
+		;;
+	x86|i?86)
+		arch="i586"
+		;;
+esac
+
+# repositories - package list URL|repository name; repositories are specified
+# via their base path; this directory contains repodata/repomd.xml, with
+# contains the variable name of the actual package list; see
+# download_package_list
+REPOSITORIES="http://mirror.anl.gov/pub/opensuse/opensuse/update/$VERSION|opensuse-update
+              http://mirror.anl.gov/pub/opensuse/opensuse/distribution/$VERSION/repo/oss/suse|opensuse-distribution"
+              
+# package download mirrors - more at http://mirrors.fedoraproject.org/publiclist/
+MIRRORS="http://mirror.anl.gov/pub/opensuse/opensuse/update/$VERSION|opensuse-update
+         http://mirror.anl.gov/pub/opensuse/opensuse/distribution/$VERSION/repo/oss/suse|opensuse-distribution
+         http://opensuse.mirror.garr.it/mirrors/opensuse/update/$VERSION|opensuse-update
+         http://opensuse.mirror.garr.it/mirrors/opensuse/distribution/$VERSION/repo/oss/suse|opensuse-distribution"

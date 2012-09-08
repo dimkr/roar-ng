@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# usage: extract_package $package $dest
+
+# create the output directory
+mkdir -p "$2"
+
+cd "$2"
+
+# extract the package
+exploderpm -x "$1"
+[ 0 -ne $? ] && exit 1
+
+exit 0
