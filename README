@@ -54,6 +54,7 @@ roar-ng supports packages of the following distributions:
  - CentOS
  - Fedora
  - OpenSUSE
+ - Mageia
  - Raspbian
  - Subito GNU/Linux (e.g packages built through roar-ng itself)
 

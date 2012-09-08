@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# usage: convert_package_list $package_list $repository_name
+
+awk -F @ '{
+	if($2 == "summary"){pkgdesc=$3}
+	if($2 == "info"){
+		# from http://wiki.mandriva.com/en/uploads/0/0e/Another_synthesis.py
+		len_parts=split($3,parts,"-")
+		
+		len_release_arch=split(parts[len_parts],release_arch,".")
+		#arch=release_arch[len_release_arch]
+		pkgrel = ""
+		for(i=1; i<len_release_arch; i++) {pkgrel=pkgrel"."release_arch[i]}
+		sub(/^\./, "", pkgrel)
+		
+		pkgver = parts[len_parts-1]
+		pkgname=""
+		for(i=1; i<len_parts-1; i++) {pkgname=pkgname"-"parts[i]}
+		sub(/^-/, "", pkgname)
+		
+		filename=$3
+		#epoch=$4
+		
+		printf("%s|%s|%s|%s.rpm|%s\n", pkgname, pkgver, pkgrel, filename, pkgdesc)
+		pkgname=""; pkgver=""; pkgrel=""; filename=""; pkgdesc=""
+	}
+}' "$1"

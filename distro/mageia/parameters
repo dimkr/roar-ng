@@ -1,0 +1,36 @@
+# include the distribution information file
+. ./conf/distrorc
+
+# the distribution version
+VERSION="2"
+
+case $DISTRO_ARCH in
+	amd64|x86_64)
+		arch="x86_64"
+		;;
+	x86|i?86)
+		arch="i586"
+		;;
+esac
+
+# repositories - package list URL|repository name
+REPOSITORIES="http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/media_info/synthesis.hdlist_core_updates.cz|mageia-core_updates
+              http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/media_info/synthesis.hdlist_core_release.cz|mageia-core
+              http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/media_info/synthesis.hdlist_tainted_updates.cz|mageia-tainted_updates
+              http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/media_info/synthesis.hdlist_tainted_release.cz|mageia-tainted
+              http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/media_info/synthesis.hdlist_nonfree_updates.cz|mageia-nonfree_updates
+              http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/media_info/synthesis.hdlist_nonfree_release.cz|mageia-nonfree"
+
+# package download mirrors - more at http://mirrors.fedoraproject.org/publiclist/
+MIRRORS="http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/core/updates|mageia-core_updates
+         http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/core/release|mageia-core
+         http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/tainted/updates|mageia-tainted_updates
+         http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/tainted/release|mageia-tainted
+         http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/nonfree/updates|mageia-nonfree_updates
+         http://mirrors.kernel.org/mageia/distrib/$VERSION/$arch/media/nonfree/release|mageia-nonfree
+         http://mageia.mirror.garr.it/$VERSION/$arch/media/core/updates|mageia-core_updates
+         http://mageia.mirror.garr.it/$VERSION/$arch/media/core/release|mageia-core
+         http://mageia.mirror.garr.it/$VERSION/$arch/media/tainted/updates|mageia-tainted_updates
+         http://mageia.mirror.garr.it/$VERSION/$arch/media/tainted/release|mageia-tainted
+         http://mageia.mirror.garr.it/$VERSION/$arch/media/nonfree/updates|mageia-nonfree_updates
+         http://mageia.mirror.garr.it/$VERSION/$arch/media/nonfree/release|mageia-nonfree"
