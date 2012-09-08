@@ -1,3 +1,10 @@
+ _ __ ___   __ _ _ __ ______ _ __   __ _ 
+| '__/ _ \ / _` | '__|______| '_ \ / _` |
+| | | (_) | (_| | |         | | | | (_| |
+|_|  \___/ \__,_|_|         |_| |_|\__, |
+                                    __/ |
+                                   |___/ 
+
 ############
 # Overview #
 ############
@@ -19,11 +26,6 @@ porting to different processor architectures.
 # Supported Architectures and Distributions #
 #############################################
 
-At the time of writing, roar-ng supports the x86 family (both x86 and x86_64) of
-processor architectures, with ARM support under heavy development. More 
-specifically, roar-ng is currently being adapted to for use with the Raspberry
-Pi (http://www.raspberrypi.org/).
-
 Packages originating in the following distributions are supported:
  - Slackware
  - Debian GNU/Linux
@@ -33,6 +35,9 @@ Packages originating in the following distributions are supported:
  - Fedora
  - Raspbian
  - Subito GNU/Linux (e.g packages built through roar-ng itself)
+
+Distribution support is provided by sub-directories under the "distro"
+directory.
 
 #########
 # Usage #
@@ -86,6 +91,42 @@ Always use a recent snapshot of roar-ng. Since its development model is based on
 incremental improvements, rather than "stable" releases, always obtain a fresh 
 copy of the "master" branch before using it.
 
+################
+# Contributing #
+################
+
+If you wish to contribute to roar-ng's development, there are many things you
+can do (in the following priority):
+ - Fix bugs.
+ - Locate and fix inefficiencies.
+ - Add support for another bootable media (e.g a SD card image for your favorite
+   SoC).
+ - Add support for another distribution.
+ - Add bits of documentation.
+
+The easiest way to begin your development is obtaining your own copy of roar-ng,
+so you have something to work on. Clone the code repository or manually maintain
+a copy.
+
+Before you send a request to merge your changes, please:
+ - Make sure your code doesn't conflict with roar-ng's current state, due to
+   changes between time you began your development and the present.
+ - Make sure your code is easy to understand, simple as possible, efficient and
+   matches roar-ng's coding style.
+ - Document your code.
+ - Make sure you have a full history of changes; always document changes. Pay
+   attention to issues you solved and interface changes.
+ - Make sure your code is as future-proof as possible.
+ - Make sure your code doesn't have a hard dependency on a third-party
+   component (e.g a parser). This is required to keep roar-ng independent.
+
+The actual code should be accompanied by all this information. If everything 
+seems good (which is a very subjective thing), it might be merged into roar-ng
+and you well be credited. However, no guarantees are made.
+
+Any code contributed to roar-ng should conform with its license. Code which
+doesn't simply won't be merged.
+
 #####################
 # Legal Information #
 #####################
@@ -93,4 +134,4 @@ copy of the "master" branch before using it.
 roar-ng is licensed under the GPLv3 license, see COPYING for the license text.
 For a list of its authors and contributors, see AUTHORS and THANKS.
 
-Raspberry Pi is a trademark of the Raspberry Pi Foundation.
+The ASCII art logo at the top was made using FIGlet (http://www.figlet.org/).
