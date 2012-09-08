@@ -30,7 +30,8 @@ do
 
 		# download the package list
 		echo "Downloading the package list"
-		download_file $package_list_url $temp_file
+		./distro/$distro/download_package_list $package_list_url \
+		                                       $temp_file
 		if [ 0 -ne $? ]
 		then
 			echo "Error: failed to download $package_list_url."
@@ -39,11 +40,11 @@ do
 		fi
 
 		# decompress the package list
-		case $package_list_url in
-			*.gz)
+		case $(file -bi $temp_file | cut -f 1 -d \;) in
+			application/x-gzip)
 				compression="gzip"
 				;;
-			*.bz2)
+			application/x-bzip2)
 				compression="bzip2"
 				;;
 			*)

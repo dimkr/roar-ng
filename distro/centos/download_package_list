@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# usage: download_package_list $url $destination
+
+# include the functions file
+. ./functions
+
+# create a temporary file
+temp_file="$(mktemp -u)"
+
+# download the repository description file
+download_file $1/repodata/repomd.xml $temp_file
+[ 0 -ne $? ] && exit 1
+
+# find the package list file name; it contains a hash and changes
+package_list_file_name="$(grep primary.xml $temp_file | cut -f 2 -d \")"
+
+# clean up
+rm -f $temp_file
+
+# download the package list; its path should begin with "/repodata"
+download_file $1/$package_list_file_name $2
+[ 0 -ne $? ] && exit 1
+
+exit 0

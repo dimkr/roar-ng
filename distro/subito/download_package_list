@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# usage: download_package_list $url $destination
+
+# include the functions file
+. ./functions
+
+# download the given file
+download_file $1 $2
+[ 0 -ne $? ] && exit 1
+
+exit 0
