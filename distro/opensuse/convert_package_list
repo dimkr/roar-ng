@@ -7,4 +7,4 @@
 
 # OpenSUSE repositories contain packages for all architectures - filter only
 # those of the target one
-./distro/centos/convert_package_list $1 $2 | grep \|$arch/
+./distro/centos/convert_package_list $1 $2 | grep -E \|\(noarch\|$arch\)/
