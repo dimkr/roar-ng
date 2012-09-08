@@ -1,35 +1,32 @@
-#!/usr/bin/python
+#!/bin/bash
 
 # usage: convert_package_list $package_list $repository_name
 
-import xml.etree.ElementTree as et
-from sys import argv
-
-# parse the XML file
-tree = et.parse(argv[1])
-
-# get the root tage
-root = tree.getroot()
-
-# the root tag's children are package tags - parse them
-for package in root.findall("./*"):
-	for tag in iter(package):
-		if tag.tag.endswith("name"):
-			name = tag.text
-	
-		elif tag.tag.endswith("version"):
-			version = tag.attrib["ver"]
-			revision = tag.attrib["rel"]
-
-		elif tag.tag.endswith("location"):
-			location = tag.attrib["href"]
-		
-		elif tag.tag.endswith("summary"):
-			description = unicode(tag.text)
-		
-	# print a package entry; encode it as a UTF-8 string, as the XML file
-	print ("%s|%s|%s|%s|%s" % (name, 
-	                           version, 
-	                           revision,
-	                           location,
-	                           description)).encode("utf-8")
+awk '
+	BEGIN{
+		RS="<"
+	}
+	function printPkg() {
+		if(pkgname != "") {
+			printf("%s|%s|%s|%s|%s\n", pkgname, pkgver, pkgrel, filename, pkgdesc)
+		}
+		pkgname=""; pkgver=""; pkgrel=""; filename=""; pkgdesc=""
+	}
+{
+	if($1 ~ "^name") {sub(/^name>/,"",$0);pkgname=$0} # get package name
+	else if($1 == "version") { # get package version partys
+		for(i=2;i<=NF;i++) { # for each part
+			versionPart=$i
+			sub(/.*=\"/,"",versionPart)
+			sub(/\".*/,"",versionPart)
+			
+			if($i ~ "^ver") {pkgver=versionPart} # get package version
+			else if($i ~ "^rel") {pkgrel=versionPart} # get package release
+			#else if($i ~ "^epoch") {epoch=versionPart} # get package epoch
+		}
+	}
+	else if($1 == "location") {sub(/.*href=\"/,"",$2);sub(/\".*/,"",$2);filename=$2} # get filename
+	else if($1 ~ "^summary") {sub(/^summary>/,"",$0);pkgdesc=$0} # get package description
+	else if($1 == "/package>") {printPkg();} # end of package spec
+}
+' "$1"
