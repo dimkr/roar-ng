@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PKG_NAME="optipng"
-PKG_VER="0.7.1"
+PKG_VER="0.7.2"
 PKG_REV="1"
 PKG_DESC="A PNG optimizer"
 PKG_CAT="Graphic"
