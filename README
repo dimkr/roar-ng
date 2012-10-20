@@ -1,9 +1,12 @@
- _ __ ___   __ _ _ __   ______   _ __   __ _ 
+ _ __ ___   __ _ _ __   ______   _ __   __ _
 | '__/ _ \ / _` | '__| |______| | '_ \ / _` |
 | | | (_) | (_| | |             | | | | (_| |
 |_|  \___/ \__,_|_|             |_| |_|\__, |
                                         __/ |
-                                       |___/ 
+                                       |___/
+
+roar-ng is deprecated; roar-ng II is the future ... and it's here.
+See https://github.com/iguleder/roar-ng-ii.
 
 ############
 # Overview #
@@ -11,18 +14,18 @@
 
 roar-ng is a generic GNU/Linux distribution building system.
 
-It provides an architecture-independent, flexible and portable infrastructure 
+It provides an architecture-independent, flexible and portable infrastructure
 for the creation of fast and portable GNU/Linux distributions. It provides
 support for the binary package format and repositories of various GNU/Linux
 distributions.
 
-The development of roar-ng started as a collection of source hacks of Woof (the 
-Puppy Linux build system) and evolved into a complete, independent 
-re-implementation. It provides advanced features not found in Woof, such as 
-parallel downloads, automatic package splitting, simple branding and easy 
+The development of roar-ng started as a collection of source hacks of Woof (the
+Puppy Linux build system) and evolved into a complete, independent
+re-implementation. It provides advanced features not found in Woof, such as
+parallel downloads, automatic package splitting, simple branding and easy
 porting to different processor architectures.
 
-The name "roar-ng" was originally a pun on the name "Woof". roar-ng's early 
+The name "roar-ng" was originally a pun on the name "Woof". roar-ng's early
 prototypes were called "Moo", "Meow", "Tweet" and finally, "Roar". The latter
 was the first to show potential and roar-ng is originally a complete rewrite
 of it.
@@ -77,7 +80,7 @@ strength.
 Before roar-ng can be executed to produce a distribution, it must be properly
 configured. Its configuration resides under the "conf" directory and consists
 of three files:
- - bootrc - various boot-related or system initialization parameters, such as 
+ - bootrc - various boot-related or system initialization parameters, such as
             the console font.
  - distrorc - the distribution's details, such as its name, version and most
               importantly, its target processor architecture.
@@ -116,7 +119,7 @@ The scripts are:
  - 0setup, which downloads package lists from repositories and converts them to
    a common, simple format.
  - 1download, which downloads all packages included in the distribution.
- - 2createpackages, which extracts, optimizes, splits and processes the 
+ - 2createpackages, which extracts, optimizes, splits and processes the
    packages.
  - 3builddistro, which builds a bootable media image. It accepts one parameter:
    the media type. Each media is built through a script under the "media"
@@ -154,7 +157,7 @@ Before you send a request to merge your changes, please:
  - Make sure your code doesn't have a hard dependency on a third-party
    component (e.g a parser). This is required to keep roar-ng independent.
 
-The actual code should be accompanied by all this information. If everything 
+The actual code should be accompanied by all this information. If everything
 seems good (which is a very subjective thing), it might be merged into roar-ng
 and you will be credited. However, no guarantees are made.
 
